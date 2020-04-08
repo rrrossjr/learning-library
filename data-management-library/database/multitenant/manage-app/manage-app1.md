@@ -65,9 +65,9 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    You need a package DBMS_SFW_ACL_ADMIN package. This is installed by running as sysdba. This package is owned by the DBSFWUSER schema. The procedures in this package can be run only by the DBSFWUSER user.
 
    ```
-   sudo su - oracle
+   <copy>sudo su - oracle
    
-   sqlplus sys/oracle@//localhost:1523/cdb1 as sysdba  @$ORACLE_HOME/rdbms/admin/dbmsaclsrv.sql
+   sqlplus sys/oracle@//localhost:1523/cdb1 as sysdba  @$ORACLE_HOME/rdbms/admin/dbmsaclsrv.sql </copy>
    
    
    ```
