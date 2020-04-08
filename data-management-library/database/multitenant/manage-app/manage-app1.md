@@ -60,7 +60,9 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    
 
-   Step 1. You need a package DBMS_SFW_ACL_ADMIN package. This is installed by running as sysdba. This package is owned by the DBSFWUSER schema. The procedures in this package can be run only by the DBSFWUSER user.
+   **Step 1.  Install ACL package**
+
+   You need a package DBMS_SFW_ACL_ADMIN package. This is installed by running as sysdba. This package is owned by the DBSFWUSER schema. The procedures in this package can be run only by the DBSFWUSER user.
 
    ```
    sudo su - oracle
@@ -126,7 +128,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    
 
-   Step 2.  Configure the listener.
+   **Step 2.  Configure the listener.**
 
    The `LOCAL_REGISTRATION_ADDRESS_lsnr_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
 
@@ -176,6 +178,60 @@ LISTCDB1 =
 
 <b>LOCAL_REGISTRATION_ADDRESS_LISTCDB1 = ON </b>
 </pre>
+
+
+
+Reload listener and observer  ensure you see (FIREWALL=ON) in the listerer status.
+
+```
+lsnrctl reload listcdb1
+
+lsnrctl status listcdb1
+```
+
+```
+[oracle@mtv30 admin]$ lsnrctl reload listcdb1
+
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 07-APR-2020 22:51:56
+
+Copyright (c) 1991, 2019, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtworkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
+The command completed successfully
+[oracle@mtv30 admin]$ lsnrctl stat listcdb1
+
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 07-APR-2020 22:52:20
+
+Copyright (c) 1991, 2019, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtworkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
+
+STATUS of the LISTENER
+------------------------
+
+Alias                     listcdb1
+Version                   TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+Start Date                06-APR-2020 21:21:04
+Uptime                    1 days 1 hr. 31 min. 15 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/19c/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/mtv30/listcdb1/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=mtv30)(PORT=1523)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1523)))
+Services Summary...
+Service "CDB1" has 1 instance(s).
+  Instance "CDB1", status READY, has 1 handler(s) for this service...
+Service "CDB1XDB" has 1 instance(s).
+  Instance "CDB1", status READY, has 1 handler(s) for this service...
+Service "a206980f93d62602e0530200000ab752" has 1 instance(s).
+  Instance "CDB1", status READY, has 1 handler(s) for this service...
+Service "pdb1" has 1 instance(s).
+  Instance "CDB1", status READY, has 1 handler(s) for this service...
+The command completed successfully
+```
 
 
 
