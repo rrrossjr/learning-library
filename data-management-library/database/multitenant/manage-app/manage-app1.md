@@ -37,7 +37,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    ##  Database Service Firewall
 
-   Database Service Firewall is a feature of Oracle Access Control List. (ACL) since 12.2.
+   Database Service Firewall is a feature of Oracle Access Control List (ACL) since 12.2.
 
     Service-Level ACLs allow you to control access to specific services, including those associated with individual pluggable databases (PDBs). This functionality is part of the Database Service Firewall, which isn't specifically a multitenant feature, but it is useful for controlling access to PDBs.
 
