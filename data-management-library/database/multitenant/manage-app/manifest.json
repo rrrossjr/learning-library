@@ -7,13 +7,13 @@
             "filename":"./about-the-workshop/content.md"
         },
         {
-            "title": " Multitenant Application Containers",
+            "title": "Multitenant Application Containers",
             "description":"Multitenant Application Containers",
             "publisheddate": "04/07/2020",
             "filename":"./mt-app-container/manage-app.md"
         },
         {
-            "title": " Multitenant Tenant Isolation",
+            "title": "Multitenant Tenant Isolation",
             "description":"Multitenant Tenant isolation",
             "publisheddate": "04/07/2020",
             "filename":"./mt-isolation/manage-app1.md"
