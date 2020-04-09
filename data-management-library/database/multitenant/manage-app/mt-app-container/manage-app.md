@@ -38,7 +38,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    Creating an Application Root is similar to creating a normal PDB, just with an extra parameter. The source of the Application Root can be an existing database or the SEED database on CDB level.
 
-   - Create a Application pluggable database **APP_ROOT** in the container database **CDB1**
+   - Create a Application pluggable database **APP\_ROOT** in the container database **CDB1**
 
    1. Connect to **CDB1**
 
@@ -103,7 +103,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    One of the things we can do now is create a new App user and create some objects for this user.
 
-   **Create a new user called APP_TEST and create a new table in this schema.** 
+   **Create a new user called APP\_TEST and create a new table in this schema.** 
 
     **Add a record and commit.**
 
@@ -193,7 +193,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    Before we install the application we can see that no user APP_TEST exists in our new PDB.
 
-    **Connect to the new APP_PDB1 and query for the user APP_TEST**
+    **Connect to the new APP\_PDB1 and query for the user APP\_TEST**
 
    ```
    alter session set container=APP_PDB1;
@@ -212,7 +212,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    We can now check to see if the user has been created and whether or not our data has been inserted.
 
-   #####  Query the table APP_TEST.MYTABLE to see if the installation was successful
+   #####  Query the table APP\_TEST.MYTABLE to see if the installation was successful
 
    ```
    select * from APP_TEST.MYTABLE;
@@ -323,7 +323,7 @@ SQL> /
 
 ## Upgrade Applications
 
-###  Upgrade APP01 in APP_ROOT  from 1.0 to 2.0
+###  Upgrade APP01 in APP\_ROOT  from 1.0 to 2.0
 
 Major changes to an application constitute application upgrades. You can upgrade an application in an application container.
 
@@ -406,7 +406,7 @@ SQL>  ALTER PLUGGABLE DATABASE APPLICATION APP01  END UPGRADE;
 Pluggable database altered.
 ```
 
-***Insert  Data into the tables  with SHARING clause  in APP_ROOT.***
+***Insert  Data into the tables  with SHARING clause  in APP\_ROOT.***
 
 ```
 insert into app_common.T_DATA values (1);
@@ -430,9 +430,9 @@ Commit complete.
 
 
 
-Observe that all Inserts into Tables with SHARING=DATA,METADATA and EXTENDED  options are successful in APP_ROOT.
+Observe that all Inserts into Tables with SHARING=DATA,METADATA and EXTENDED  options are successful in APP\_ROOT.
 
-***UPGRADE the application APP01 in APP_PDB1 from 1.0 to 2.0***
+***UPGRADE the application APP01 in APP\_PDB1 from 1.0 to 2.0***
 
 ```
 alter session set container=APP_PDB1;
@@ -499,7 +499,7 @@ SQL> commit;
 Commit complete.
 ```
 
-As the  following table shows, you cannot insert or delete data if the table has SHARING is DATA or EXTENDED. However, in EXTENDED table you can have Both Local data and APP_ROOT data, the insert was successful.
+As the  following table shows, you cannot insert or delete data if the table has SHARING is DATA or EXTENDED. However, in EXTENDED table you can have Both Local data and APP\_ROOT data, the insert was successful.
 
 The following table shows the types of application common objects, and where the data and metadata is stored.
 
@@ -513,7 +513,7 @@ The following table shows the types of application common objects, and where the
 
 
 
-***As a last step, try to delete the record with ID=1 . This data was inserted from APP_ROOT***
+***As a last step, try to delete the record with ID=1 . This data was inserted from APP\_ROOT***
 
 ```
 select * from app_common.T_DATA;
@@ -541,13 +541,13 @@ SQL> delete app_common.T_EXTENDED where id=1;
 0 rows deleted.
 ```
 
-Note that in table T_EXTENDED, we can select where Id=1, but cannot delete as the data was created in APP_ROOT.
+Note that in table T\_EXTENDED, we can select where Id=1, but cannot delete as the data was created in APP\_ROOT.
 
-In case of DATA, you can query data that was created in APP_ROOT, but errors out when we try to Delete.
+In case of DATA, you can query data that was created in APP\_ROOT, but errors out when we try to Delete.
 
-In case of METADATA  query does not show the data inserted in APP_ROOT, as only DDL statements is replicated.
+In case of METADATA  query does not show the data inserted in APP\_ROOT, as only DDL statements is replicated.
 
-In some tables we inserted a record with ID 2. from within APP_PDB So let us see how much of this information is available in the APP_ROOT
+In some tables we inserted a record with ID 2. from within APP\_PDB So let us see how much of this information is available in the APP\_ROOT
 
 ***Connect to the Application Root and query the 3 tables***
 
@@ -578,7 +578,7 @@ SQL> select * from app_common.T_METADATA;
           1
 ```
 
-As you can see, From APP_ROOT, you cannot see data inserted in APP_PDB1. 
+As you can see, From APP\_ROOT, you cannot see data inserted in APP\_PDB1. 
 
 
 
@@ -751,7 +751,7 @@ A good scenario is hosting a multi tenant Application environment where each ten
 
 
 
- Connect to APP_ROOT and create Additional App_PDB2  and install the Application APP01
+ Connect to APP\_ROOT and create Additional App_PDB2  and install the Application APP01
 
 ```
 conn sys/oracle@//localhost:1523/cdb1 as sysdba
@@ -808,7 +808,7 @@ SQL> commit;
 Commit complete.
 ```
 
-Now  APP01 Application in APP_ROOT has been SYNCed with APP_PDB1 and APP_PDB2 . You can now run the sql CONTAINER query to see the data  inserted after SYNCing.
+Now  APP01 Application in APP\_ROOT has been SYNCed with APP\_PDB1 and APP\_PDB2 . You can now run the sql CONTAINER query to see the data  inserted after SYNCing.
 
 ```
 conn  sys/oracle@//localhost:1523/APP_ROOT as sysdba
@@ -817,11 +817,11 @@ select  con$name, A.*  FROM  containers(app_common.T_METADATA) A ;
 
 
 
-#### Clone APP_ROOT_REPLICA in CDB2 based on  APP_ROOT in CDB1.
+#### Clone APP\_ROOT\_REPLICA in CDB2 based on  APP\_ROOT in CDB1.
 
-##### Create a DB link in CDB2 pointing to CDB1 and Remote clone APP_ROOT. 
+##### Create a DB link in CDB2 pointing to CDB1 and Remote clone APP\_ROOT. 
 
-User the CLAUSE "**AS APPLICATION CONTAINER from <remote_APP_ROOT>@<DB_LINK>**"
+User the CLAUSE "**AS APPLICATION CONTAINER from <remote_APP\_ROOT>@<DB_LINK>**"
 
 ```
 conn sys/oracle@//localhost:1524/cdb2 as sysdba
@@ -876,17 +876,17 @@ SQL> show pdbs
 
 
 
-#### Create App PDB APP_PDB3 under APP_ROOT_RELICA and install APP01 application.
+#### Create App PDB APP\_PDB3 under APP\_ROOT\_REPICA and install APP01 application.
 
-Now, APP_ROOT_REPLICA is a ROOT CONTAINER in Container database CDB2.  This CDB could in real world would be in a different server. This APP_ROOT_REPLICA being Application ROOT can now have local App PDBs. 
+Now, APP\_ROOT\_REPLICA is a ROOT CONTAINER in Container database CDB2.  This CDB could in real world would be in a different server. This APP\_ROOT\_REPLICA being Application ROOT can now have local App PDBs. 
 
-**Connect to APP_ROOT_REPLICA and create App PDB APP_PDB3 and SYNC the Application APP01**
+** Connect to APP\_ROOT\_REPLICA lala and create App PDB APP\_PDB3 and SYNC the Application APP01 **
 
 ```
 
 conn sys/oracle@//localhost:1524/APP_ROOT_REPLICA as sysdba
-create pluggable database APP_PDB3  admin user admin identified by admin;
-alter pluggable database APP_PDB3 open;
+create pluggable database APP\_PDB3  admin user admin identified by admin;
+alter pluggable database APP\_PDB3 open;
 show pdbs
 conn sys/oracle@//localhost:1524/APP_PDB3 as sysdba
 alter pluggable database application APP01 SYNC;
@@ -920,7 +920,7 @@ SQL> commit;
 Commit complete.
 ```
 
-#### Query the App data using the containers clause from APP_ROOT_REPLICA in CDB2.
+#### Query the App data using the containers clause from APP\_ROOT\_REPLICA in CDB2.
 
 ```
 conn sys/oracle@//localhost:1524/APP_ROOT_REPLICA as sysdba;
@@ -939,11 +939,11 @@ APP_ROOT_REPLICA                          1          4
 APP_PDB3                               3333          6
 ```
 
-Here, APP_ROOT_REPLICA has has data (ID =1 ) as this  Application container was cloned from APP_ROOT where we had inserted earlier. Having the same application run on different Replicas of Application Containers  in different CDBs address data sovereignty and latency issues. 
+Here, APP\_ROOT\_REPLICA has has data (ID =1 ) as this  Application container was cloned from APP\_ROOT where we had inserted earlier. Having the same application run on different Replicas of Application Containers  in different CDBs address data sovereignty and latency issues. 
 
-Now, by creating a Proxy PDB for APP_ROOT_REPLICA (in CDB2) in  APP_ROOT ( in CDB1), we can query using the containers clause across all APPs. ( APP_PDB1, APP_PDB2 and APP_PDB3).  
+Now, by creating a Proxy PDB for APP\_ROOT\_REPLICA (in CDB2) in  APP\_ROOT ( in CDB1), we can query using the containers clause across all APPs. ( APP\_PDB1, APP\_PDB2 and APP\_PDB3).  
 
- Application APP01 upgrades and patches  in APP_ROOT are pushed to the APP_ROOT_REPLICA through the proxy PDBs.
+ Application APP01 upgrades and patches  in APP\_ROOT are pushed to the APP\_ROOT\_REPLICA through the proxy PDBs.
 
 Before we create proxy PDBs, ensure that the Port property of all the PDBS in CDB2 is 1524. ( required for proxy PDB when its not the default port (1521))
 
@@ -962,7 +962,7 @@ select * from  v$proxy_pdb_targets;
 
 
 
-#### Create ProxyPDB ARR_PROXY in APP_ROOT(in CDB1) for APP_ROOT_REPLICA (in CDB2) 
+#### Create ProxyPDB ARR_PROXY in APP\_ROOT(in CDB1) for APP\_ROOT\_REPLICA (in CDB2) 
 
  
 
@@ -1014,15 +1014,15 @@ CDB2       APP_PDB3                   3333          6
 
 
 
-Now we can apply a patch or upgrade the Master APP_ROOT,  the data will be distributed to APP_ROOT_REPLICA when we sync the proxy PDB. Let us test this.
+Now we can apply a patch or upgrade the Master APP\_ROOT,  the data will be distributed to APP\_ROOT\_REPLICA when we sync the proxy PDB. Let us test this.
 
 We will 
 
-- **Upgrade APP01** from 2.0 to 20.0 In APP_ROOT
+- **Upgrade APP01** from 2.0 to 20.0 In APP\_ROOT
 
-- **SYNC**  local App pdbs APP_PDB1 and APP_PDB2.
+- **SYNC**  local App pdbs APP\_PDB1 and APP\_PDB2.
 
-- #### Connect to ARR_PROXY &  SYNC and verify that the APP01 changes are push from APP_ROOT to APP_ROOT_REPLICA
+- #### Connect to ARR_PROXY &  SYNC and verify that the APP01 changes are push from APP\_ROOT to APP\_ROOT\_REPLICA
 
  
 
@@ -1069,7 +1069,7 @@ in_cdb1-app_root
 
 
 
-Table created during the upgrade of APP01 from 2.0 to 20.0 in APP_ROOT has successfully replicated. This demonstrates that we can have **one Master Application root container and push changes to all the  Root replicas** and inturn help manage application PDBs. 
+Table created during the upgrade of APP01 from 2.0 to 20.0 in APP\_ROOT has successfully replicated. This demonstrates that we can have **one Master Application root container and push changes to all the  Root replicas** and inturn help manage application PDBs. 
 
 ## Version Control and Compatibility.
 
@@ -1135,9 +1135,9 @@ select * from app_test.mytable;SQL>
 
 ### Compatibility 
 
-When we upgrade application , Oracle creates  a copy of the APP_ROOT container with Names like F3345058508_3_2 ..  This Helps in Creating a NEW App PDBs and SYNC to any version by USING the **SYNC to "version"** Clause.  instead of  just **SYNC**  which we did  in out lab to the latest version.
+When we upgrade application , Oracle creates  a copy of the APP\_ROOT container with Names like F3345058508_3_2 ..  This Helps in Creating a NEW App PDBs and SYNC to any version by USING the **SYNC to "version"** Clause.  instead of  just **SYNC**  which we did  in out lab to the latest version.
 
-If we do not need to keep older versions of the APP_ROOT , then we could simply set compatibility to a higher version.  Any App PDBs created from App Root after setting the compatibility will inherit the data until the set version.  Application root clones that resulted from application upgrades corresponding to versions are implicitly dropped.
+If we do not need to keep older versions of the APP\_ROOT , then we could simply set compatibility to a higher version.  Any App PDBs created from App Root after setting the compatibility will inherit the data until the set version.  Application root clones that resulted from application upgrades corresponding to versions are implicitly dropped.
 
 
 
