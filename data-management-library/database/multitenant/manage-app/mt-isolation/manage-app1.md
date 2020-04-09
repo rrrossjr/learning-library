@@ -131,7 +131,7 @@ Database Service Firewall is a feature of Oracle Access Control List (ACL) since
 
 ####    **Step 2.  Configure the listener.**
 
-   The LOCAL_REGISTRATION_ADDRESS_lsnr_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
+   The LOCAL_REGISTRATION_ADDRESS_lsnr_alias and FIREWALL lala setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
 
    ```
    # LOCAL_REGISTRATION_ADDRESS_lsnr_alias = ON
