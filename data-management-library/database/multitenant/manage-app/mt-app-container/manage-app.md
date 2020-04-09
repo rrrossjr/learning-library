@@ -2,7 +2,7 @@
 
 ## Lab Introduction
 
-This is a series of 12 hands-on labs designed to familiarize you with the Application Container functionality of Oracle Multitenant. In these labs, We will dive into the concepts of Application container and Proxy PDBs.
+This is a series self pased labs. Once you are familir of multitenant back concepts like plug-in,un-plug, clone, hot clone and refreshable clones, you with the Application Container functionality of Oracle Multitenant. In these labs, We will dive into the concepts of Application container and Proxy PDBs.
 
 
 ### Lab Assumptions
@@ -86,7 +86,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    ```
 
    For more information see [documentation](http://docs.oracle.com/database/122/ADMIN/administering-application-containers-with-sql-plus.htm) .you will see there is a lot of detail about this functionality.
-
+   
    ## Creating an application
 
    We can create one or more Applications within the Application Root container. When an Application is created, you need to give it a version number and a name. All statements that are executed after the initial 'BEGIN' clause of the application are captured and can be replayed in the target APP PDB.
@@ -105,14 +105,12 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    **Create a new user called APP\_TEST and create a new table in this schema.** 
 
-    **Add a record and commit.**
-
    ```
-   create user app_test identified by app_test;
+   <copy>create user app_test identified by app_test;
    alter user APP_TEST quota unlimited on SYSTEM;
    create table app_test.mytable (id number);
    insert into app_test.mytable values (1);
-   commit;
+   commit;</copy>
    ```
 
    Usually a lot more statements would follow, comparable to an application install script. But for now we simulate that one table and one user is all we need in our application. 
@@ -123,7 +121,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
     alter pluggable database application APP01 end install;
    ```
 
-   The actual statements that were recorded are visible in the view DBA_APP_STATEMENTS
+   The actual statements that were recorded are visible in the view DBA\_APP\_STATEMENTS
 
    #####  Query the stored commands for application APP01
 
@@ -474,7 +472,7 @@ SQL> select * from app_common.T_METADATA;
 no rows selected
 ```
 
-The table app_common.T_METADATA does not have any data as it shares only DDL .  However if SHARING is DATA or EXTENDED,  the data is shared from the App Root to App PDB.
+The table app\_common.T\_METADATA does not have any data as it shares only DDL .  However if SHARING is DATA or EXTENDED,  the data is shared from the App Root to App PDB.
 
 ***Insert a value in the created tables***
 
@@ -1083,7 +1081,7 @@ APP PDBs can run different versions of Application , Combining this with the abi
 
 ```
 conn sys/oracle@//localhost:1523/APP_ROOT as sysdba
-select * from containers(dba_pplications) select  cdb$name,con$name, APP_NAME , APP_VERSIOn,CON_ID from containers(dba_applications);
+select * from containers(dba_applications) select  cdb$name,con$name, APP_NAME , APP_VERSIOn,CON_ID from containers(dba_applications);
 ```
 
 
@@ -1104,13 +1102,13 @@ CDB1       APP_PDB1             APP01                                         20
 
 
 
-You will observe that  APP_PDB3 has not been upgraded to  version 20.0  .... It is at level 2.0
+You will observe that  APP\_PDB3 has not been upgraded to  version 20.0  .... It is at level 2.0
 
 ### Implicit Patching
 
 Another import feature to remember is that the PATCHES applied between upgrades will be  implicitly applied before the upgrade.  Earlier , we had applied PATCH 1.1  which added a column "description" to table app_test.mytable in APP01 1.0.
 
- Now connect to APP_PDB3 to see if the changes done in the patch 1.1 are in APP_PDB3 which is in version 2.0.
+ Now connect to APP\_PDB3 to see if the changes done in the patch 1.1 are in APP\_PDB3 which is in version 2.0.
 
 ```
 conn sys/oracle@//localhost:1524/app_pdb3 as sysdba
