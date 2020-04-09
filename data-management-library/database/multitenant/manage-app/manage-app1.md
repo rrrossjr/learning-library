@@ -282,6 +282,8 @@ Once all services are available, specifically the PDB1 services, we can continue
 
    Once the firewall is set and listener is resarted, We will need to register the IP address of every connection that can be accepted per PDB. We are creating a whitelist of all IP address that can connect to a service. In our multitenant environment, CDB1 and PDB1 are both services. We can add additional user defined service and add whitelist to them as well.
 
+
+####**Step 3: Add the IPADDRESS to the whitelist for each PDB.**
 ```
  sqlplus sys/oracle@//localhost:1523/pdb1 as sysdba
 
