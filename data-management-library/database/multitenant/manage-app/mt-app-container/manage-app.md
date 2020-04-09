@@ -2,7 +2,8 @@
 
 ## Lab Introduction
 
-This is a series self pased labs. Once you are familir of multitenant back concepts like plug-in,un-plug, clone, hot clone and refreshable clones, you with the Application Container functionality of Oracle Multitenant. In these labs, We will dive into the concepts of Application container and Proxy PDBs.
+This is a series self pased labs. Once you are familir of multitenant basic concepts like plug-in,un-plug, clone, hot clone and refreshable clones, you can familiaize with Application Container functionality of Oracle Multitenant. In these labs, We will dive into the concepts of Application container and Proxy PDBs.
+Finally see how it all fits together in Root Replicas
 
 
 ### Lab Assumptions
@@ -34,9 +35,9 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    ./resetCDB.sh
    ```
 
-### Application Container 
+## Application Container 
 
-   Creating an Application Root is similar to creating a normal PDB, just with an extra parameter. The source of the Application Root can be an existing database or the SEED database on CDB level.
+   Creating an Application Root is similar to creating a normal PDB, just with an extra clause "AS APPLICATION CONTAINER". The source of the Application Root can be an existing database or the SEED database on CDB level.
 
    - Create a Application pluggable database **APP\_ROOT** in the container database **CDB1**
 
@@ -85,9 +86,9 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    }
    ```
 
-   For more information see [documentation](http://docs.oracle.com/database/122/ADMIN/administering-application-containers-with-sql-plus.htm) .you will see there is a lot of detail about this functionality.
-   
-   ## Creating an application
+
+
+   #### Creating an application
 
    We can create one or more Applications within the Application Root container. When an Application is created, you need to give it a version number and a name. All statements that are executed after the initial 'BEGIN' clause of the application are captured and can be replayed in the target APP PDB.
 
@@ -123,7 +124,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    The actual statements that were recorded are visible in the view DBA\_APP\_STATEMENTS
 
-   #####  Query the stored commands for application APP01
+   ####  Query the stored commands for application APP01
 
    ```
    select app_statement from dba_app_statements
@@ -131,7 +132,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    order by statement_id;
    ```
 
-    
+​    
 
    ```
    SQL> select app_statement from dba_app_statements
@@ -155,13 +156,13 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    The Application can be installed in an Application PDB.
 
-   ## Creating an Application PDB
+   ### Creating an Application PDB
 
    An Application PDB is a child of APPS_ROOT PDB. The source could either be the regular CDB SEED, an existing application PDB or a special Application Seed PDB. For this example we will use the regular CDB SEED (PDB$SEED) pluggable database.
 
    The only difference between a regular PDB and an Application PDB Is the location where it is plugged in. Regular PDBs are plugged into the CDB$ROOT, Application PDBs are plugged into the Application Root Container. So, in order to create a new Application PDB, we need to connect to the Application Root Container and execute a normal Create Pluggable Database statement.
 
-   #####  Connect to the Application Root PDB and create a new Application PDB. Finally, open the PDB.
+   ####  Connect to the Application Root PDB and create a new Application PDB. Finally, open the PDB.
 
    ```
    alter session set container=APP_ROOT;
@@ -169,11 +170,11 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    alter pluggable database APP_PDB1 open;
    ```
 
-    
+​    
 
    The Application Root works basically as a regular container database. This means that if we query the databases available in this container, it will only show us the Application PDBs and not the remaining PDBs in the regular CDB$ROOT.
 
-   #####  Display the available PDBs in this container
+   ####  Display the available PDBs in this container
 
    ```
    SQL> show pdbs
@@ -217,7 +218,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    select username from dba_users where username='APP_TEST';
    ```
 
-    
+​    
 
    ```
    SQL> select * from APP_TEST.MYTABLE;
@@ -1192,4 +1193,5 @@ SQL> show pdbs
 Note that one of the APP ROOT CLONE F3345058508_3_1 is deleted as we set the compatibility to 2.0. So, any App Pdbs created further will inherit all the changes from  1.0 version and 1.1 Patch and 2.0 changes when SYNCed. 
 
 
+For more information see [documentation](http://docs.oracle.com/database/122/ADMIN/administering-application-containers-with-sql-plus.htm) .you will see there is a lot of detail about this functionality.
 
