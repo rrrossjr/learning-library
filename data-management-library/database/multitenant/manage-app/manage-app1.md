@@ -192,6 +192,7 @@ LISTCDB1 =
 #### **Restart lister and verify FIREWALL is ON.**
 
 ```
+lsnrctl stop listcdb1
 lsnrctl start listener
 lsnrctl status listcdb1
 ```
