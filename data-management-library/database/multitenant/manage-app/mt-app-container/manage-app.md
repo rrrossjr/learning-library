@@ -88,7 +88,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
 
 
-   #### Creating an application
+**Creating an application**
 
    We can create one or more Applications within the Application Root container. When an Application is created, you need to give it a version number and a name. All statements that are executed after the initial 'BEGIN' clause of the application are captured and can be replayed in the target APP PDB.
 
@@ -124,7 +124,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    The actual statements that were recorded are visible in the view DBA\_APP\_STATEMENTS
 
-   ####  Query the stored commands for application APP01
+**Query the stored commands for application APP01**
 
    ```
    select app_statement from dba_app_statements
@@ -156,13 +156,13 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    The Application can be installed in an Application PDB.
 
-   ### Creating an Application PDB
+#### **Creating an Application PDB**
 
    An Application PDB is a child of APPS_ROOT PDB. The source could either be the regular CDB SEED, an existing application PDB or a special Application Seed PDB. For this example we will use the regular CDB SEED (PDB$SEED) pluggable database.
 
    The only difference between a regular PDB and an Application PDB Is the location where it is plugged in. Regular PDBs are plugged into the CDB$ROOT, Application PDBs are plugged into the Application Root Container. So, in order to create a new Application PDB, we need to connect to the Application Root Container and execute a normal Create Pluggable Database statement.
 
-   ####  Connect to the Application Root PDB and create a new Application PDB. Finally, open the PDB.
+#### **Connect to the Application Root PDB and create a new Application PDB. Finally, open the PDB.**
 
    ```
    alter session set container=APP_ROOT;
@@ -174,7 +174,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    The Application Root works basically as a regular container database. This means that if we query the databases available in this container, it will only show us the Application PDBs and not the remaining PDBs in the regular CDB$ROOT.
 
-   ####  Display the available PDBs in this container
+#### **Display the available PDBs in this container**
 
    ```
    SQL> show pdbs
@@ -186,7 +186,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    
 
-   ## Installing an application in an Application PDB
+#### **Installing an application in an Application PDB**
 
    Installing, upgrading or patching an application in an Application PDB is basically running the statements that have been captured during the initial INSTALL command in the Application Root. The running of the statements is called 'Syncing' to a particular version of the application. If no version has been specified during the **SYNC** process, the system will run all commands up to the latest version of the Application.
 
@@ -201,7 +201,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
     Note that no Application or users are installed in the Application PDB.  We need to **SYNC**  the Application PDB in order to install the application.
 
-   ##### Install the application APP01 into the APP_PDB1
+#### **Install the application APP01 into the APP_PDB1**
 
    ```
     alter pluggable database application APP01 SYNC;
@@ -211,7 +211,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    We can now check to see if the user has been created and whether or not our data has been inserted.
 
-   #####  Query the table APP\_TEST.MYTABLE to see if the installation was successful
+#### **Query the table APP\_TEST.MYTABLE to see if the installation was successful**
 
    ```
    select * from APP_TEST.MYTABLE;
@@ -236,7 +236,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    Observe that the table and user created in APP\_ROOT in now created in APP\_PDB1 after SYNCing the App PDB.
 
-   #### View the application and the versions from **DBA_APPLICATIONS.**
+#### **View the application and the versions from DBA_APPLICATIONS.**
 
    ```
    col APP_NAME    format a10
@@ -247,11 +247,11 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    
 
-   ### Patching an Application and pushing the changes
+### **Patching an Application and pushing the changes**
 
    Patching means changing the application in a non-destructive way. Basically, do anything that would not result in data loss. For example, we can add a new table, procedures, functions  to the application, add a column to an existing table or add data into the existing tables. Dropping a table would not be allowed as this would mean data loss. Minor changes to an application constitute application patches. If you consider the changes to be major and will affect you application compatibility, then use upgrade instead of patching. Here is an example of Patching:
 
-   ###  Start to create a patch for the application APP01 with version 1.1
+#### **Start to create a patch for the application APP01 with version 1.1**
 
    In this example we will  create a table and add a column to existing table and insert data. All within the application APP01 patch.
 
@@ -269,7 +269,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    If we connect to the Application PDB, no changes are forwarded yet. We could automate this process but by default it is a manual action to sync the Application in the Application PDB with the one in the Application Root.
 
-   ### Connect to the Application PDB and check the current status
+#### **Connect to the Application PDB and check the current status**
 
    ```
    alter session set container=APP_PDB1;
