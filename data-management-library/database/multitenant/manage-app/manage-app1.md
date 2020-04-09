@@ -62,7 +62,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    
 
-   ### **Step 1.  Install ACL package**
+   #### **Step 1.  Install ACL package**
 
    You need a package DBMS_SFW_ACL_ADMIN package. This is installed by running as sysdba. This package is owned by the DBSFWUSER schema. The procedures in this package can be run only by the DBSFWUSER user.
    
@@ -132,9 +132,9 @@ SQL>
 
    
 
-   ### **Step 2.  Configure the listener.**
+   #### **Step 2.  Configure the listener.**
 
-   The `LOCAL_REGISTRATION_ADDRESS_lsnr_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
+   The `LOCAL\_REGISTRATION\_ADDRESS_lsnr\_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
    
    ```
    ##### LOCAL_REGISTRATION_ADDRESS_lsnr_alias = ON
@@ -280,7 +280,7 @@ Once all services are available, specifically the PDB1 services, we can continue
 
   Each policy is represented by an access control list (ACL) containing hosts that are allowed access to a specific database service. Local listeners and server processes validate all inbound client connections against the ACL.
 
-   Once the firewall is set and listener is resarted, We will need to register the ipaddress of every connection that can be accepted per PDB. We are creating a whitelist of all ipaddress that can connect to a service. In our multitenant environment, CDB1 and PDB1 are both services. We can add additional user defined service and add whitelist to them as well.
+   Once the firewall is set and listener is resarted, We will need to register the IP address of every connection that can be accepted per PDB. We are creating a whitelist of all IP address that can connect to a service. In our multitenant environment, CDB1 and PDB1 are both services. We can add additional user defined service and add whitelist to them as well.
 
 ```
  sqlplus sys/oracle@//localhost:1523/pdb1 as sysdba
@@ -294,6 +294,8 @@ ERROR:
 ORA-12506: TNS:listener rejected connection based on service ACL filtering
 ```
 
+You will see that the connection fails with error ORA-12506. Since even the local host IP address is not included in the whitelist, the listener does not allow connections.
+We are clearly not allowed to access this database based on the ACL filtering available. So now we are going to add our IP address to the whitelist for the (default) service PDB1.
 
 
    SQL> show pdbs
@@ -310,7 +312,7 @@ ORA-12506: TNS:listener rejected connection based on service ACL filtering
 
    Step e)  Note that you will get errors if you do not include the DBSFWUSER. 
 
-   Add the ACL service ipaddress for the perticulat PDB and the IP address from which to allow connections.
+   Add the ACL service IP address for the perticulat PDB and the IP address from which to allow connections.
 
    SQL> execute  dbms_sfw_acl_admin.ip_add_pdb_ace('CDB4PDB1','140.86.12.219');
 
