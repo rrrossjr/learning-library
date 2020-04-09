@@ -5,7 +5,15 @@
             "description":"Workhop Overview",
             "publisheddate": "01/15/2020",
             "filename":"./about-the-workshop/content.md"
+        },{         
+            "title": "Multitenant Basics",
+            "description": "Clone, Plug and Drop Pluggable Databases",
+            "partnumber": "Ennnnn_01",
+            "publisheddate": "03/10/2020",
+            "contentid": "12nnnn",
+            "filename": "./../clone-plug-drop/clone-plug-drop.md"
         },
+
         {
             "title": "Multitenant Application Containers",
             "description":"Multitenant Application Containers",

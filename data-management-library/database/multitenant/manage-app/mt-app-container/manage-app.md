@@ -57,11 +57,11 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
       show pdbs;
       ```
 
-      ![](.../images/MT01_createAppRoot.png)****
+      ![](./images/MT01_createAppRoot.png)
 
       
 
-   ## Manage Applications
+   ### Manage Applications
 
    Applications are managed in the application root container using the `APPLICATION` clause of the `ALTER PLUGGABLE DATABASE` command, described below.
 
@@ -233,7 +233,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    APP_TEST
    ```
 
-   Observe that the table and user created in APP_ROOT in now created in APP_PDB1 after SYNCing the App PDB.
+   Observe that the table and user created in APP\_ROOT in now created in APP\_PDB1 after SYNCing the App PDB.
 
    #### View the application and the versions from **DBA_APPLICATIONS.**
 
@@ -246,7 +246,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    
 
-   ## Patching an Application and pushing the changes
+   ### Patching an Application and pushing the changes
 
    Patching means changing the application in a non-destructive way. Basically, do anything that would not result in data loss. For example, we can add a new table, procedures, functions  to the application, add a column to an existing table or add data into the existing tables. Dropping a table would not be allowed as this would mean data loss. Minor changes to an application constitute application patches. If you consider the changes to be major and will affect you application compatibility, then use upgrade instead of patching. Here is an example of Patching:
 
@@ -268,7 +268,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    If we connect to the Application PDB, no changes are forwarded yet. We could automate this process but by default it is a manual action to sync the Application in the Application PDB with the one in the Application Root.
 
-   ###  Connect to the Application PDB and check the current status
+   ### Connect to the Application PDB and check the current status
 
    ```
    alter session set container=APP_PDB1;
@@ -359,7 +359,7 @@ The `DEFAULT_SHARING` parameter, which has `METADATA` as a default value, determ
 
 
 
-***Create a new tablespace for the new common user*** 
+**Create a new tablespace for the new common user**
 
 
 
@@ -372,7 +372,7 @@ grant connect, resource to app_common;
 
 
 
-***Create 3 new tables, each with a different SHARING clause.***
+**Create 3 new tables, each with a different SHARING clause.**
 
 ```
 create table app_common.T_DATA sharing=data (id number);
@@ -393,7 +393,7 @@ Table created.
 
 
 
-### ***END upgrade of APP01 from 1.0  to 2.0***
+### **END upgrade of APP01 from 1.0  to 2.0**
 
 ```
 ALTER PLUGGABLE DATABASE APPLICATION APP01  END UPGRADE;
@@ -404,7 +404,7 @@ SQL>  ALTER PLUGGABLE DATABASE APPLICATION APP01  END UPGRADE;
 Pluggable database altered.
 ```
 
-***Insert  Data into the tables  with SHARING clause  in APP\_ROOT.***
+**Insert  Data into the tables  with SHARING clause  in APP\_ROOT.**
 
 ```
 insert into app_common.T_DATA values (1);
@@ -430,7 +430,7 @@ Commit complete.
 
 Observe that all Inserts into Tables with SHARING=DATA,METADATA and EXTENDED  options are successful in APP\_ROOT.
 
-***UPGRADE the application APP01 in APP\_PDB1 from 1.0 to 2.0***
+**UPGRADE the application APP01 in APP\_PDB1 from 1.0 to 2.0**
 
 ```
 alter session set container=APP_PDB1;
@@ -449,7 +449,7 @@ Pluggable database altered.
 
 
 
-*** DML and Query on  Application Tables***
+** DML and Query on  Application Tables**
 
 ```
 select * from app_common.T_DATA;
@@ -474,7 +474,7 @@ no rows selected
 
 The table app\_common.T\_METADATA does not have any data as it shares only DDL .  However if SHARING is DATA or EXTENDED,  the data is shared from the App Root to App PDB.
 
-***Insert a value in the created tables***
+**Insert a value in the created tables**
 
 ```
 insert into app_common.T_DATA values (2);
@@ -501,7 +501,7 @@ As the  following table shows, you cannot insert or delete data if the table has
 
 The following table shows the types of application common objects, and where the data and metadata is stored.
 
- ***Application Common Objects***
+ **Application Common Objects**
 
 | Object Type          | SHARING Value   | Metadata Storage | Data Storage                         |
 | :------------------- | :-------------- | :--------------- | :----------------------------------- |
@@ -511,7 +511,7 @@ The following table shows the types of application common objects, and where the
 
 
 
-***As a last step, try to delete the record with ID=1 . This data was inserted from APP\_ROOT***
+**As a last step, try to delete the record with ID=1 . This data was inserted from APP\_ROOT**
 
 ```
 select * from app_common.T_DATA;
@@ -547,7 +547,7 @@ In case of METADATA  query does not show the data inserted in APP\_ROOT, as only
 
 In some tables we inserted a record with ID 2. from within APP\_PDB So let us see how much of this information is available in the APP\_ROOT
 
-***Connect to the Application Root and query the 3 tables***
+**Connect to the Application Root and query the 3 tables**
 
 ```
 alter session set container=APP_ROOT;
