@@ -35,6 +35,8 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    ./resetCDB.sh
    ```
 
+   
+
    ##  Database Service Firewall
 
    Database Service Firewall is a feature of Oracle Access Control List (ACL) since 12.2.
@@ -47,33 +49,33 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    
 
-   ### SETUP
+   ### SETUP Steps
 
    The steps include
 
    
-
+   
    - Install the ACL package
    - Configure the listener
-   - Add the IPADDRESS to the whitelist for each PDB.
+- Add the IPADDRESS to the whitelist for each PDB.
    - Verify/test.
 
    
 
-   **Step 1.  Install ACL package**
+   ### **Step 1.  Install ACL package**
 
    You need a package DBMS_SFW_ACL_ADMIN package. This is installed by running as sysdba. This package is owned by the DBSFWUSER schema. The procedures in this package can be run only by the DBSFWUSER user.
-
+   
    ```
    <copy>sudo su - oracle
    
    sqlplus sys/oracle@//localhost:1523/cdb1 as sysdba  @$ORACLE_HOME/rdbms/admin/dbmsaclsrv.sql </copy>
    
-   
+
    ```
 
    
-
+   
    ```
    [opc@mtv30 ~]$ sudo su - oracle
    Last login: Mon Apr  6 21:20:38 GMT 2020 on pts/0
@@ -123,44 +125,50 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    
    Session altered.
    
-   SQL> 
+   ```
+
+SQL> 
    ```
 
    
 
-   **Step 2.  Configure the listener.**
+   ### **Step 2.  Configure the listener.**
 
    The `LOCAL_REGISTRATION_ADDRESS_lsnr_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
-
+   
    ```
    # LOCAL_REGISTRATION_ADDRESS_lsnr_alias = ON
    #LOCAL_REGISTRATION_ADDRESS_LISTENER = ON
-   LOCAL_REGISTRATION_ADDRESS_LISTCDB1 = ON
+LOCAL_REGISTRATION_ADDRESS_LISTCDB1 = ON
    ```
 
    
 
    The `FIREWALL` attribute can be added to the listener endpoint to control the action of the database firewall.
-
-   - `FIREWALL=ON` : Only connections matching an ACL are considered valid. All other connections are rejected.
+   
+- `FIREWALL=ON` : Only connections matching an ACL are considered valid. All other connections are rejected.
    - `FIREWALL=OFF` : The firewall functionality is disabled, so all connections are considered valid.
 
    #### Take a backup of current listener.
 
    You could open another termimal to take a backup.
-
-   ```
-   sudo su - oracle
-   cd $ORACLE_HOME/network/admin
-   cp listener.ora listener.backup
-   ```
-
    
+   ```
+```
+<copy> sudo su - oracle
+cd $ORACLE_HOME/network/admin
+cp listener.ora listener.backup</copy>
+```
+
+
+   ```
+
+  
 
   #### Edit Listener.ora 
 
   <pre>
-
+  
   LISTCDB2 =
     (DESCRIPTION_LIST =
       (DESCRIPTION =
@@ -183,7 +191,7 @@ LISTCDB1 =
 
 Reload listener and observer  ensure you see (FIREWALL=ON) in the listerer status.
 
-```
+   ```
 lsnrctl reload listcdb1
 
 lsnrctl status listcdb1
@@ -235,15 +243,21 @@ The command completed successfully
 
 
 
+### Step 3: Add the IPADDRESS to the whitelist for each PDB.
+
+  Each policy is represented by an access control list (ACL) containing hosts that are allowed access to a specific database service. Local listeners and server processes validate all inbound client connections against the ACL.
+
+   Once the firewall is set and listener is resarted, We will need to register the ipaddress of every connection that can be accepted per PDB. We are creating a whitelist of all ipaddress that can connect to a service. In our multitenant environment, CDB1 and PDB1 are both services. We can add additional user defined service and add whitelist to them as well.
 
 
-   Each policy is represented by an access control list (ACL) containing hosts that are allowed access to a specific database service. Local listeners and server processes validate all inbound client connections against the ACL.
 
-   Once the firewall is set and listener is resarted, We will need to register the ipaddress of every connection can be accapted per PDB. We are assestially createing a whitelist of all ipaddress that can connect to it.
+First try to connect to PDB1 without registering any Ipaddress.
 
-   Below are the steps to configure the DB for PDB isolation using  Database service firewall.
+sqlplus sys/oracle@//localhost:1523/pdb1 as sysdba
 
- 
+
+
+
 
    SQL> show pdbs
 
@@ -331,5 +345,179 @@ The command completed successfully
 
    ERROR:
 
-  
 
+
+Multitenant Lockdown  
+
+PDB Lockdown profiles prevent administrators, even if they have been granted permissions through roles, from changing certain settings or executing certain commands. In this lab we will let you work with setting up PDB Lockdown Profiles.
+
+## Prevent changes using ALTER SYSTEM commands
+
+The first step is to create a lockdown profile, second step is to add statements to the lockdown profile which are disabled. The profiles are created at CDB$ROOT level and can be applied to PDBs in that CDB$ROOT.
+
+à Login to CDB1 as sysdba and create a lockdown profile
+
+[oracle@guest lab04]$ **. oraenv**
+
+ORACLE_SID = [CDB2] ? **CDB1**
+
+The Oracle base remains unchanged with value /u01/oracle
+
+ 
+
+[oracle@guest lab04]$ **sqlplus / as sysdba**
+
+ 
+
+SQL*Plus: Release 12.2.0.1.0 Production on Tue Sep 19 13:38:12 2017
+
+ 
+
+Copyright (c) 1982, 2016, Oracle. All rights reserved.
+
+ 
+
+ 
+
+Connected to:
+
+Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+
+ 
+
+SQL> **create lockdown profile lock01;**
+
+ 
+
+Lockdown Profile created.
+
+ 
+
+As a first example, we will prevent a PDB to change the settings for the parameter CURSOR_SHARING. Changing this parameter could cause changes in performance and behavior of the entire CDB. Adding a rule to the newly created LOCK01 lockdown profile is done with an ALTER LOCKDOWN PROFILE command.
+
+à Prevent the change of CURSOR_SHARING using an ALTER SYSTEM command
+
+SQL> **alter lockdown profile LOCK01** 
+
+   **disable statement=('alter system') clause=('set') option=('cursor_sharing');**
+
+ 
+
+Lockdown Profile altered.
+
+After the lockdown profile has been created, it is not automatically active for one or more PDBs. Let us first see if we can change the parameter before we activate the lockdown profile:
+
+à Connect to container PDB1 and display the current value of CURSOR_SHARING
+
+SQL> **alter session set container=PDB1;**
+
+ 
+
+Session altered.
+
+ 
+
+SQL> **show parameter cursor_sharing**
+
+ 
+
+NAME                 TYPE    VALUE
+
+------------------------------------ ----------- ------------------------------
+
+cursor_sharing            string   EXACT
+
+à Change the value of cursor_sharing to FORCE
+
+SQL> **alter system set cursor_sharing = FORCE;**
+
+ 
+
+System altered.
+
+Because the lockdown profile has not been activated for this PDB, we can still change the parameter if we have enough permissions to do so.
+
+à Enable the lockdown profile LOCK01
+
+SQL> **alter system set PDB_LOCKDOWN=LOCK01;**
+
+ 
+
+System altered.
+
+à Try to change the value of CURSOR_SHARING back to EXACT
+
+SQL> **alter system set cursor_sharing=EXACT;**
+
+alter system set cursor_sharing=EXACT
+
+*
+
+ERROR at line 1:
+
+ORA-01031: insufficient privileges
+
+As you can see, the lockdown profile prevents me from changing the cursor sharing. The same lockdown could also prevent changes to the SGA size, the CPU_COUNT or other parameters that could have an impact to other PDBs in the CDB.
+
+## Prevent using Oracle Database Options
+
+Oracle Partitioning Option is one of the options that can be disabled using PDB Lockdown profiles. In this part of the lab we will demonstrate how to disable this option for a PDB. In this example we are creating a new Lockdown Profile but this is not required. For example, both the ALTER SYSTEM lockdown and the Partitioning lockdown can co-exist inside one Lockdown Profile.
+
+à Connect to the CDB$ROOT and create a new Lockdown Profile called LOCK02
+
+SQL> **alter session set container=CDB$ROOT;**
+
+ 
+
+Session altered.
+
+ 
+
+SQL> **create lockdown profile LOCK02;**
+
+ 
+
+Lockdown Profile created.
+
+à Add the restriction to use Partitioning to the Lockdown Profile
+
+SQL> **alter lockdown profile LOCK02 disable option=('Partitioning');**
+
+ 
+
+Lockdown Profile altered.
+
+This new lockdown profile is not active by default as well so let's try to connect to the PDB and create a small partitioned table.
+
+à Login to the PDB1 and create a small partitioned table
+
+SQL> **create table MyTable01 (id number) partition by hash (id);**
+
+ 
+
+Table created.
+
+This is working as expected because we have not enabled the Lockdown Profile LOCK02 yet. So please, enable the Lockdown Profile and test again
+
+à Enable the lockdown Profile LOCK02 and attempt to create another partitioned table
+
+SQL> **alter system set PDB_LOCKDOWN=LOCK02;**
+
+ 
+
+System altered.
+
+ 
+
+SQL> **create table MyTable02 (id number) partition by hash (id);**
+
+create table MyTable02 (id number) partition by hash (id)
+
+*
+
+ERROR at line 1:
+
+ORA-00439: feature not enabled: Partitioning
+
+As you can see, the Lockdown Profile is doing his job like designed
+```
