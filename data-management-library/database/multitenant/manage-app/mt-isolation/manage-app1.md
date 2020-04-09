@@ -35,19 +35,20 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    ./resetCDB.sh
    ```
 
-   ##  Database Service Firewall
 
-   Database Service Firewall is a feature of Oracle Access Control List (ACL) since 12.2.
+   
 
-    Service-Level ACLs allow you to control access to specific services, including those associated with individual pluggable databases (PDBs). This functionality is part of the Database Service Firewall, which isn't specifically a multitenant feature, but it is useful for controlling access to PDBs.
+##  Database Service Firewall
+
+Database Service Firewall is a feature of Oracle Access Control List (ACL) since 12.2.
+
+ Service-Level ACLs allow you to control access to specific services, including those associated with individual pluggable databases (PDBs). This functionality is part of the Database Service Firewall, which isn't specifically a multitenant feature, but it is useful for controlling access to PDBs.
+
+![](C:\Users\vbalebai.ORADEV\github\learning-library\data-management-library\database\multitenant\manage-app\images\MT3_DB_service_firewall.png)
 
 
 
-   ![](C:\Users\vbalebai.ORADEV\github\learning-library\data-management-library\database\multitenant\manage-app\images\MT3_DB_service_firewall.png)
-
-
-
-   ### SETUP
+### SETUP
 
    The steps include
 
@@ -60,7 +61,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
 
 
-   **Step 1.  Install ACL package**
+####    **Step 1.  Install ACL package**
 
    You need a package DBMS_SFW_ACL_ADMIN package. This is installed by running as sysdba. This package is owned by the DBSFWUSER schema. The procedures in this package can be run only by the DBSFWUSER user.
 
@@ -128,7 +129,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
 
 
-   **Step 2.  Configure the listener.**
+####    **Step 2.  Configure the listener.**
 
    The `LOCAL_REGISTRATION_ADDRESS_lsnr_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
 
@@ -145,7 +146,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    - `FIREWALL=ON` : Only connections matching an ACL are considered valid. All other connections are rejected.
    - `FIREWALL=OFF` : The firewall functionality is disabled, so all connections are considered valid.
 
-   #### Take a backup of current listener.
+**Take a backup of current listener.**
 
    You could open another termimal to take a backup.
 
@@ -157,10 +158,9 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
 
 
-  #### Edit Listener.ora
+**Edit Listener.ora**
 
   <pre>
-
   LISTCDB2 =
     (DESCRIPTION_LIST =
       (DESCRIPTION =
@@ -181,7 +181,7 @@ LISTCDB1 =
 
 
 
-Reload listener and observer  ensure you see (FIREWALL=ON) in the listerer status.
+**Reload listener and observer  ensure you see (FIREWALL=ON) in the listerer status.**
 
 ```
 lsnrctl reload listcdb1
@@ -239,7 +239,7 @@ The command completed successfully
 
    Each policy is represented by an access control list (ACL) containing hosts that are allowed access to a specific database service. Local listeners and server processes validate all inbound client connections against the ACL.
 
-   Once the firewall is set and listener is resarted, We will need to register the ipaddress of every connection can be accapted per PDB. We are assestially createing a whitelist of all ipaddress that can connect to it.
+   Once the firewall is set and listener is resarted, We will need to register the IP address of every connection can be accepted per PDB. We are creating a whitelist of all IP address that can connect to it.
 
    Below are the steps to configure the DB for PDB isolation using  Database service firewall.
 
@@ -260,13 +260,13 @@ The command completed successfully
    LISTENER =
 
     (DESCRIPTION_LIST =
-
+    
      (DESCRIPTION =
-
+    
       (ADDRESS = (PROTOCOL = TCP)(HOST = CDB4.compute-dbuser19.oraclecloud.internal)(PORT = 1521) (firewall=on))
-
+    
      )
-
+    
     )
 
    VALID_NODE_CHECKING_REGISTRATION_LISTENER=ON
