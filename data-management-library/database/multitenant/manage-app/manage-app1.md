@@ -134,7 +134,7 @@ SQL>
 
    #### **Step 2.  Configure the listener.**
 
-   The `LOCAL\_REGISTRATION\_ADDRESS_lsnr\_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
+   The LOCAL\_REGISTRATION\_ADDRESS\_lsnr\_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
    
    ```
    ##### LOCAL_REGISTRATION_ADDRESS_lsnr_alias = ON
