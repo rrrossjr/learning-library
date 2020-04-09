@@ -137,7 +137,7 @@ SQL>
    The `LOCAL_REGISTRATION_ADDRESS_lsnr_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
    
    ```
-   # LOCAL_REGISTRATION_ADDRESS_lsnr_alias = ON
+   ##### LOCAL_REGISTRATION_ADDRESS_lsnr_alias = ON
    #LOCAL_REGISTRATION_ADDRESS_LISTENER = ON
 LOCAL_REGISTRATION_ADDRESS_LISTCDB1 = ON
    ```
@@ -186,48 +186,77 @@ LISTCDB1 =
 
 <b>LOCAL_REGISTRATION_ADDRESS_LISTCDB1 = ON </b>
 </pre>
-
-
-
-Reload listener and observer  ensure you see (FIREWALL=ON) in the listerer status.
-
    ```
-lsnrctl reload listcdb1
 
+
+#### **Restart lister and verify FIREWALL is ON.**
+
+```
+lsnrctl start listener
 lsnrctl status listcdb1
 ```
-
 ```
-[oracle@mtv30 admin]$ lsnrctl reload listcdb1
+[oracle@mtv30 admin]$ lsnrctl stop listcdb1
 
-LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 07-APR-2020 22:51:56
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 09-APR-2020 18:49:57
 
 Copyright (c) 1991, 2019, Oracle.  All rights reserved.
 
-Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtworkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtw                                                                                                             orkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
 The command completed successfully
-[oracle@mtv30 admin]$ lsnrctl stat listcdb1
+[oracle@mtv30 admin]$ lsnrctl start listcdb1
 
-LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 07-APR-2020 22:52:20
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 09-APR-2020 18:50:06
 
 Copyright (c) 1991, 2019, Oracle.  All rights reserved.
 
-Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtworkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
+Starting /u01/app/oracle/product/19c/dbhome_1/bin/tnslsnr: please wait...
 
+TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+System parameter file is /u01/app/oracle/product/19c/dbhome_1/network/admin/list                                                                                                             ener.ora
+Log messages written to /u01/app/oracle/diag/tnslsnr/mtv30/listcdb1/alert/log.xm                                                                                                             l
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=mtv30)(PORT=1523)(FIREWA                                                                                                             LL=ON)))
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1523)))
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtw                                                                                                             orkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
 STATUS of the LISTENER
 ------------------------
-
 Alias                     listcdb1
 Version                   TNSLSNR for Linux: Version 19.0.0.0.0 - Production
-Start Date                06-APR-2020 21:21:04
-Uptime                    1 days 1 hr. 31 min. 15 sec
+Start Date                09-APR-2020 18:50:06
+Uptime                    0 days 0 hr. 0 min. 0 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/19c/dbhome_1/network/admin/lis                                                                                                             tener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/mtv30/listcdb1/alert/log.                                                                                                             xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=mtv30)(PORT=1523)(FIREWALL=ON)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1523)))
+The listener supports no services
+The command completed successfully
+
+
+[oracle@mtv30 admin]$ lsnrctl stat listcdb1
+
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 09-APR-2020 18:57:12
+
+Copyright (c) 1991, 2019, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtworkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
+STATUS of the LISTENER
+------------------------
+Alias                     listcdb1
+Version                   TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+Start Date                09-APR-2020 18:50:06
+Uptime                    0 days 0 hr. 7 min. 6 sec
 Trace Level               off
 Security                  ON: Local OS Authentication
 SNMP                      OFF
 Listener Parameter File   /u01/app/oracle/product/19c/dbhome_1/network/admin/listener.ora
 Listener Log File         /u01/app/oracle/diag/tnslsnr/mtv30/listcdb1/alert/log.xml
 Listening Endpoints Summary...
-  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=mtv30)(PORT=1523)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=mtv30)(PORT=1523)(FIREWALL=ON)))
   (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1523)))
 Services Summary...
 Service "CDB1" has 1 instance(s).
@@ -239,23 +268,30 @@ Service "a206980f93d62602e0530200000ab752" has 1 instance(s).
 Service "pdb1" has 1 instance(s).
   Instance "CDB1", status READY, has 1 handler(s) for this service...
 The command completed successfully
-```
 
 
+It can take up to 5 minutes before all services have been registered again. If you want to speed this up, login to the CDB1 using SQL*Plus and execute the command 'alter system register'.
+Once all services are available, specifically the PDB1 services, we can continue with the lab.
 
+````
 ### Step 3: Add the IPADDRESS to the whitelist for each PDB.
+
 
   Each policy is represented by an access control list (ACL) containing hosts that are allowed access to a specific database service. Local listeners and server processes validate all inbound client connections against the ACL.
 
    Once the firewall is set and listener is resarted, We will need to register the ipaddress of every connection that can be accepted per PDB. We are creating a whitelist of all ipaddress that can connect to a service. In our multitenant environment, CDB1 and PDB1 are both services. We can add additional user defined service and add whitelist to them as well.
 
+```
+ sqlplus sys/oracle@//localhost:1523/pdb1 as sysdba
 
+SQL*Plus: Release 19.0.0.0.0 - Production on Thu Apr 9 19:03:48 2020
+Version 19.5.0.0.0
 
-First try to connect to PDB1 without registering any Ipaddress.
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
 
-sqlplus sys/oracle@//localhost:1523/pdb1 as sysdba
-
-
+ERROR:
+ORA-12506: TNS:listener rejected connection based on service ACL filtering
+```
 
 
 
@@ -520,4 +556,7 @@ ERROR at line 1:
 ORA-00439: feature not enabled: Partitioning
 
 As you can see, the Lockdown Profile is doing his job like designed
+
+```
+
 ```
