@@ -35,7 +35,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    ./resetCDB.sh
    ```
 
-   
+
 
    ##**Database Service Firewall**
 
@@ -43,39 +43,39 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
     Service-Level ACLs allow you to control access to specific services, including those associated with individual pluggable databases (PDBs). This functionality is part of the Database Service Firewall, which isn't specifically a multitenant feature, but it is useful for controlling access to PDBs.
 
-   
+
 
    ![](C:\Users\vbalebai.ORADEV\github\learning-library\data-management-library\database\multitenant\manage-app\images\MT3_DB_service_firewall.png)
 
-   
+
 
    ### SETUP Steps
 
    The steps include
 
-   
-   
+
+
    - Install the ACL package
    - Configure the listener
-- Add the IPADDRESS to the whitelist for each PDB.
+   - Add the IPADDRESS to the whitelist for each PDB.
    - Verify/test.
 
-   
+
 
    #### **Step 1.  Install ACL package**
 
    You need a package DBMS_SFW_ACL_ADMIN package. This is installed by running as sysdba. This package is owned by the DBSFWUSER schema. The procedures in this package can be run only by the DBSFWUSER user.
-   
+
    ```
    <copy>sudo su - oracle
-   
+
    sqlplus sys/oracle@//localhost:1523/cdb1 as sysdba  @$ORACLE_HOME/rdbms/admin/dbmsaclsrv.sql </copy>
-   
+
 
    ```
 
-   
-   
+
+
    ```
    [opc@mtv30 ~]$ sudo su - oracle
    Last login: Mon Apr  6 21:20:38 GMT 2020 on pts/0
@@ -83,76 +83,76 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    ORACLE_SID = [CDB1] ?
    The Oracle base remains unchanged with value /u01/app/oracle
    [oracle@mtv30 ~]$ sqlplus /nolog
-   
+
    SQL*Plus: Release 19.0.0.0.0 - Production on Tue Apr 7 22:35:20 2020
    Version 19.5.0.0.0
-   
+
    Copyright (c) 1982, 2019, Oracle.  All rights reserved.
-   
+
    SQL> conn sys/oracle@//localhost:1523/cdb1 as sysdba
    Connected.
    SQL> @$ORACLE_HOME/rdbms/admin/dbmsaclsrv.sql
-   
+
    Session altered.
-   
-   
+
+
    Grant succeeded.
-   
-   
+
+
    Grant succeeded.
-   
-   
+
+
    Grant succeeded.
-   
-   
+
+
    Grant succeeded.
-   
-   
+
+
    Grant succeeded.
-   
-   
+
+
    Grant succeeded.
-   
-   
+
+
    Grant succeeded.
-   
-   
+
+
    Grant succeeded.
-   
-   
+
+
    Package created.
-   
-   
+
+
    Session altered.
-   
+
    ```
 
-SQL> 
+SQL>
    ```
 
-   
+
 
    #### **Step 2.  Configure the listener.**
 
-   The LOCAL\_REGISTRATION\_ADDRESS\_lsnr\_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
-   
+   The  LOCAL\_REGISTRATION\_ADDRESS\_lsnr\_alias and FIREWALL lala  setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
+
    ```
-   ##### LOCAL_REGISTRATION_ADDRESS_lsnr_alias = ON
+   #LOCAL_REGISTRATION_ADDRESS_lsnr_alias = ON
    #LOCAL_REGISTRATION_ADDRESS_LISTENER = ON
-LOCAL_REGISTRATION_ADDRESS_LISTCDB1 = ON
+   LOCAL_REGISTRATION_ADDRESS_LISTCDB1 = ON
    ```
 
-   
+
 
    The `FIREWALL` attribute can be added to the listener endpoint to control the action of the database firewall.
-   
+
 - `FIREWALL=ON` : Only connections matching an ACL are considered valid. All other connections are rejected.
    - `FIREWALL=OFF` : The firewall functionality is disabled, so all connections are considered valid.
 
    #### Take a backup of current listener.
 
    You could open another termimal to take a backup.
-   
+
    ```
 ```
 <copy> sudo su - oracle
@@ -163,12 +163,12 @@ cp listener.ora listener.backup</copy>
 
    ```
 
-  
 
-  #### Edit Listener.ora 
+
+  #### Edit Listener.ora
 
   <pre>
-  
+
   LISTCDB2 =
     (DESCRIPTION_LIST =
       (DESCRIPTION =
@@ -312,7 +312,7 @@ We are clearly not allowed to access this database based on the ACL filtering av
 
    ​     6 MYLOCAL            READ WRITE NO
 
-   Step e)  Note that you will get errors if you do not include the DBSFWUSER. 
+   Step e)  Note that you will get errors if you do not include the DBSFWUSER.
 
    Add the ACL service IP address for the perticulat PDB and the IP address from which to allow connections.
 
@@ -388,7 +388,7 @@ We are clearly not allowed to access this database based on the ACL filtering av
 
 
 
-Multitenant Lockdown  
+Multitenant Lockdown
 
 PDB Lockdown profiles prevent administrators, even if they have been granted permissions through roles, from changing certain settings or executing certain commands. In this lab we will let you work with setting up PDB Lockdown Profiles.
 
@@ -404,45 +404,45 @@ ORACLE_SID = [CDB2] ? **CDB1**
 
 The Oracle base remains unchanged with value /u01/oracle
 
- 
+
 
 [oracle@guest lab04]$ **sqlplus / as sysdba**
 
- 
+
 
 SQL*Plus: Release 12.2.0.1.0 Production on Tue Sep 19 13:38:12 2017
 
- 
+
 
 Copyright (c) 1982, 2016, Oracle. All rights reserved.
 
- 
 
- 
+
+
 
 Connected to:
 
 Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
 
- 
+
 
 SQL> **create lockdown profile lock01;**
 
- 
+
 
 Lockdown Profile created.
 
- 
+
 
 As a first example, we will prevent a PDB to change the settings for the parameter CURSOR_SHARING. Changing this parameter could cause changes in performance and behavior of the entire CDB. Adding a rule to the newly created LOCK01 lockdown profile is done with an ALTER LOCKDOWN PROFILE command.
 
 à Prevent the change of CURSOR_SHARING using an ALTER SYSTEM command
 
-SQL> **alter lockdown profile LOCK01** 
+SQL> **alter lockdown profile LOCK01**
 
    **disable statement=('alter system') clause=('set') option=('cursor_sharing');**
 
- 
+
 
 Lockdown Profile altered.
 
@@ -452,15 +452,15 @@ After the lockdown profile has been created, it is not automatically active for 
 
 SQL> **alter session set container=PDB1;**
 
- 
+
 
 Session altered.
 
- 
+
 
 SQL> **show parameter cursor_sharing**
 
- 
+
 
 NAME                 TYPE    VALUE
 
@@ -472,7 +472,7 @@ cursor_sharing            string   EXACT
 
 SQL> **alter system set cursor_sharing = FORCE;**
 
- 
+
 
 System altered.
 
@@ -482,7 +482,7 @@ Because the lockdown profile has not been activated for this PDB, we can still c
 
 SQL> **alter system set PDB_LOCKDOWN=LOCK01;**
 
- 
+
 
 System altered.
 
@@ -508,15 +508,15 @@ Oracle Partitioning Option is one of the options that can be disabled using PDB 
 
 SQL> **alter session set container=CDB$ROOT;**
 
- 
+
 
 Session altered.
 
- 
+
 
 SQL> **create lockdown profile LOCK02;**
 
- 
+
 
 Lockdown Profile created.
 
@@ -524,7 +524,7 @@ Lockdown Profile created.
 
 SQL> **alter lockdown profile LOCK02 disable option=('Partitioning');**
 
- 
+
 
 Lockdown Profile altered.
 
@@ -534,7 +534,7 @@ This new lockdown profile is not active by default as well so let's try to conne
 
 SQL> **create table MyTable01 (id number) partition by hash (id);**
 
- 
+
 
 Table created.
 
@@ -544,11 +544,11 @@ This is working as expected because we have not enabled the Lockdown Profile LOC
 
 SQL> **alter system set PDB_LOCKDOWN=LOCK02;**
 
- 
+
 
 System altered.
 
- 
+
 
 SQL> **create table MyTable02 (id number) partition by hash (id);**
 
