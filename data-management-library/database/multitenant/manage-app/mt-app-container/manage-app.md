@@ -1,4 +1,4 @@
-# Hands-on with Multitenant (Advanced)
+# Multitenant Application Container 
 
 ## Lab Introduction
 
