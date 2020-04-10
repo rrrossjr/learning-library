@@ -366,8 +366,31 @@ The steps are
 -  add statements to the lockdown profile which are disabled.
 
 
-sqlplus / as sysdba
+##### create a lockdown profile.
+
+````
+conn / as sysdba
 show con_name
 show pdbs
 
 create lockdown profile sec_profile;
+````
+
+##### Add restrictions to profile
+````
+alter lockdown profile sec_profile disable statement=('alter system') clause=('set') option all;
+
+alter lockdown profile sec_profile disable option=('Partitioning');
+
+alter lockdown profile sec_profile disable feature=('NETWORK_ACCESS');
+
+````
+SQL> alter lockdown profile sec_profile disable statement=('alter system') clause=('set') option all;
+Lockdown Profile altered.
+
+SQL> alter lockdown profile sec_profile disable option=('Partitioning');
+Lockdown Profile altered.
+
+SQL> alter lockdown profile sec_profile disable feature=('NETWORK_ACCESS');
+Lockdown Profile altered.
+````
