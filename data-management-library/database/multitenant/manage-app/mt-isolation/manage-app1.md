@@ -323,7 +323,7 @@ A lockdown profile is a mechanism to restrict certain operations or functionalit
 
 Executing certain SQL statements, such as ALTER SYSTEM and ALTER SESSION,
 
-Running procedures that access the network (e.g. UTL_SMTP, UTL_HTTP),
+Running procedures that access the network (e.g. UTL\_SMTP, UTL\_HTTP),
 Accessing a common user’s objects,
 Interacting with the OS (In addition to the capabilities covered by PDB_OS_CREDENTIAL),
 Making unrestricted cross-PDB connections in a CDB,
@@ -471,5 +471,5 @@ create table MyTable02 (id number) partition by hash (id) partitions 2
 ERROR at line 1:
 ORA-00439: feature not enabled: Partitioning
 
-
 ````
+As you can see , We are not able to create a partitioned table even with SYS privileges.
