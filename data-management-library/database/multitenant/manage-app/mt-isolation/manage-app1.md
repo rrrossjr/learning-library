@@ -365,4 +365,9 @@ The steps are
 -  Create lockdown profile
 -  add statements to the lockdown profile which are disabled.
 
-  The profiles are created at CDB$ROOT level and can be applied to PDBs in that CDB$ROOT.
+
+sqlplus / as sysdba
+show con_name
+show pdbs
+
+create lockdown profile sec_profile;
