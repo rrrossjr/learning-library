@@ -382,15 +382,11 @@ alter lockdown profile sec_profile disable statement=('alter system') clause=('s
 
 alter lockdown profile sec_profile disable option=('Partitioning');
 
-alter lockdown profile sec_profile disable feature=('NETWORK_ACCESS');
-
+````
 ````
 SQL> alter lockdown profile sec_profile disable statement=('alter system') clause=('set') option all;
 Lockdown Profile altered.
 
 SQL> alter lockdown profile sec_profile disable option=('Partitioning');
-Lockdown Profile altered.
-
-SQL> alter lockdown profile sec_profile disable feature=('NETWORK_ACCESS');
 Lockdown Profile altered.
 ````
