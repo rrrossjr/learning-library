@@ -36,19 +36,17 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    ```
 
 
-
-
 ##  Database Service Firewall
 
 Database Service Firewall is a feature of Oracle Access Control List (ACL) since 12.2.
 
  Service-Level ACLs allow you to control access to specific services, including those associated with individual pluggable databases (PDBs). This functionality is part of the Database Service Firewall, which isn't specifically a multitenant feature, but it is useful for controlling access to PDBs.
 
-![](C:\Users\vbalebai.ORADEV\github\learning-library\data-management-library\database\multitenant\manage-app\images\MT3_DB_service_firewall.png)
+![](./images/MT3_DB_service_firewall.png)
 
 
 
-### SETUP
+### SETUP STEPS
 
    The steps include
 
@@ -63,7 +61,7 @@ Database Service Firewall is a feature of Oracle Access Control List (ACL) since
 
 ####    **Step 1.  Install ACL package**
 
-   You need a package DBMS_SFW_ACL_ADMIN package. This is installed by running as sysdba. This package is owned by the DBSFWUSER schema. The procedures in this package can be run only by the DBSFWUSER user.
+   You need a package DBMS\_SFW\_ACL\_ADMIN package. This is installed by running as sysdba. This package is owned by the DBSFWUSER schema. The procedures in this package can be run only by the DBSFWUSER user.
 
    ```
    <copy>sudo su - oracle
@@ -131,7 +129,7 @@ Database Service Firewall is a feature of Oracle Access Control List (ACL) since
 
 ####    **Step 2.  Configure the listener.**
 
-   The LOCAL_REGISTRATION_ADDRESS_lsnr_alias and FIREWALL lala setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
+   The LOCAL\_REGISTRATION\_ADDRESS\_lsnr\_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
 
    ```
    # LOCAL_REGISTRATION_ADDRESS_lsnr_alias = ON
@@ -167,7 +165,6 @@ Database Service Firewall is a feature of Oracle Access Control List (ACL) since
       (ADDRESS = (PROTOCOL = TCP)(HOST = mtv28imp.sub160.vjvcn.oraclevcn.com)(PORT = 1524))
     )
   )
-
 LISTCDB1 =
   (DESCRIPTION_LIST =
     (DESCRIPTION =
@@ -180,46 +177,75 @@ LISTCDB1 =
 </pre>
 
 
-
-**Reload listener and observer  ensure you see (FIREWALL=ON) in the listerer status.**
+##### **Restart listener and verify FIREWALL= ON.**
 
 ```
-lsnrctl reload listcdb1
-
+lsnrctl stop listcdb1
+lsnrctl start listener
 lsnrctl status listcdb1
 ```
-
 ```
-[oracle@mtv30 admin]$ lsnrctl reload listcdb1
+[oracle@mtv30 admin]$ lsnrctl stop listcdb1
 
-LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 07-APR-2020 22:51:56
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 09-APR-2020 18:49:57
 
 Copyright (c) 1991, 2019, Oracle.  All rights reserved.
 
-Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtworkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtw                                                                                                             orkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
 The command completed successfully
-[oracle@mtv30 admin]$ lsnrctl stat listcdb1
+[oracle@mtv30 admin]$ lsnrctl start listcdb1
 
-LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 07-APR-2020 22:52:20
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 09-APR-2020 18:50:06
 
 Copyright (c) 1991, 2019, Oracle.  All rights reserved.
 
-Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtworkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
+Starting /u01/app/oracle/product/19c/dbhome_1/bin/tnslsnr: please wait...
 
+TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+System parameter file is /u01/app/oracle/product/19c/dbhome_1/network/admin/list                                                                                                             ener.ora
+Log messages written to /u01/app/oracle/diag/tnslsnr/mtv30/listcdb1/alert/log.xm                                                                                                             l
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=mtv30)(PORT=1523)(FIREWA                                                                                                             LL=ON)))
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1523)))
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtw                                                                                                             orkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
 STATUS of the LISTENER
 ------------------------
-
 Alias                     listcdb1
 Version                   TNSLSNR for Linux: Version 19.0.0.0.0 - Production
-Start Date                06-APR-2020 21:21:04
-Uptime                    1 days 1 hr. 31 min. 15 sec
+Start Date                09-APR-2020 18:50:06
+Uptime                    0 days 0 hr. 0 min. 0 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/19c/dbhome_1/network/admin/lis                                                                                                             tener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/mtv30/listcdb1/alert/log.                                                                                                             xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=mtv30)(PORT=1523)(FIREWALL=ON)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1523)))
+The listener supports no services
+The command completed successfully
+
+
+[oracle@mtv30 admin]$ lsnrctl stat listcdb1
+
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 09-APR-2020 18:57:12
+
+Copyright (c) 1991, 2019, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=mtv30.sub04061927430.mtworkshop.oraclevcn.com)(PORT=1523)(FIREWALL=ON)))
+STATUS of the LISTENER
+------------------------
+Alias                     listcdb1
+Version                   TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+Start Date                09-APR-2020 18:50:06
+Uptime                    0 days 0 hr. 7 min. 6 sec
 Trace Level               off
 Security                  ON: Local OS Authentication
 SNMP                      OFF
 Listener Parameter File   /u01/app/oracle/product/19c/dbhome_1/network/admin/listener.ora
 Listener Log File         /u01/app/oracle/diag/tnslsnr/mtv30/listcdb1/alert/log.xml
 Listening Endpoints Summary...
-  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=mtv30)(PORT=1523)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=mtv30)(PORT=1523)(FIREWALL=ON)))
   (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1523)))
 Services Summary...
 Service "CDB1" has 1 instance(s).
@@ -231,200 +257,112 @@ Service "a206980f93d62602e0530200000ab752" has 1 instance(s).
 Service "pdb1" has 1 instance(s).
   Instance "CDB1", status READY, has 1 handler(s) for this service...
 The command completed successfully
+
+
+It can take up to 5 minutes before all services have been registered again. If you want to speed this up, login to the CDB1 using SQL*Plus and execute the command 'alter system register'.
+Once all services are available, specifically the PDB1 services, we can continue with the lab.
+
+````
+
+#### **Step 3: Add IP address to PDB whitelist.**
+
+  Each policy is represented by an access control list (ACL) containing hosts that are allowed access to a specific database service. Local listeners and server processes validate all inbound client connections against the ACL.
+
+   Once the firewall is set and listener is resarted, We will need to register the IP address of every connection that can be accepted per PDB. We are creating a whitelist of all IP address that can connect to a service. In our multitenant environment, CDB1 and PDB1 are both services. We can add additional user defined service and add whitelist to them as well.
+
+
+
+```
+ sqlplus sys/oracle@//localhost:1523/pdb1 as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Thu Apr 9 19:03:48 2020
+Version 19.5.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+ERROR:
+ORA-12506: TNS:listener rejected connection based on service ACL filtering
 ```
 
+You will see that the connection fails with error ORA-12506. Since even the local host IP address is not included in the whitelist, the listener does not allow connections.
+We are clearly not allowed to access this database based on the ACL filtering available. So now we are going to add our IP address to the whitelist for the (default) service PDB1.
 
 
+````
+<copy>
+sqlplus / as sysdba
+show pdbs
+exec  dbsfwuser.DBMS_SFW_ACL_ADMIN.ip_add_ace('pdb1','localhost');
+exec  dbsfwuser.DBMS_SFW_ACL_ADMIN.commit_acl;
+</copy>
 
+````
+````
+SQL>  exec dbsfwuser.DBMS_SFW_ACL_ADMIN.ip_add_ace('pdb1','localhost');
+PL/SQL procedure successfully completed.
 
-   Each policy is represented by an access control list (ACL) containing hosts that are allowed access to a specific database service. Local listeners and server processes validate all inbound client connections against the ACL.
+SQL> exec  dbsfwuser.DBMS_SFW_ACL_ADMIN.commit_acl;
 
-   Once the firewall is set and listener is resarted, We will need to register the IP address of every connection can be accepted per PDB. We are creating a whitelist of all IP address that can connect to it.
+PL/SQL procedure successfully completed.
+````
+Now connect using username/password from localhost to verify.
 
-   Below are the steps to configure the DB for PDB isolation using  Database service firewall.
+````
+<copy>
+conn sys/oracle@//localhost:1523/pdb1 as sysdba </copy>
 
-   Step a)  You need a package DBMS_SFW_ACL_ADMIN package. This is installed by running as sysdba. This package is owned by the DBSFWUSER schema. The procedures in this package can be run only by the DBSFWUSER user.
+SQL> conn sys/oracle@//localhost:1523/pdb1 as sysdba
+Connected.
+````
 
-   SQL> conn / as sysdba
+### Multitenant Lockdown
 
-   Connected.
+Tenant isolation is a key requirement for security in a multitenant environment. A PDB lockdown profile allows you to restrict the operations and functionality available from within a PDB. This can be very useful from a security perspective, giving the PDBs a greater degree of separation and allowing different people to manage each PDB, without compromising the security of other PDBs with the same instance.
 
-   -- Create user and package.
+A lockdown profile is a mechanism to restrict certain operations or functionalities in a PDB. This new Multitenant feature is managed by a CDB administrator and can be used to restrict user access in a particular PDB. A lockdown profile can prevent PDB users from:
 
-   SQL> @$ORACLE_HOME/rdbms/admin/dbmsaclsrv.sql
+Executing certain SQL statements, such as ALTER SYSTEM and ALTER SESSION,
 
-   Step B)
+Running procedures that access the network (e.g. UTL_SMTP, UTL_HTTP),
 
-   Configure the listener.ora and set LOCAL_REGISTRATION_ADDRESS_LISTENER and firewall=on. Below is the sample listener.ora with modification in red.
+Accessing a common user’s objects,
 
-   LISTENER =
+Interacting with the OS (In addition to the capabilities covered by PDB_OS_CREDENTIAL),
 
-    (DESCRIPTION_LIST =
-    
-     (DESCRIPTION =
-    
-      (ADDRESS = (PROTOCOL = TCP)(HOST = CDB4.compute-dbuser19.oraclecloud.internal)(PORT = 1521) (firewall=on))
-    
-     )
-    
-    )
+Making unrestricted cross-PDB connections in a CDB,
 
-   VALID_NODE_CHECKING_REGISTRATION_LISTENER=ON
+Taking AWR snapshots,
 
-   SSL_VERSION = 1.0
+Using JAVA partially or as a whole,
 
-   LOCAL_REGISTRATION_ADDRESS_LISTENER= (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))
+Using certain database options such as Advanced Queueing and Partitioning.
 
-   Step C)  Start the listener.
+In order to explore these capabilities, let’s take a look at a sample use case in which we want to enforce the following restrictions in our PDB:
 
-   [oracle@CDB4 admin]$ lsnrctl start
+Disable ALTER SYSTEM statement altogether
 
-   LSNRCTL for Linux: Version 12.2.0.1.0 - Production on 10-MAR-2017 22:35:08
+Disable Partitioning database option
 
-   Copyright (c) 1991, 2016, Oracle. All rights reserved.
+Disable network access
 
-   Starting /u01/app/oracle/product/12.2.0/dbhome_1/bin/tnslsnr: please wait...
+We can fulfill these requirements by creating a lockdown profile in our CDB Root and adding these restrictions to it. Before we move onto the “How?” part of this discussion, it’s worth mentioning a couple of important details about lockdown profiles:
+We can fulfill these requirements by creating a lockdown profile in our CDB Root and adding these restrictions to it. Before we move onto the “How?” part of this discussion, it’s worth mentioning a couple of important details about lockdown profiles:
 
-   TNSLSNR for Linux: Version 12.2.0.1.0 - Production
+In order to be able to create a lockdown profile, you have to be a common user with CREATE LOCKDOWN PROFILE privilege and in order to enable a lockdown profile (either at the CDB or PDB level), you have to be common user with common ALTER SYSTEM or common SYSDBA privilege.
 
-   System parameter file is /u01/app/oracle/product/12.2.0/dbhome_1/network/admin/listener.ora
+A single lockdown profile can have several rules defined in it. In other words, you don’t have to create a lockdown profile for every restriction you want to implement.
 
-   Log messages written to /u01/app/oracle/diag/tnslsnr/CDB4/listener/alert/log.xml
+A PDB can have only one lockdown profile active at a time.
 
-   Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=CDB4.compute-dbuser19.oraclecloud.internal)(PORT=1521)(FIREWALL=ON)))
+The restrictions enforced by a lockdown profile are PDB-wide, they affect every single user including the SYS and SYSTEM.
 
-   Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=CDB4.compute-dbuser19.oraclecloud.internal)(PORT=1521)(firewall=on)))
+If you enable a lockdown profile in CDB Root, it affects all PDBs in the CDB. If you enable it in an Application Root (App Root), it affects all Application PDBs (App PDBs) under that App Root. If you enable it within a PDB, it only affects that PDB.
 
-   STATUS of the LISTENER
 
-   \------------------------
 
-   Alias           LISTENER
 
-   Version          TNSLSNR for Linux: Version 12.2.0.1.0 - Production
+The steps are
+-  Create lockdown profile
+-  add statements to the lockdown profile which are disabled.
 
-   Start Date        10-MAR-2017 22:35:08
-
-   Uptime          0 days 0 hr. 0 min. 0 sec
-
-   Trace Level        off
-
-   Security         ON: Local OS Authentication
-
-   SNMP           OFF
-
-   Listener Parameter File  /u01/app/oracle/product/12.2.0/dbhome_1/network/admin/listener.ora
-
-   Listener Log File     /u01/app/oracle/diag/tnslsnr/CDB4/listener/alert/log.xml
-
-   Listening Endpoints Summary...
-
-    (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=CDB4.compute-dbuser19.oraclecloud.internal)(PORT=1521)(FIREWALL=ON)))
-
-   The listener supports no services
-
-   The command completed successfully
-
-   [oracle@CDB4 admin]$ sqlplus / as sysdba
-
-   SQL*Plus: Release 12.2.0.1.0 Production on Fri Mar 10 22:36:55 2017
-
-   Copyright (c) 1982, 2016, Oracle. All rights reserved.
-
-   Step D) Now setup the local_listener  to point to the listener.
-
-   SQL> alter system set local_listener='(ADDRESS = (PROTOCOL=TCP)(HOST=localhost)(PORT=1521))';
-
-   System altered.
-
-   SQL> alter system register;
-
-   System altered.
-
-   SQL> show pdbs
-
-     CON_ID CON_NAME            OPEN MODE RESTRICTED
-
----------- ------------------------------ ---------- ----------
-
-   ​     2 PDB$SEED            READ ONLY NO
-
-   ​     3 CDB4PDB1            READ WRITE NO
-
-   ​     6 MYLOCAL            READ WRITE NO
-
-   Step e)  Note that you will get errors if you do not include the DBSFWUSER.
-
-   Add the ACL service ipaddress for the perticulat PDB and the IP address from which to allow connections.
-
-   SQL> execute  dbms_sfw_acl_admin.ip_add_pdb_ace('CDB4PDB1','140.86.12.219');
-
-   BEGIN dbms_sfw_acl_admin.ip_add_pdb_ace('CDB4PDB1','140.86.12.219'); END;
-
-      *
-
-   ERROR at line 1:
-
-   ORA-06550: line 1, column 7:
-
-   PLS-00201: identifier 'DBMS_SFW_ACL_ADMIN.IP_ADD_PDB_ACE' must be declared
-
-   ORA-06550: line 1, column 7:
-
-   PL/SQL: Statement ignored
-
-   SQL> exec DBSFWUSER.DBMS_SFW_ACL_ADMIn.ip_add_pdb_ace('CDB4PDB1','140.86.12.219');
-
-   PL/SQL procedure successfully completed.
-
-   SQL> exec DBSFWUSER.dbms_sfw_acl_admin.commit_acl;
-
-   PL/SQL procedure successfully completed.
-
-   SQL> exec DBSFWUSER.DBMS_SFW_ACL_ADMIn.ip_add_pdb_ace('CDB4PDB1','140.86.39.63');
-
-   PL/SQL procedure successfully completed.
-
-   SQL> exec DBSFWUSER.dbms_sfw_acl_admin.commit_acl;
-
-   PL/SQL procedure successfully completed.
-
-   SQL> alter system register;
-
-   System altered.
-
-   SQL> exec DBSFWUSER.DBMS_SFW_ACL_ADMIn.IP_REMOVE_PDB_ACE('CDB4PDB1','140.86.39.63');
-
-   PL/SQL procedure successfully completed.
-
-   SQL> alter system register;
-
-   System altered.
-
-   Step f) Connect from remote client and test. You will either get connected or  access denied error depending on the ACL rule.
-
-   select * from DBSFWUSER .ip_acl;
-
-   SERVICE_NAME                 HOST
-
--------------------------------------------- --------------------------------
-
-   "48ADC37AB9052039E0536E99C40AD0FD"      140.86.12.219
-
-   "48ADC37AB9052039E0536E99C40AD0FD"      140.86.39.63
-
-   "CDB4PDB1"                  140.86.12.219
-
-   "CDB4PDB1"                  140.86.39.63
-
-   SQL> conn system/Saturn_02@//140.86.39.27/CDB4PDB1
-
-   Connected.
-
-   if the sqlplus is run from a client ip not in ACL, you the the following error.
-
-   SQL> conn system/Saturn_02@//140.86.39.27/CDB4PDB1
-
-   ERROR:
-
-   ORA-46981: Access to service CDB4PDB1 from 140.86.39.63 was denied.
+  The profiles are created at CDB$ROOT level and can be applied to PDBs in that CDB$ROOT.
