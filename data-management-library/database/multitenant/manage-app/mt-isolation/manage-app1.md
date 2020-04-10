@@ -315,7 +315,7 @@ SQL> conn sys/oracle@//localhost:1523/pdb1 as sysdba
 Connected.
 ````
 
-### Multitenant Lockdown
+## Multitenant Lockdown
 
 Tenant isolation is a key requirement for security in a multitenant environment. A PDB lockdown profile allows you to restrict the operations and functionality available from within a PDB. This can be very useful from a security perspective, giving the PDBs a greater degree of separation and allowing different people to manage each PDB, without compromising the security of other PDBs with the same instance.
 
@@ -324,26 +324,12 @@ A lockdown profile is a mechanism to restrict certain operations or functionalit
 Executing certain SQL statements, such as ALTER SYSTEM and ALTER SESSION,
 
 Running procedures that access the network (e.g. UTL_SMTP, UTL_HTTP),
-
 Accessing a common user’s objects,
-
 Interacting with the OS (In addition to the capabilities covered by PDB_OS_CREDENTIAL),
-
 Making unrestricted cross-PDB connections in a CDB,
-
 Taking AWR snapshots,
-
 Using JAVA partially or as a whole,
-
 Using certain database options such as Advanced Queueing and Partitioning.
-
-In order to explore these capabilities, let’s take a look at a sample use case in which we want to enforce the following restrictions in our PDB:
-
-Disable ALTER SYSTEM statement altogether
-
-Disable Partitioning database option
-
-Disable network access
 
 We can fulfill these requirements by creating a lockdown profile in our CDB Root and adding these restrictions to it. Before we move onto the “How?” part of this discussion, it’s worth mentioning a couple of important details about lockdown profiles:
 We can fulfill these requirements by creating a lockdown profile in our CDB Root and adding these restrictions to it. Before we move onto the “How?” part of this discussion, it’s worth mentioning a couple of important details about lockdown profiles:
@@ -373,7 +359,7 @@ conn / as sysdba
 show con_name
 show pdbs
 
-create lockdown profile sec_profile;
+create lockdown profile TENANT_LOCK;
 ````
 
 ##### Add restrictions to profile
@@ -393,18 +379,74 @@ eg.  alter lockdown profile sec_profile disable statement=('alter system') claus
           MAXVALUE = '6';
 
 
-As a first example, we will prevent a PDB to change the settings for the parameter CURSOR_SHARING. Changing this parameter could cause changes in performance and behavior of the entire CDB. Adding a rule to the newly created sec_profile lockdown profile is done with an ALTER LOCKDOWN PROFILE command.
+As a first example, we will prevent a PDB to change the settings for the parameter CURSOR_SHARING. Changing this parameter could cause changes in performance and behavior of the entire CDB. Adding a rule to the newly created sec_profile lockdown profile is done with an ALTER LOCKDOWN PROFILE command. We will also lockdown the use of partitioning option into the lockdown profile.
 
 ````
-alter lockdown profile sec_profile disable statement=('alter system') clause=('set') option all;
+alter lockdown profile TENANT_LOCK disable statement=('alter system') clause=('set') option=('cursor_sharing');
 
-alter lockdown profile sec_profile disable option=('Partitioning');
+alter lockdown profile TENANT_LOCK disable option=('Partitioning');
 
 ````
 ````
-SQL> alter lockdown profile sec_profile disable statement=('alter system') clause=('set') option all;
+SQL> alter lockdown profile TENANT_LOCK disable statement=('alter system') clause=('set') option=('cursor_sharing');
 Lockdown Profile altered.
-
-SQL> alter lockdown profile sec_profile disable option=('Partitioning');
+SQL> alter lockdown profile TENANT_LOCK disable option=('Partitioning');
 Lockdown Profile altered.
+````
+
+Connect to container PDB1 and display the value of CURSOR_SHARING
+````
+alter session set container=PDB1;
+show parameter cursor_sharing
+````
+````
+SQL>  alter session set container=PDB1;
+Session altered.
+
+SQL> show parameter cursor_sharing
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+cursor_sharing                       string      EXACT
+SQL>
+````
+Change the value oF CURSOR_SHARING to FORCE
+````
+SQL> <copy> alter system set cursor_sharing = FORCE; </copy>
+
+System altered.
+
+````
+We have set the TENANT_LOCK lockdown profile to prevent creation tables with partitions.
+create a partitioned table before the profile is enabled.
+````
+SQL><copy> create table MyTable01 (id number) partition by hash (id) partitions 2;</copy>
+
+Table created.
+````
+Since the lockdown profile has not been activated for this PDB, we can still change the parameter if we have enough permissions to do so.
+
+Enable the LOCKDOEN profile TENANT_LOCK
+
+````
+SQL> <copy>alter system set PDB_LOCKDOWN=TENANT_LOCK;</copy>
+System altered.
+````
+Now, try to change the value of  CURSOR_SHARING back to EXACT
+
+````
+SQL> <copy>alter system set cursor_sharing=EXACT;<copy>
+alter system set cursor_sharing=EXACT
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+````
+Test to see if you can create a partitioned table when the profile is enabled.
+````
+SQL> <copy>create table MyTable02 (id number) partition by hash (id) partitions 2;</copy>
+create table MyTable02 (id number) partition by hash (id) partitions 2
+*
+ERROR at line 1:
+ORA-00439: feature not enabled: Partitioning
+
+
 ````
