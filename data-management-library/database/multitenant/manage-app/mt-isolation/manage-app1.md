@@ -371,15 +371,16 @@ You can restrict all statements by using the "ALL" clause.
 eg.  alter lockdown profile sec_profile disable statement=('alter system') clause=('set') option all;.
 
  The scope of the restriction can be reduced using the  CLAUSE, OPTION, MINVALUE, MAXVALUE options and values.
+ <pre>
  eg. ALTER LOCKDOWN PROFILE hr_prof
-  DISABLE STATEMENT = ('ALTER SYSTEM')
+     DISABLE STATEMENT = ('ALTER SYSTEM')
           CLAUSE = ('SET')
           OPTION = ('CPU_COUNT')
           MINVALUE = '2'
-          MAXVALUE = '6';
+          MAXVALUE = '6';</pre>
 
 
-As a first example, we will prevent a PDB to change the settings for the parameter CURSOR_SHARING. Changing this parameter could cause changes in performance and behavior of the entire CDB. Adding a rule to the newly created sec_profile lockdown profile is done with an ALTER LOCKDOWN PROFILE command. We will also lockdown the use of partitioning option into the lockdown profile.
+As a first example, we will prevent a PDB to change the settings for the parameter CURSOR_SHARING. Changing this parameter could cause changes in performance and behavior of the entire CDB. Adding a rule to the newly created TENANT\_LOCK lockdown profile is done with an ALTER LOCKDOWN PROFILE command. We will also lockdown the use of partitioning option into the lockdown profile.
 
 ````
 alter lockdown profile TENANT_LOCK disable statement=('alter system') clause=('set') option=('cursor_sharing');
@@ -392,6 +393,28 @@ SQL> alter lockdown profile TENANT_LOCK disable statement=('alter system') claus
 Lockdown Profile altered.
 SQL> alter lockdown profile TENANT_LOCK disable option=('Partitioning');
 Lockdown Profile altered.
+````
+Information about PDB lockdown profiles can be displayed using the DBA_LOCKDOWN_PROFILES view. You can use variations on the following query to check the impact of some of the commands used in this article. You may want to alter the format of the columns, depending on what you are trying to display.
+````
+SET LINESIZE 200
+COLUMN rule_type FORMAT A20
+COLUMN rule_type FORMAT A10
+COLUMN rule format a13
+COLUMN clause FORMAT A5
+COLUMN clause_option FORMAT A15
+
+select profile_name, rule_type, rule, clause, clause_option, status, users from DBA_LOCKDOWN_PROFILES;
+````
+````
+SQL> select profile_name, rule_type, rule, clause, clause_option, status, users from DBA_LOCKDOWN_PROFILES;
+
+PROFILE_NAME         RULE_TYPE  RULE          CLAUS CLAUSE_OPTION   STATUS  USERS
+-------------------- ---------- ------------- ----- --------------- ------- ------
+PRIVATE_DBAAS                                                       EMPTY
+PUBLIC_DBAAS                                                        EMPTY
+SAAS                                                                EMPTY
+TENANT_LOCK          OPTION     PARTITIONING                        DISABLE ALL
+TENANT_LOCK          STATEMENT  ALTER SYSTEM  SET   CURSOR_SHARING  DISABLE ALL
 ````
 
 Connect to container PDB1 and display the value of CURSOR_SHARING
@@ -416,7 +439,7 @@ SQL> <copy> alter system set cursor_sharing = FORCE; </copy>
 System altered.
 
 ````
-We have set the TENANT_LOCK lockdown profile to prevent creation tables with partitions.
+We have set the TENANT\_LOCK lockdown profile to prevent creation tables with partitions.
 create a partitioned table before the profile is enabled.
 ````
 SQL><copy> create table MyTable01 (id number) partition by hash (id) partitions 2;</copy>
@@ -425,7 +448,7 @@ Table created.
 ````
 Since the lockdown profile has not been activated for this PDB, we can still change the parameter if we have enough permissions to do so.
 
-Enable the LOCKDOEN profile TENANT_LOCK
+Enable the LOCKDOWN profile TENANT_LOCK
 
 ````
 SQL> <copy>alter system set PDB_LOCKDOWN=TENANT_LOCK;</copy>
