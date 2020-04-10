@@ -377,6 +377,24 @@ create lockdown profile sec_profile;
 ````
 
 ##### Add restrictions to profile
+
+You can lockdown options such as partitions option or lockdown statements like alter system.
+Eg alter lockdown profile sec_profile disable option=('Partitioning');
+
+You can restrict all statements by using the "ALL" clause.
+eg.  alter lockdown profile sec_profile disable statement=('alter system') clause=('set') option all;.
+
+ The scope of the restriction can be reduced using the  CLAUSE, OPTION, MINVALUE, MAXVALUE options and values.
+ eg. ALTER LOCKDOWN PROFILE hr_prof
+  DISABLE STATEMENT = ('ALTER SYSTEM')
+          CLAUSE = ('SET')
+          OPTION = ('CPU_COUNT')
+          MINVALUE = '2'
+          MAXVALUE = '6';
+
+
+As a first example, we will prevent a PDB to change the settings for the parameter CURSOR_SHARING. Changing this parameter could cause changes in performance and behavior of the entire CDB. Adding a rule to the newly created sec_profile lockdown profile is done with an ALTER LOCKDOWN PROFILE command.
+
 ````
 alter lockdown profile sec_profile disable statement=('alter system') clause=('set') option all;
 
