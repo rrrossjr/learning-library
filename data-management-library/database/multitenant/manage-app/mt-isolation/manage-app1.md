@@ -475,6 +475,9 @@ ORA-00439: feature not enabled: Partitioning
 ````
 As you can see , We are not able to create a partitioned table even with SYS privileges.
 
+#### Drop LOCKDOWN profile
+
+
 ## Resource management
 In a CDB, workloads within multiple PDBs can compete for system and CDB resources. Resource plans solve this problem.
 
@@ -580,3 +583,11 @@ Oracle now provides views to monitor the resource (CPU, I/O, parallel execution,
 - V$RSRCPDBMETRIC_HISTORY : 61 rows per PDB, holding the last 60 minutes worth of samples from the V$RSRCPDBMETRIC view.
 - V$RSRC_PDB : Cumulative statistics since the CDB resource plan ws set.
 - DBA\_HIST\_RSRC\_PDB\_METRIC : AWR snaphots, retained based on the AWR retention period.
+
+### Managing CPU Resources
+
+Two ways to limit CPU resources
+- Parameter CPU_COUNT (on PDB level) – since Oracle 12.2
+- Resource Manager
+
+Parameter CPU_COUNT
