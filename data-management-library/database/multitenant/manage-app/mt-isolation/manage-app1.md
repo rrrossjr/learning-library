@@ -501,16 +501,16 @@ In a CDB with multiple PDBs, The Resource Manager enables you to prioritize and 
 
 ### Memory Management of tenant PDBs
 
-  The advantage of having multitenant is that, all the memory in a server can be provided to a single CDB and memory can be optimally utilized. However, in case one of the tenants use overly 
+  The advantage of having multitenant is that, all the memory in a server can be provided to a single CDB and memory can be optimally utilized. However, in case one of the tenants use overly
 
 PDB Memory Parameters
 The following parameters can be set at the PDB level.
 
-- DB_CACHE_SIZE : The minimum buffer cache size for the PDB.
-- SHARED_POOL_SIZE : The minimum shared pool size for the PDB.
-- PGA_AGGREGATE_LIMIT : The maximum PGA size for the PDB.
-- PGA_AGGREGATE_TARGET : The target PGA size for the PDB.
-- SGA_MIN_SIZE : The minimum SGA size for the PDB.
+- DB\_CACHE\_SIZE : The minimum buffer cache size for the PDB.
+- SHARED\_POOL\_SIZE : The minimum shared pool size for the PDB.
+- PGA\_AGGREGATE\_LIMIT : The maximum PGA size for the PDB.
+- PGA\_AGGREGATE\_TARGET : The target PGA size for the PDB.
+- SGA\_MIN\_SIZE : The minimum SGA size for the PDB.
 - SGA_TARGET : The maximum SGA size for the PDB.
 
 ensure that the CDB and the other PDBs have sufficient memory for their operations. The initialization parameters control the memory usage of PDBs only if the following conditions are met:
@@ -518,3 +518,65 @@ ensure that the CDB and the other PDBs have sufficient memory for their operatio
 The NONCDB_COMPATIBLE initialization parameter is set to false in the CDB root.
 
 The MEMORY_TARGET initialization parameter is not set or is set to 0 (zero) in the CDB root.
+
+Let us set SGA_TARGET for PDB1 to 1G. First verify the default settings to enable Memory management.
+
+````
+conn / as SYSDBA
+show parameter  NONCDB_COMPATIBLE
+show parameter MEMORY_TARGET
+````
+
+````
+SQL> show parameter NONCDB_COMPATIBLE
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+noncdb_compatible                    boolean     FALSE
+
+SQL> show parameter MEMORY_TARGET
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+memory_target                        big integer 0
+````
+Next check the value of SGA_TARGET in CDB1 and PDB1.
+
+````
+show parameter sga_target
+ALTER SESSION SET CONTAINER=pdb1;
+show parameter SGA_TARGET
+````
+````
+SQL> show parameter sga_target
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+sga_target                           big integer 4432M
+
+SQL> ALTER SESSION SET CONTAINER=pdb1;
+Session altered.
+
+SQL> SHOW PARAMETER sga_target;
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+sga_target                           big integer 0
+````
+
+Set SGA_TARGET for pdb1
+````
+ALTER SYSTEM SET sga_target=1G SCOPE=BOTH;
+SHOW PARAMETER sga_target;
+````
+````
+SQL> ALTER SYSTEM SET sga_target=1G SCOPE=BOTH;
+System altered.
+SQL> SHOW PARAMETER sga_target;
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+sga_target                           big integer 1G
+````
+#### Monitoring Memory Usage for PDBs
+Oracle now provides views to monitor the resource (CPU, I/O, parallel execution, memory) usage of PDBs. Each view contains similar information, but for different retention periods.
+
+- V$RSRCPDBMETRIC : A single row per PDB, holding the last of the 1 minute samples.
+- V$RSRCPDBMETRIC_HISTORY : 61 rows per PDB, holding the last 60 minutes worth of samples from the V$RSRCPDBMETRIC view.
+- V$RSRC_PDB : Cumulative statistics since the CDB resource plan ws set.
+- DBA\_HIST\_RSRC\_PDB\_METRIC : AWR snaphots, retained based on the AWR retention period.
