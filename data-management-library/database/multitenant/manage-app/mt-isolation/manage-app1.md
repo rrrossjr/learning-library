@@ -596,3 +596,33 @@ Instance caging is a technique that uses an initialization parameter to limit th
 Resource Manager allows one Oracle process per CPU to run at a given time. All other processes wait on an internal Resource Manager run queue, under the wait event "resmgr:cpu quantum". Resource Manager allows an Oracle process to run for a small quantum of time (100 milliseconds). At the end of this quantum or when the Oracle process starts a wait (e.g. for a lock or I/O), Resource Manager selects a new Oracle process to run. Resource Manager uses a round-robin algorithm , and has priority Queues to choose between all runnable processes.
 
 As mentioned above, to setup Instance Caging, we need to enable Resource Manager and set CPU_COUNT at PDB level.
+````
+conn / as SYSDBA
+show parameter CPU_COUNT
+show parameter resource_
+````
+set default resource manager plan
+````
+SQL> <copy> alter system set resource_manager_plan='DEFAULT_CDB_PLAN' ; </copy>
+
+System altered.
+
+````
+set CPU count in pdb1
+````
+alter session set container=pdb1;
+alter system set cpu_count=1;
+show parameter CPU_COUNT
+````
+````
+SQL> alter session set container=pdb1;
+Session altered.
+
+SQL> alter system set cpu_count=1;
+System altered.
+SQL> show parameter cpu_count
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+cpu_count                            integer     1
+````
