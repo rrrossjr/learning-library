@@ -353,7 +353,7 @@ The steps are
 - set PDB_LOCKDOWN parameter
 
 
-##### create a lockdown profile.
+#### create a lockdown profile.
 
 ````
 conn / as sysdba
@@ -620,9 +620,68 @@ Session altered.
 
 SQL> alter system set cpu_count=1;
 System altered.
-SQL> show parameter cpu_count
 
+SQL> show parameter cpu_count
 NAME                                 TYPE        VALUE
 ------------------------------------ ----------- ------------------------------
 cpu_count                            integer     1
 ````
+
+In a system with many CPUs and many PDBs consolidated, it is possible to overprovision. i.e The total of CPU_COUNT at PDB level is more than whats allocated at PDB level. This will actually recommended if we want better CPU utilization of the system.
+
+Resource Manager CPU.
+
+
+<style>
+	.demo {
+		border:1px solid #C0C0C0;
+		border-collapse:collapse;
+		padding:5px;
+	}
+	.demo th {
+		border:1px solid #C0C0C0;
+		padding:5px;
+		background:#F0F0F0;
+	}
+	.demo td {
+		border:1px solid #C0C0C0;
+		padding:5px;
+	}
+</style>
+<table class="demo">
+	<caption>Table 1</caption>
+	<thead>
+	<tr>
+		<th>&nbsp;</th>
+		<th>Shares</th>
+		<th>Utilization Limit %</th>
+		<th>Parallel Server Limit %</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>&nbsp;Default per PDB </td>
+		<td>&nbsp;1</td>
+		<td>&nbsp;100</td>
+		<td>&nbsp;100</td>
+	</tr>
+	<tr>
+		<td>&nbsp;PDB1</td>
+		<td>&nbsp;2</td>
+		<td>&nbsp;50</td>
+		<td>&nbsp;20</td>
+	</tr>
+	<tr>
+		<td>&nbsp;PDB2</td>
+		<td>&nbsp;4</td>
+		<td>&nbsp;75</td>
+		<td>&nbsp;20</td>
+	</tr>
+	<tr>
+		<td>&nbsp;PDB3</td>
+		<td>&nbsp;4</td>
+		<td>&nbsp;100</td>
+		<td>&nbsp;100</td>
+	</tr>
+	</tbody>
+</table>
