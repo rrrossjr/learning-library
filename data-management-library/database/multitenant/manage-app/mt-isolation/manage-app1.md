@@ -756,15 +756,15 @@ Unset  resource\_manager\_plan in CDB  and  connect to OE and run workload.
 ````
 alter system set resource_manager_plan='';
 alter session set container=OE;
--- unset any IOPS RM
-alter system set  MAX_IOPS=0;
 ````
+run a workload with MAX_IOPS=0.
 
-run a workload with .
 ````
 <copy>
 set timing on
 set serveroutput on
+-- unset any IOPS RM
+alter system set  MAX_IOPS=0;
 
 BEGIN
   EXECUTE IMMEDIATE ' create table test as select * from dba_objects';
@@ -782,7 +782,7 @@ Elapsed: 00:00:18.48
 ````
 THe workload runs without any resource manager in under 20 seconds.
 
-Now set MAX_IOPS IORM and rerun the load.
+Now set MAX_IOPS=1 and rerun the load.
 
 ````
 <copy>alter system set  MAX_IOPS=1;
@@ -796,41 +796,20 @@ BEGIN
 END;
 /
 </copy>
+PL/SQL procedure successfully completed.
+
+Elapsed: 00:01:14.17
+
 ````
 Now the same workload takes about 250 to 300 seconds to run.
-
-
-Copy
-connect soe/soe@localhost:1523/oe
-CREATE TABLE sale_orders
-(ORDER_ID      number,
-ORDER_DATE    date,
-CUSTOMER_ID   number);
-
-Open a new terminal window, sudo to the oracle user and execute write-load.sh. Leave this window open and running throughout the rest of the multitenant labs.
-
-Copy
+Open a new terminal window, sudo to the oracle user and query v$session_event to see IO resource wait event.
+````
 sudo su - oracle
-cd /home/oracle/labs/multitenant
-./write-load.sh
+sqlplus / as SYSDBA
+select se.con_id,event,time_waited from v$session_event se,v$pdbs pdb where event like 'resmgr: %' and pdb.name='OE' and pdb.con_id=se.con_id ;
 
-Leave this window open and running for the next few labs.
-
-Go back to your original terminal window. Connect to CDB2 and create the pluggable OEDEV from the database link oe@cdb1link
-
-Copy
-connect sys/oracle@localhost:1524/cdb2 as sysdba
-create pluggable database oe_dev from oe@cdb1_link;
-alter pluggable database oe_dev open;
-
-Connect as SOE to OEDEV and check the number of records in the saleorders table
-
-Copy
-connect soe/soe@localhost:1524/oe_dev
-select count(*) from sale_orders;
-
-Connect as SOE to OE and check the number of records in the sale_orders table
-
-Copy
-connect soe/soe@localhost:1523/oe
-select count(*) from sale_orders;
+   CON_ID EVENT                          TIME_WAITED
+---------- ------------------------------ -----------
+        4 resmgr: I/O rate limit              185428
+        4 resmgr: I/O rate limit                9016
+````
