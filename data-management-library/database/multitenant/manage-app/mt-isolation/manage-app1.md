@@ -1,4 +1,4 @@
-# Hands-on with Multitenant -- Network Isolation
+# Hands-on with Multitenant  Isolation
 
 ## Lab Introduction
 
@@ -92,33 +92,23 @@ Database Service Firewall is a feature of Oracle Access Control List (ACL) since
 
    Session altered.
 
+   Grant succeeded.
 
    Grant succeeded.
 
+   Grant succeeded.
 
    Grant succeeded.
 
+   Grant succeeded.
 
    Grant succeeded.
 
-
    Grant succeeded.
 
-
    Grant succeeded.
-
-
-   Grant succeeded.
-
-
-   Grant succeeded.
-
-
-   Grant succeeded.
-
 
    Package created.
-
 
    Session altered.
 
