@@ -1,4 +1,4 @@
-# Hands-on with Multitenant  Isolation
+#  Multitenant Tenant Isolation
 
 ## Lab Introduction
 
@@ -6,7 +6,7 @@ This is a series of hands-on labs designed to familiarize you with the  Oracle M
 
 ### Setup
 
-### Lab Assumptions
+#### Lab Assumptions
 
 - Each participant has been provided a username and password to the tenancy c4u03.
 - Each participant has completed the Environment Setup lab.
@@ -17,7 +17,7 @@ There are two container databases running:
 - CDB1 running on port 1523
 - CDB2 running on port 1524
 
-### Lab Setup
+#### Lab Setup
 
 All the scripts for this lab are located in the /home/oracle/labs/multitenant/scripts folder.
 
@@ -34,7 +34,6 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    ```
    ./resetCDB.sh
    ```
-
 
 ##  Database Service Firewall
 
@@ -116,7 +115,6 @@ Database Service Firewall is a feature of Oracle Access Control List (ACL) since
    ```
 
 
-
 ####    **Step 2.  Configure the listener.**
 
    The LOCAL\_REGISTRATION\_ADDRESS\_lsnr\_alias and FIREWALL setting must be added to the "listener.ora" file. The default listener name is LISTENER and listeners on default port 1521. However In our example the CDB1 DB is listening on listener LISTCDB1. Example setting below.
@@ -152,18 +150,19 @@ Database Service Firewall is a feature of Oracle Access Control List (ACL) since
   LISTCDB2 =
     (DESCRIPTION_LIST =
       (DESCRIPTION =
-      (ADDRESS = (PROTOCOL = TCP)(HOST = mtv28imp.sub160.vjvcn.oraclevcn.com)(PORT = 1524))
+      (ADDRESS = (PROTOCOL = TCP)(HOST = mtv28imp.vjvcn.oraclevcn.com)(PORT = 1524))
     )
   )
 LISTCDB1 =
   (DESCRIPTION_LIST =
     (DESCRIPTION =
-      (ADDRESS = (PROTOCOL = TCP)(HOST = mtv28imp.sub160.vjvcn.oraclevcn.com)(PORT = 1523) <b>(FIREWALL=ON)</b>)
+      (ADDRESS = (PROTOCOL = TCP)(HOST = mtv28imp.vjvcn.oraclevcn.com)(PORT = 1523) <b><font color="red">(FIREWALL=ON)</font>) </b>
       (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1523))
     )
   )
 
-<b>LOCAL_REGISTRATION_ADDRESS_LISTCDB1 = ON </b>
+<b><font color="red">LOCAL_REGISTRATION_ADDRESS_LISTCDB1 = ON</font></b>
+
 </pre>
 
 
@@ -248,18 +247,17 @@ Service "pdb1" has 1 instance(s).
   Instance "CDB1", status READY, has 1 handler(s) for this service...
 The command completed successfully
 
-
+````
 It can take up to 5 minutes before all services have been registered again. If you want to speed this up, login to the CDB1 using SQL*Plus and execute the command 'alter system register'.
 Once all services are available, specifically the PDB1 services, we can continue with the lab.
 
-````
 
 #### **Step 3: Add IP address to PDB whitelist.**
 
-  Each policy is represented by an access control list (ACL) containing hosts that are allowed access to a specific database service. Local listeners and server processes validate all inbound client connections against the ACL.
+  Create a policy whitelist in access control list (ACL) containing hosts that are allowed access to a specific database service. Local listeners and server processes validate all inbound client connections against the ACL.
 
-   Once the firewall is set and listener is resarted, We will need to register the IP address of every connection that can be accepted per PDB. We are creating a whitelist of all IP address that can connect to a service. In our multitenant environment, CDB1 and PDB1 are both services. We can add additional user defined service and add whitelist to them as well.
-
+   Once the firewall is set and listener is restarted, We will need to add the IP address of every connection that can be accepted per PDB. We are creating a whitelist of all IP address that can connect to a service. In our multitenant environment, CDB1 and PDB1 are both services. We can add additional user defined service and add whitelist to them as well.
+   Try to login to PDB1 in your localhost without any ipaddress in the whitelist.
 
 
 ```
@@ -304,7 +302,7 @@ conn sys/oracle@//localhost:1523/pdb1 as sysdba </copy>
 SQL> conn sys/oracle@//localhost:1523/pdb1 as sysdba
 Connected.
 ````
-
+You can now connect to PDB1 from localhost since we aded localhost to the whitelist. If you need to test ipaddress from outside the 
 ## Multitenant Lockdown
 
 Tenant isolation is a key requirement for security in a multitenant environment. A PDB lockdown profile allows you to restrict the operations and functionality available from within a PDB. This can be very useful from a security perspective, giving the PDBs a greater degree of separation and allowing different people to manage each PDB, without compromising the security of other PDBs with the same instance.
