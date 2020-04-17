@@ -302,9 +302,9 @@ conn sys/oracle@//localhost:1523/pdb1 as sysdba </copy>
 SQL> conn sys/oracle@//localhost:1523/pdb1 as sysdba
 Connected.
 ````
-You can now connect to PDB1 successfully from localhost since we added localhost to the whitelist. If you need to test IP address or external hosts in this environment, we will have to open port 1523 in Oracle Virtual Network Connection (VNC) and add port 1523 in the linux firewall.
+You can now connect to PDB1 successfully from localhost since we added localhost to the whitelist. If you need to test IP address or external hosts in this environment, we will have to open port 1523 in Oracle Virtual Network Connection (VNC) and add port 1523 in the linux firewall.  
 
-The IP_ACL table holds all the saved ACLs, while the V$IP_ACL view lists the active ACLs.
+The V$IP_ACL view lists the active ACLs.
 
 ````
 - Display the saved ACLs.
@@ -327,10 +327,14 @@ PDB1                           MTV30.SUB04061927430.MTWORKSHO          3
                                P.ORACLEVCN.COM
 
 ````
-
-
-- REMOVE THE FIREWALL=ON AND LOCAL_REGISTRATION_ADDRESS_LISTENER  ENTRY FROM THE LISTENER.ORA
-- RESTART THE LISTENERS
+This is the end of LAB. Please clean your environment so that it is ready for the next lab
+- restore the original listener  and restart the listener.
+````
+cd $ORACLE_HOME/network/admin
+cp  listener.backup listener.ora
+lsnrctl stop LISTCDB1
+lsnrctl start LISTCDB1
+````
 
 ## Multitenant Lockdown
 
