@@ -386,7 +386,7 @@ create lockdown profile TENANT_LOCK;
 
 ##### Add restrictions to profile
 
-You can lockdown options such as partitions option or lockdown statements like alter system.
+You can lockdown Oracle options such as partitions option or lockdown statements like alter system.
 Eg alter lockdown profile sec_profile disable option=('Partitioning');
 
 You can restrict all statements by using the "ALL" clause.
@@ -399,26 +399,31 @@ eg.  alter lockdown profile sec_profile disable statement=('alter system') claus
           CLAUSE = ('SET')
           OPTION = ('CPU_COUNT')
           MINVALUE = '2'
-          MAXVALUE = '6';</pre>
+          MAXVALUE = '6';
+</pre>
 
-
-As a first example, we will prevent a PDB to change the settings for the parameter CURSOR_SHARING. Changing this parameter could cause changes in performance and behavior of the entire CDB. Adding a rule to the newly created TENANT\_LOCK lockdown profile is done with an ALTER LOCKDOWN PROFILE command. We will also lockdown the use of partitioning option into the lockdown profile.
-
-````
-alter lockdown profile TENANT_LOCK disable statement=('alter system') clause=('set') option=('cursor_sharing');
-
-alter lockdown profile TENANT_LOCK disable option=('Partitioning');
+As a example, we will prevent a PDB to change the settings for the parameter CURSOR_SHARING. Changing this parameter could cause changes in performance and behavior and affect other tenants in the CDB. Adding a rule to the newly created TENANT\_LOCK lockdown profile is done with an ALTER LOCKDOWN PROFILE command. We will also lockdown the use of partitioning option into the lockdown profile.
 
 ````
+<copy>
+ALTER LOCKDOWN PROFILE TENANT_LOCK DISABLE STATEMENT=('alter system') CLAUSE=('set') OPTION=('cursor_sharing');
+
+ALTER LOCKDOWN PROFILE TENANT_LOCK DISABLE OPTION=('Partitioning');
+</copy>
 ````
-SQL> alter lockdown profile TENANT_LOCK disable statement=('alter system') clause=('set') option=('cursor_sharing');
+````
+SQL> ALTER LOCKDOWN PROFILE TENANT_LOCK DISABLE STATEMENT=('alter system') CLAUSE=('set') OPTION=('cursor_sharing');
 Lockdown Profile altered.
-SQL> alter lockdown profile TENANT_LOCK disable option=('Partitioning');
+
+SQL> ALTER LOCKDOWN PROFILE TENANT_LOCK DISABLE OPTION=('Partitioning');
 Lockdown Profile altered.
+
 ````
-Information about PDB lockdown profiles can be displayed using the DBA\_LOCKDOWN\_PROFILES view. You can use variations on the following query to check the impact of some of the commands used in this article. You may want to alter the format of the columns, depending on what you are trying to display.
+Information about PDB lockdown profiles can be displayed using the DBA\_LOCKDOWN\_PROFILES view.
 ````
+<copy>
 SET LINESIZE 200
+COLUMN profile_name format a20
 COLUMN rule_type FORMAT A20
 COLUMN rule_type FORMAT A10
 COLUMN rule format a13
@@ -426,6 +431,7 @@ COLUMN clause FORMAT A5
 COLUMN clause_option FORMAT A15
 
 select profile_name, rule_type, rule, clause, clause_option, status, users from DBA_LOCKDOWN_PROFILES;
+</copy>
 ````
 ````
 SQL> select profile_name, rule_type, rule, clause, clause_option, status, users from DBA_LOCKDOWN_PROFILES;
@@ -439,10 +445,11 @@ TENANT_LOCK          OPTION     PARTITIONING                        DISABLE ALL
 TENANT_LOCK          STATEMENT  ALTER SYSTEM  SET   CURSOR_SHARING  DISABLE ALL
 ````
 
+Once the restrictions are added to the lockdown profile, we need to set it. Let us verify you can change CURSOR_SHARING and create a partitioned table before the lockdown profile TENANT_LOCK is set.
 Connect to container PDB1 and display the value of CURSOR_SHARING
 ````
-alter session set container=PDB1;
-show parameter cursor_sharing
+<copy>alter session set container=PDB1;
+show parameter cursor_sharing</copy>
 ````
 ````
 SQL>  alter session set container=PDB1;
@@ -468,13 +475,19 @@ SQL><copy> create table MyTable01 (id number) partition by hash (id) partitions 
 
 Table created.
 ````
-Since the lockdown profile has not been activated for this PDB, we can still change the parameter if we have enough permissions to do so.
+lockdown profile has not been set for this PDB, We saw that the DBA can create partitioned tables and alter initialization Parameters
 
-Enable the LOCKDOWN profile TENANT_LOCK
+Set the LOCKDOWN profile TENANT_LOCK
 
 ````
 SQL> <copy>alter system set PDB_LOCKDOWN=TENANT_LOCK;</copy>
 System altered.
+SQL> show parameter pdb_lockdown
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+pdb_lockdown                         string      TENANT_LOCK
+
 ````
 Now, try to change the value of  CURSOR_SHARING back to EXACT
 
@@ -494,14 +507,20 @@ ERROR at line 1:
 ORA-00439: feature not enabled: Partitioning
 
 ````
-As you can see , We are not able to create a partitioned table even with SYS privileges.
+As you can see , We are not able to create a partitioned table or alter initialization parameters from PDB1 even with SYS privileges.
+Now we will drop the lockdown profile and unset the parameter.
 
 #### Drop LOCKDOWN profile
 
 execute the drop command to drop the LOCKDOWN profile
 ````
+<copy>Alter system set pdb_lockdown='';
+conn / as SYSDBA
 DROP LOCKDOWN PROFILE TENANT_LOCK;
+ </copy>
 ````
+This is the end of the lackdown lab.
+
 ## Resource Management
 In a CDB, workloads within multiple PDBs can compete for system and CDB resources. Resource plans solve this problem.
 
@@ -549,9 +568,9 @@ The MEMORY_TARGET initialization parameter is not set or is set to 0 (zero) in t
 Let us set SGA_TARGET for PDB1 to 1G. First verify the default settings to enable Memory management.
 
 ````
-conn / as SYSDBA
+<copy>conn / as SYSDBA
 show parameter  NONCDB_COMPATIBLE
-show parameter MEMORY_TARGET
+show parameter MEMORY_TARGET </copy>
 ````
 
 ````
@@ -568,9 +587,9 @@ memory_target                        big integer 0
 Next check the value of SGA_TARGET in CDB1 and PDB1.
 
 ````
-show parameter sga_target
+<copy>show parameter sga_target
 ALTER SESSION SET CONTAINER=pdb1;
-show parameter SGA_TARGET
+show parameter SGA_TARGET</copy>
 ````
 ````
 SQL> show parameter sga_target
@@ -600,6 +619,8 @@ NAME                                 TYPE        VALUE
 ------------------------------------ ----------- ------------------------------
 sga_target                           big integer 1G
 ````
+You have successfully set a limit of memory PDB1 can use.
+
 #### Monitoring Memory Usage for PDBs
 Oracle now provides views to monitor the resource (CPU, I/O, parallel execution, memory) usage of PDBs. Each view contains similar information, but for different retention periods.
 
