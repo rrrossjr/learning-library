@@ -302,7 +302,36 @@ conn sys/oracle@//localhost:1523/pdb1 as sysdba </copy>
 SQL> conn sys/oracle@//localhost:1523/pdb1 as sysdba
 Connected.
 ````
-You can now connect to PDB1 from localhost since we aded localhost to the whitelist. If you need to test ipaddress from outside the 
+You can now connect to PDB1 successfully from localhost since we added localhost to the whitelist. If you need to test IP address or external hosts in this environment, we will have to open port 1523 in Oracle Virtual Network Connection (VNC) and add port 1523 in the linux firewall.
+
+The IP_ACL table holds all the saved ACLs, while the V$IP_ACL view lists the active ACLs.
+
+````
+- Display the saved ACLs.
+COLUMN service_name FORMAT A30
+COLUMN host FORMAT A30
+
+-- Display the active ACLs.
+SELECT service_name,
+       host,
+       con_id
+FROM   v$ip_acl
+ORDER BY 1, 2;
+
+
+SERVICE_NAME                   HOST                               CON_ID
+------------------------------ ------------------------------ ----------
+PDB1                           10.0.0.2                                3
+PDB1                           LOCALHOST                               3
+PDB1                           MTV30.SUB04061927430.MTWORKSHO          3
+                               P.ORACLEVCN.COM
+
+````
+
+
+- REMOVE THE FIREWALL=ON AND LOCAL_REGISTRATION_ADDRESS_LISTENER  ENTRY FROM THE LISTENER.ORA
+- RESTART THE LISTENERS
+
 ## Multitenant Lockdown
 
 Tenant isolation is a key requirement for security in a multitenant environment. A PDB lockdown profile allows you to restrict the operations and functionality available from within a PDB. This can be very useful from a security perspective, giving the PDBs a greater degree of separation and allowing different people to manage each PDB, without compromising the security of other PDBs with the same instance.
