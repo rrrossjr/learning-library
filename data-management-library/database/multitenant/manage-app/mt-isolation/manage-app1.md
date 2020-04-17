@@ -642,9 +642,9 @@ Resource Manager allows one Oracle process per CPU to run at a given time. All o
 
 As mentioned above, to setup Instance Caging, we need to enable Resource Manager and set CPU_COUNT at PDB level.
 ````
-conn / as SYSDBA
+<copy>conn / as SYSDBA
 show parameter CPU_COUNT
-show parameter resource_
+show parameter resource_</copy>
 ````
 set default resource manager plan
 ````
@@ -804,7 +804,6 @@ run a workload with MAX_IOPS=0.
 ````
 <copy>
 set timing on
-set serveroutput on
 -- unset any IOPS RM
 alter system set  MAX_IOPS=0;
 
@@ -816,13 +815,13 @@ BEGIN
   END LOOP;
   execute immediate 'drop table test purge';
 END;
-/
+/</copy>
 PL/SQL procedure successfully completed.
 
 Elapsed: 00:00:18.48
-</copy>
+
 ````
-THe workload runs without any resource manager in under 20 seconds.
+The workload runs without any resource manager in under 20 seconds.
 
 Now set MAX_IOPS=1 and rerun the load.
 
