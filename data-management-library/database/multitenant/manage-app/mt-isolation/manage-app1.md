@@ -677,9 +677,9 @@ To test this, you can run the sample workload.
 ````
  SQL> <copy> host /home/oracle/labs/multitenant/cpu_test.sh</copy>
 ````
-You can open another session can run top command and observe the cpu % will be limited to the percentgate equal to one cpu. In our cace, Total cpus were 2, so 1 cpu would be 50% cpu utilization.
- 
-In a system with many CPUs and many PDBs consolidated, it is possible to overprovision. i.e The total of CPU_COUNT at PDB level is more than allocated at CDB level. This is a recommended configuration if we want better CPU utilization of the system.
+ open another session and run top command and observe the cpu busy percentage. It will be limited to the percentgate equal to one cpu. In our cace, Total cpus were 2, so 1 cpu would be 50% cpu utilization.
+
+In a production system with many CPUs and PDB consolidation, it is possible to over provision. i.e The total of CPU_COUNT at PDB level is more than allocated at CDB level. This is a recommended configuration if we want better CPU utilization of the system.
 
 Resource Manager CPU.
 
