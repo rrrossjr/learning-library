@@ -681,6 +681,16 @@ To test this, you can run the sample workload.
 
 In a production system with many CPUs and PDB consolidation, it is possible to over provision. i.e The total of CPU_COUNT at PDB level is more than allocated at CDB level. This is a recommended configuration if we want better CPU utilization of the system.
 
+Now unset the CPU caging and rerun the workload. In our test, the cpu utilization peaks to 100% consuming the 2 CPUs available.
+````
+ <copy>conn / as SYSDBA
+ alter system set resource_manager_plan='';
+ alter session set container=PDB1;
+ alter system set cpu_count=0;
+ host /home/oracle/labs/multitenant/cpu_test.sh</copy>
+ ````
+THe workload without he resources runs faster as they make use of all the CPUs.
+
 Resource Manager CPU.
 
 
