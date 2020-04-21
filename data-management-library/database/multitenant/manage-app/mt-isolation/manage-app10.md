@@ -694,10 +694,148 @@ The workload without he resources runs faster as they make use of all the CPUs.
 Resource Manager CPU.
 
 Another way of managing CPU resources is through a defining a percentage or share to each PDB.
-To allocate resources among PDBs, assign a share value to each PDB or performance profile.
-Resource Manager Plans are more useful when the database is running in an exadata machine. Since this is DB is not on exadata, CPU_COUNT is recommended method.
+To allocate resources among PDBs, assign a share value to each PDB or performance profile. A higher share value results in more guaranteed resources for a PDB or the PDBs that use the performance profile.
 
-CPU\_COUNT is advantageous because when the PDB is plugged into a new container, the CPU_COUNT setting remains with the plugged-in PDB. Also, Oracle Database uses the CPU\_COUNT setting for a PDB to derive many other PDB parameters, such as those for parallel execution.
+A CDB resource plan is made up of CDB resource plan directives. The plan directives allocate shares, which define the proportion of the CDB resources available to the PDB, and specific utilization percentages, that give a finer level of control. CDB resource plans are managed using the DBMS_RESOURCE_MANAGER package. Each plan directive is made up of the following elements:
+
+- pluggable\_database : The PDB the directive relates to.
+- shares : The proportion of the CDB resources available to the PDB.
+- utilization\_limit : A utilization limit restrains the system resource usage of a specific PDB or a specific PDB performance profile.
+- parallel\_server\_limit : The percentage of the CDBs available parallel servers (PARALLEL_SERVERS_TARGET initialization parameter) that are available to the PDB.
+- PDBs without a specific plan directive use the default PDB directive.
+
+CPU_COUNT works the same way as the utilization_limit directive in the CDB plan. However, the CPU_COUNT limit is expressed in terms of number of CPUs rather than utilization percentage. If both the utilization_limit and CPU_COUNT are specified, then the lower limit is enforced.
+
+CPU_COUNT is advantageous because when the PDB is plugged into a new container, the CPU_COUNT setting remains with the plugged-in PDB. Also, Oracle Database uses the CPU_COUNT setting for a PDB to derive many other PDB parameters, such as those for parallel execution.
+
+
+The following figure shows an example of three PDBs with share values specified for them in a CDB resource plan.
+
+
+<style>
+	.demo {
+		border:1px solid #C0C0C0;
+		border-collapse:collapse;
+		padding:5px;
+	}
+	.demo th {
+		border:1px solid #C0C0C0;
+		padding:5px;
+		background:#F0F0F0;
+	}
+	.demo td {
+		border:1px solid #C0C0C0;
+		padding:5px;
+	}
+</style>
+<table class="demo">
+	<caption>Table 1</caption>
+	<thead>
+	<tr>
+		<th>&nbsp;</th>
+		<th>Shares</th>
+		<th>Utilization Limit %</th>
+		<th>Parallel Server Limit %</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>&nbsp;Default per PDB </td>
+		<td>&nbsp;1</td>
+		<td>&nbsp;100</td>
+		<td>&nbsp;100</td>
+	</tr>
+	<tr>
+		<td>&nbsp;PDB1</td>
+		<td>&nbsp;2</td>
+		<td>&nbsp;50</td>
+		<td>&nbsp;20</td>
+	</tr>
+	<tr>
+		<td>&nbsp;PDB2</td>
+		<td>&nbsp;4</td>
+		<td>&nbsp;75</td>
+		<td>&nbsp;20</td>
+	</tr>
+	<tr>
+		<td>&nbsp;PDB3</td>
+		<td>&nbsp;14</td>
+		<td>&nbsp;100</td>
+		<td>&nbsp;100</td>
+	</tr>
+	</tbody>
+</table>
+
+PDB1 gets guaranteed 2 share of total 20 (2+4+14), so 10% of system resources (CPU, Exadata I/O
+Bandwidth, queued parallel statements) –
+PDB2  is allocated 4/20 or 20% and PDB3 is allocated 14/20 or 70%.
+
+The tasks you will accomplish in this lab are:
+
+Create a pluggable database OE in the container database CDB1
+Create a resource profile to manage PDB1 and OE PDBs
+run sample workloads.
+
+Connect to CDB1
+````
+<copy>sqlplus /nolog
+connect sys/oracle@localhost:1523/cdb1 as sysdba </copy>
+````
+Create a pluggable database PDB3_RM with an admin user of SOE
+````
+<copy>
+create pluggable database PDB3_RM admin user soe identified by soe roles=(dba);
+alter pluggable database PDB3_RM open;
+alter session set container = oe;
+grant create session, create table to soe;
+alter user soe quota unlimited on system;
+</copy>
+````
+Create a resource profile. Allocate 3/10 shares to pdb1 and 7/10 shares to PDB3_RM.
+````
+BEGIN
+DBMS_RESOURCE_MANAGER.CREATE_PENDING_AREA();
+DBMS_RESOURCE_MANAGER.CREATE_CDB_PLAN( plan => 'newcdb_plan',comment => 'CDB resource plan for newcdb');
+DBMS_RESOURCE_MANAGER.CREATE_CDB_PLAN_DIRECTIVE(
+    plan                  => 'newcdb_plan',
+    pluggable_database    => 'PDB1',
+    shares                => 3,
+    utilization_limit     => 30,
+    parallel_server_limit => 100);
+
+    DBMS_RESOURCE_MANAGER.CREATE_CDB_PLAN_DIRECTIVE(
+       plan                  => 'newcdb_plan',
+       pluggable_database    => 'PDB3_RM',
+       shares                => 7,
+       utilization_limit     => 70,
+       parallel_server_limit => 100);
+
+
+DBMS_RESOURCE_MANAGER.VALIDATE_PENDING_AREA();
+DBMS_RESOURCE_MANAGER.SUBMIT_PENDING_AREA();
+
+END;
+/
+````
+
+To enable a CDB resource plan:
+````
+ALTER SYSTEM SET RESOURCE_MANAGER_PLAN = 'newcdb_plan';
+````
+
+Now run out CPU test againt PDB1 and verify in another session that the CPU limit is at 30%.
+alter session set container=pdb1;
+host /home/oracle/labs/multitenant/cpu_test.sh
+
+BEGIN
+  DBMS_RESOURCE_MANAGER.UPDATE_CDB_PLAN_DIRECTIVE(
+    plan                      => 'newcdb_plan',
+    pluggable_database        => 'pdb1',
+    new_shares                => 3,
+    new_utilization_limit     => 11,
+    new_parallel_server_limit => 20);
+END;
+/
 
 ### I/O Resource Management
 
