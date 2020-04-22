@@ -761,8 +761,8 @@ alter user soe quota unlimited on system;
 
 Unset  resource\_manager\_plan in CDB  and  connect to OE and run workload.
 ````
-alter system set resource_manager_plan='';
-alter session set container=OE;
+<copy>alter system set resource_manager_plan='';
+alter session set container=OE;</copy>
 ````
 run a workload with MAX_IOPS=0.
 
@@ -788,10 +788,10 @@ Elapsed: 00:00:18.48
 ````
 The workload runs without any resource manager in under 20 seconds.
 
-Now set MAX_IOPS=1 and rerun the load.
+Now set MAX_IOPS=10 and rerun the load.
 
 ````
-<copy>alter system set  MAX_IOPS=1;
+<copy>alter system set  MAX_IOPS=10;
 BEGIN
   EXECUTE IMMEDIATE ' create table test as select * from dba_objects';
   FOR i in 1..6  LOOP
@@ -807,7 +807,7 @@ PL/SQL procedure successfully completed.
 Elapsed: 00:01:14.17
 
 ````
-Now the same workload takes about 250 to 300 seconds to run.
+Now the same workload takes much longer to run. You can rerun any number of times.
 Open a new terminal window, sudo to the oracle user and query v$session_event to see IO resource wait event.
 ````
 sudo su - oracle
@@ -819,3 +819,5 @@ select se.con_id,event,time_waited from v$session_event se,v$pdbs pdb where even
         4 resmgr: I/O rate limit              185428
         4 resmgr: I/O rate limit                9016
 ````
+
+ You shoub be seeing time_waited for event "resmgr: I/O rate limit" increasing while the load is running.
