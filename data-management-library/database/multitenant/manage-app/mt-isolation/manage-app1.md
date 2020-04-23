@@ -820,4 +820,4 @@ select se.con_id,event,time_waited from v$session_event se,v$pdbs pdb where even
         4 resmgr: I/O rate limit                9016
 ````
 
- You shoub be seeing time_waited for event "resmgr: I/O rate limit" increasing while the load is running.
+ You should be seeing time_waited for event "resmgr: I/O rate limit" increasing while the load runs.
