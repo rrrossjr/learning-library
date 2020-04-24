@@ -695,7 +695,7 @@ Resource Manager CPU.
 
 Another way of managing CPU resources is through a defining a percentage or share to each PDB.
 To allocate resources among PDBs, assign a share value to each PDB or performance profile.
-Resource Manager Plans are more useful when the database is running in an exadata machine. Since this is DB is not on exadata, CPU_COUNT is recommended method.
+Resource Manager Plans are more useful when the database is running in an exadata machine. Since this Lab is not on exadata, CPU_COUNT is recommended method.
 
 CPU\_COUNT is advantageous because when the PDB is plugged into a new container, the CPU_COUNT setting remains with the plugged-in PDB. Also, Oracle Database uses the CPU\_COUNT setting for a PDB to derive many other PDB parameters, such as those for parallel execution.
 
