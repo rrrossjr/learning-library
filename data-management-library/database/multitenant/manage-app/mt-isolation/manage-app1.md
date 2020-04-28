@@ -693,11 +693,14 @@ The workload without resources runs faster as they make use of all the CPUs.
 
 Resource Manager CPU.
 
-Another way of managing CPU resources is through a defining a percentage or share to each PDB.
-To allocate resources among PDBs, assign a share value to each PDB or performance profile.
-Resource Manager Plans are more useful when the database is running in an exadata machine. Since this Lab is not on exadata, CPU_COUNT is recommended method.
+Another way of managing CPU resources is through Resource Manager. We allocate a certain number of shares to each PDB. The amount of CPUs allocated to the PDB is equal to the percentage of shares of that PDB compared to the total number of shares across all the PDBS.
 
-CPU\_COUNT is advantageous because when the PDB is plugged into a new container, the CPU_COUNT setting remains with the plugged-in PDB. Also, Oracle Database uses the CPU\_COUNT setting for a PDB to derive many other PDB parameters, such as those for parallel execution.
+To allocate resources among PDBs, assign a share value to each PDB.
+Resource Manager Plans are more useful when the database is running in an exadata machine. Since this Lab is not on exadata, CPU_COUNT is recommended method.
+One key difference between instance caging and Resource Manager is that the Resource Manager allows the PDB tenant to utilize 100% of the CPUs allocated to the CDB if there is no load on the system. Only when the workload on the system is more than 100% of the CPUs allocated to the CDB, will the resource manager kick in and prioritize cpu resource based on the percentage of shares.
+
+
+ ![](./images/CPU_RESOURCEMANAGER.png)
 
 ### I/O Resource Management
 
