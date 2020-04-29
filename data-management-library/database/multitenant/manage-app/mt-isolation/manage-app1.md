@@ -695,19 +695,22 @@ Resource Manager CPU.
 
 Another way of managing CPU resources is through Resource Manager. We allocate a certain number of shares to each PDB. The amount of CPUs allocated to the PDB is equal to the percentage of shares of that PDB compared to the total number of shares across all the PDBS.
 
-To allocate resources among PDBs, assign a share value to each PDB.
-Resource Manager Plans are more useful when the database is running in an exadata machine. Since this Lab is not on exadata, CPU_COUNT is recommended method.
-One key difference between instance caging and Resource Manager is that the Resource Manager allows the PDB tenant to utilize 100% of the CPUs allocated to the CDB if there is no load on the system. Only when the workload on the system is more than 100% of the CPUs allocated to the CDB, will the resource manager kick in and prioritize CPU resource based on the percentage of shares.
-Since 19c, a new parameter has been introduced called CPU\_MIN\_COUNT. This allows us to set the minimum CPUs available per PDB.
+To allocate resources among PDBs, assign a share value to each PDB. Until 19c database, the shares were allocated to each pdb through dbms_resource_manager PL/SQL package. Since 19c, a new parameter has been introduced called CPU\_MIN\_COUNT. This allows us to set the minimum CPUs available per PDB.
 
-The steps for this is
+CPU_MIN_COUNT allows the PDB tenant to utilize 100% of the CPUs allocated to the CDB if there is no load on the system. Only when the workload on the system is more than 100% of the CPUs allocated to the CDB and workload is from more than one PDB, will the resource manager kick in and prioritize CPU resource based on the percentage of shares or CPU_MIN_COUNT.
+
+The steps to set this is
 - At the CDB level
     -- Set resource_manager_plan = default_cdb_plan
 - For each PDB
     -- Set cpu_min_count to specify its shares
     -- Set cpu_count to specify its limit
 
-By default, cpu_min_count == cpu_count, If sum(cpu_min_count) <= CDB’s cpu_count , then each PDB is guaranteed cpu_min_count CPUs.
+By default, cpu_min_count == cpu_count, If sum(cpu_min_count) <= CDB’s cpu_count , then each PDB is guaranteed cpu_min_count CPUs
+
+
+ ![](./images/CPU_RESOURCEMANAGER.png)
+
 
 
 
