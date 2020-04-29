@@ -632,8 +632,8 @@ Oracle now provides views to monitor the resource (CPU, I/O, parallel execution,
 ### CPU Resources Management
 
 Two ways to limit CPU resources
-- Instance Caging
-- Resource Manager
+- Instance Caging with CPU_COUNT
+- Resource Manager with CPU\_MIN\_COUNT ( new in 19c)
 
 
 Instance caging is a technique that uses an initialization parameter to limit the number of CPUs that an instance can use simultaneously. You can set CPU\_COUNT at the PDB level. If Resource Manager is enabled, then the PDB is “caged” (restricted) to the number of CPUs specified by CPU\_COUNT. This count can be altered dynamically altered. In Oracle database hosting environment, This is useful to scale cpus up and down PDBs.  Another advantage is oracle can monitor resource usage. The resource limits can trigger to dynamically change the  CPU_COUNT. The CPUs will be available in all the session in the PDB immediately. This way, we can auto scale the CPUs for PDB tenant.
