@@ -713,7 +713,6 @@ By default, cpu_min_count == cpu_count, If sum(cpu_min_count) <= CDB’s cpu_cou
 
 
 
-
 ### I/O Resource Management
 
 I/O Resource Management for Non-Exadata Platforms (PDB only)
