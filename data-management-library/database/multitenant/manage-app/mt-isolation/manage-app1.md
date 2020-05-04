@@ -697,9 +697,9 @@ Another way of managing CPU resources is through Resource Manager. We allocate a
 
 To allocate resources among PDBs, assign a share value to each PDB. Until 19c database, the shares were allocated to each pdb through dbms\_resource\_manager PL/SQL package. Since 19c, a new parameter has been introduced called CPU\_MIN\_COUNT. This allows us to set the minimum CPUs available per PDB.
 
-CPU_MIN_COUNT is the minimum number of vCPUs the Pluggable DatabaseInstancewill receive.  The total of CPU_MIN_COUNT for all Pluggable Databaseinstances should not exceed the CPU_COUNT of the Container Databaseinstance. When Database Resource Manager (DBRM) is enabled, and when CPU_MIN_COUNT has been set, the CPU_COUNTparameter defines the maximum number of vCPUs that can be used by a Pluggable Database Instance.
+CPU\_MIN\_COUNT is the minimum number of CPUs the Pluggable Database Instance will receive.  The total of CPU\_MIN\_COUNT for all Pluggable Database instances should not exceed the CPU\_COUNT of the Container Database instance. When Database Resource Manager (DBRM) is enabled, and when CPU\_MIN\_COUNT has been set, the CPU\_COUNT parameter defines the maximum number of CPUs that can be used by a Pluggable Database Instance.
 
-CPU_MIN_COUNT allows the PDB tenant to utilize 100% of the CPUs allocated to the CDB if there is no load on the system. Only when the workload on the system is more than 100% of the CPUs allocated to the CDB and workload is from more than one PDB, will the resource manager kick in and prioritize CPU resource based on the percentage of shares or CPU_MIN_COUNT.
+CPU\_MIN\_COUNT allows the PDB tenant to utilize 100% of the CPUs allocated to the CDB if there is no load on the system. Only when the workload on the system is more than 100% of the CPUs allocated to the CDB and workload is from more than one PDB, will the resource manager kick in and prioritize CPU resource based on the percentage of shares or CPU\_MIN\_COUNT.
 
 The steps to set this is
 - At the CDB level
@@ -708,10 +708,78 @@ The steps to set this is
     -- Set cpu\_min\_count to specify its shares
     -- Set cpu_count to specify its limit
 
-By default, cpu\_min\_count == cpu\_count, If sum(cpu\_min\_count) <= CDB’s cpu\_count , then each PDB is guaranteed cpu\_min\_count CPUs
-
 
  ![](./images/CPU_RESOURCEMANAGER.png)
+
+
+ Connect to CDB1 and set the resource plan.
+````
+ <copy>
+ connect / as SYSDBA
+ show parameter cpu_
+ show parameter resource_manager_plan
+ alter system set resource_manager_plan='DEFAULT_CDB_PLAN';
+ show parameter resource_manager_plan </copy>
+````
+
+````
+SQL>
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+cpu_count                            integer     4
+cpu_min_count                        string      4
+resource_manager_cpu_allocation      integer     4
+SQL>
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+resource_manager_plan                string
+SQL>
+System altered.
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+resource_manager_plan                string      DEFAULT_CDB_PLAN
+
+````
+
+Create PDB and set the CPU\_MIN\_COUNT.
+````
+<copy>create pluggable database pdb_2 admin user admin identified by oracle ;
+alter pluggable database pdb_2 open;
+alter session set container=pdb_2;
+show parameter cpu_
+alter system set cpu_min_count=1;
+</copy>
+````
+````
+SQL> create pluggable database pdb_2 admin user admin identified by oracle ;
+
+Pluggable database created.
+
+SQL> alter pluggable database pdb_2 open;
+
+Pluggable database altered.
+
+SQL> alter session set container=pdb_2;
+
+Session altered.
+
+SQL> show parameter cpu_
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+cpu_count                            integer     4
+cpu_min_count                        string      4
+resource_manager_cpu_allocation      integer     4
+SQL> alter system set cpu_min_count=1;
+
+System altered.
+
+SQL>
+````
+That's it. With 2 simple steps, the minimum resource is set. If you need to set instance Caging, you can set CPU_COUNT in PDB level as well.
+
+By default, CPU\_MIN\_COUNT = CPU\_COUNT, If sum(CPU\_MIN\_COUNT) <= CDB’s CPU\_COUNT , then each PDB is guaranteed CPU\_MIN\_COUNT CPUs
 
 
 
