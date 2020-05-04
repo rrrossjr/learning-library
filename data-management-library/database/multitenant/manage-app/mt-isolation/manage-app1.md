@@ -697,6 +697,8 @@ Another way of managing CPU resources is through Resource Manager. We allocate a
 
 To allocate resources among PDBs, assign a share value to each PDB. Until 19c database, the shares were allocated to each pdb through dbms\_resource\_manager PL/SQL package. Since 19c, a new parameter has been introduced called CPU\_MIN\_COUNT. This allows us to set the minimum CPUs available per PDB.
 
+CPU_MIN_COUNT is the minimum number of vCPUs the Pluggable DatabaseInstancewill receive.  The total of CPU_MIN_COUNT for all Pluggable Databaseinstances should not exceed the CPU_COUNT of the Container Databaseinstance. When Database Resource Manager (DBRM) is enabled, and when CPU_MIN_COUNT has been set, the CPU_COUNTparameter defines the maximum number of vCPUs that can be used by a Pluggable Database Instance.
+
 CPU_MIN_COUNT allows the PDB tenant to utilize 100% of the CPUs allocated to the CDB if there is no load on the system. Only when the workload on the system is more than 100% of the CPUs allocated to the CDB and workload is from more than one PDB, will the resource manager kick in and prioritize CPU resource based on the percentage of shares or CPU_MIN_COUNT.
 
 The steps to set this is
