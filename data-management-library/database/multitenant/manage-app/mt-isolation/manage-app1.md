@@ -775,13 +775,50 @@ SQL> alter system set cpu_min_count=1;
 
 System altered.
 
-SQL>
+SQL> show parameter cpu_
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+cpu_count                            integer     4
+cpu_min_count                        string      1
+resource_manager_cpu_allocation      integer     4
 ````
+
 That's it. With 2 simple steps, the minimum resource is set. If you need to set instance Caging, you can set CPU_COUNT in PDB level as well.
 
 By default, CPU\_MIN\_COUNT = CPU\_COUNT, If sum(CPU\_MIN\_COUNT) <= CDB’s CPU\_COUNT , then each PDB is guaranteed CPU\_MIN\_COUNT CPUs
 
+To test this let us run some load in PDB_2. You will observer that the CPU utilization on the system will be 100% and all teken by it.Next when we put the same workload into PDB1 , where CPU_MIN_COUNT=CPU_CUNT , we will observe that while the PDB1 will captue a greate percent of CPU while the workload is still at 100 percent.
+Note that the workload script is single threaded and has a default of 4 threads. If you are testing this on servers with more cpus, you can increase the count.
 
+````
+alter session set container=pdb_2;
+@/home/oracle/labs/multitenant/cpu_test.sql
+````
+If you open another session and monitor cpu utilization , it should 100%. However, to find out which PDB is consuming CPUs, we need to look at  V$RSRCPDBMETRIC.
+In a new sesion , run the following script to see the CPU utilization per PDB.
+
+````
+sqlplus / as SYSDBA
+COLUMN PDB_NAME FORMAT A10
+COLUMN CPU_UTILIZATION_LIMIT 9999
+SELECT r.CON_ID,
+       p.PDB_NAME,
+       r.CPU_UTILIZATION_LIMIT,
+       round(r.AVG_CPU_UTILIZATION) AVG_CPU_UTILIZATION,
+       count(job) JOB_sess
+FROM   V$RSRCPDBMETRIC r,
+       CDB_PDBS p,
+       cdb_jobs j
+WHERE r.CON_ID = p.CON_ID
+AND j.CON_ID(+)=r.CON_id
+group by
+r.CON_ID,
+p.PDB_NAME,
+r.CPU_UTILIZATION_LIMIT,
+r.AVG_CPU_UTILIZATION
+order by r.con_id asc;
+````
 
 ### I/O Resource Management
 
