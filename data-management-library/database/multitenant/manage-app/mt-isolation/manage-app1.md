@@ -788,15 +788,24 @@ That's it. With 2 simple steps, the minimum resource is set. If you need to set 
 
 By default, CPU\_MIN\_COUNT = CPU\_COUNT, If sum(CPU\_MIN\_COUNT) <= CDB’s CPU\_COUNT , then each PDB is guaranteed CPU\_MIN\_COUNT CPUs
 
-To test this let us run some load in PDB_2. You will observer that the CPU utilization on the system will be 100% and all teken by it.Next when we put the same workload into PDB1 , where CPU_MIN_COUNT=CPU_CUNT , we will observe that while the PDB1 will captue a greate percent of CPU while the workload is still at 100 percent.
-Note that the workload script is single threaded and has a default of 4 threads. If you are testing this on servers with more cpus, you can increase the count.
+To test this let us run some high CPU workload in PDB\_2. You will observer that the CPU utilization on the system will be 100%. Next when we put the same workload into PDB1 , where CPU\_MIN\_COUNT=CPU\_COUNT=4, we will observe that while the PDB1 will capture a greater percent of CPU.
+
+Note that the workload script is single threaded and has a default of 4 threads. If you are testing this on servers with more cpus, you can increase the thread_count.
 
 ````
+<copy>
 alter session set container=pdb_2;
-@/home/oracle/labs/multitenant/cpu_test.sql
+@/home/oracle/labs/multitenant/cpu_test.sql </copy>
 ````
-If you open another session and monitor cpu utilization , it should 100%. However, to find out which PDB is consuming CPUs, we need to look at  V$RSRCPDBMETRIC.
-In a new sesion , run the following script to see the CPU utilization per PDB.
+````
+SQL> alter session set container=pdb_2;
+@/home/oracle/labs/multitenant/cpu_test.sql
+Session altered.
+SQL>
+PL/SQL procedure successfully completed.
+````
+If you open another session and monitor CPU utilization , it should 100%. However, to find out which PDB is consuming CPUs, we need to look at  V$RSRCPDBMETRIC.
+In a new session , run the following script to see the CPU utilization per PDB.
 
 ````
 sqlplus / as SYSDBA
@@ -819,6 +828,39 @@ r.CPU_UTILIZATION_LIMIT,
 r.AVG_CPU_UTILIZATION
 order by r.con_id asc;
 ````
+````
+SQL>
+SQL> /
+
+    CON_ID PDB_NAME   CPU_UTILIZATION_LIMIT AVG_CPU_UTILIZATION   JOB_SESS
+---------- ---------- --------------------- ------------------- ----------
+         3 PDB1                         100                   0          0
+         4 PDB_2                        100                  99          4
+````
+Observer that when there is no load on PDB1, the PDB_2 is able to use all of the CPUs allocated to the CDB.
+Note: The Average CPU Utilization will take about 60 seconds to update the value. You will need to rerun the sql typing the "/" .
+
+Since we have not set CPU\_MIN\_COUNT in PDB1, it will default to CPU\_COUNT which is 4 in my case. So, when we run load on both PDBs, the CPU utilization should be equal to 80% and 20% for PDB_2.
+
+````
+<copy>
+alter session set container=pdb_2;
+@/home/oracle/labs/multitenant/cpu_test.sql
+alter session set container=pdb1;
+@/home/oracle/labs/multitenant/cpu_test.sql
+</copy>
+````
+Rerun the monitoring script in the other session_event and check the output.
+
+````
+SQL> /
+
+    CON_ID PDB_NAME   CPU_UTILIZATION_LIMIT AVG_CPU_UTILIZATION   JOB_SESS
+---------- ---------- --------------------- ------------------- ----------
+         3 PDB1                         100                  77          4
+         4 PDB_2                        100                  20          4
+````
+
 
 ### I/O Resource Management
 
