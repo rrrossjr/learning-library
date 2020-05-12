@@ -1,10 +1,18 @@
-# Oracle Machine Learning with Python
+# Oracle Multitenant workshop
 
 ## Workshop Overview
 
-**Artificial Intelligence** and **Machine Learning** have become increasingly necessary for enterprises to translate today's data into direct business value. This course introduces learners to the basic concepts of AI/ML, using a mix of engaging lectures and hands-on activities to help you navigate the first steps in this exciting field. The exercises present real world use cases that show how Oracle is actively helping companies maximize business benefits through AI and ML.
+**[Oracle Multitenant](https://github.com/oracle/learning-library/issues)** is the architecture for the next-generation database cloud. It delivers isolation, agility and economies of scale. A multitenant container database can hold many pluggable databases. An existing database can simply be adopted with no application changes required. Oracle Multitenant fully complements other options, including Oracle Real Application Clusters and Oracle Active Data Guard.
 
-This hands-on workshop focuses on **Oracle Machine Learning for Python (OML4Py)** which enables AI and ML capabilities of the Oracle Database in conjunction with the popular Python programming language and Jupyter notebooks.  You will learn to apply machine learning concepts and algorithms to solve real-world problems ranging from data acquisition and feature engineering, to creating ML models and tuning for optimal results.
+This hands-on workshop focuses on
+* Multitenant Basics
+    * Create, Drop, Unplug and Plug PDBs.
+    * Includes Hot clone, PDB refresh and PDB relocate.
+* Multitenant Application Containers
+    * Application Architecture, Upgrde, Porxy PDBs , Syncronizing Application and Version control.
+* Multitenant Tenant Isolation.
+    * Isolation features like Database Firewall
+    * Memory, CPU and IO isolation.
 
 ## Workshop Requirements
 
