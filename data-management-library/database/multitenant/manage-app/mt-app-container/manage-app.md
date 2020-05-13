@@ -1,4 +1,4 @@
-# Multitenant Application Container 
+# Multitenant Application Container
 
 ## Lab Introduction
 
@@ -35,7 +35,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    ./resetCDB.sh
    ```
 
-## Application Container 
+## Application Container
 
    Creating an Application Root is similar to creating a normal PDB, just with an extra clause "AS APPLICATION CONTAINER". The source of the Application Root can be an existing database or the SEED database on CDB level.
 
@@ -60,7 +60,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
       ![](./images/MT01_createAppRoot.png)
 
-      
+
 
    ### Manage Applications
 
@@ -94,17 +94,17 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    Connect to the application root and create a new Application called APP01 with version 1.0
 
-   
+
 
    ```
    alter session set container=APP_ROOT;
    alter pluggable database application APP01 begin install '1.0';
-   
+
    ```
 
    One of the things we can do now is create a new App user and create some objects for this user.
 
-   **Create a new user called APP\_TEST and create a new table in this schema.** 
+   **Create a new user called APP\_TEST and create a new table in this schema.**
 
    ```
    <copy>create user app_test identified by app_test;
@@ -114,7 +114,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    commit;</copy>
    ```
 
-   Usually a lot more statements would follow, comparable to an application install script. But for now we simulate that one table and one user is all we need in our application. 
+   Usually a lot more statements would follow, comparable to an application install script. But for now we simulate that one table and one user is all we need in our application.
 
    **End** the installation of Application APP01
 
@@ -138,7 +138,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    SQL> select app_statement from dba_app_statements
    where app_name='APP01'
    order by statement_id;  2    3
-   
+
    APP_STATEMENT
    --------------------------------------------------------------------------------
    SYS
@@ -184,7 +184,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
             5 APP_PDB1                       READ WRITE NO
    ```
 
-   
+
 
 #### **Installing an application in an Application PDB**
 
@@ -207,7 +207,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
     alter pluggable database application APP01 SYNC;
    ```
 
-   
+
 
    We can now check to see if the user has been created and whether or not our data has been inserted.
 
@@ -222,13 +222,13 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 
    ```
    SQL> select * from APP_TEST.MYTABLE;
-   
+
            ID
    ----------
             1
-   
+
    SQL> select username from dba_users where username='APP_TEST';
-   
+
    USERNAME
    -------------------------------------------
    APP_TEST
@@ -245,7 +245,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    select * from dba_applications ;
    ```
 
-   
+
 
 ### **Patching an Application and pushing the changes**
 
@@ -265,7 +265,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    alter pluggable database application APP01 end patch;
    ```
 
-   
+
 
    If we connect to the Application PDB, no changes are forwarded yet. We could automate this process but by default it is a manual action to sync the Application in the Application PDB with the one in the Application Root.
 
@@ -282,7 +282,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    select * from app_test.mytable;
    ```
 
-   
+
 
 ```
 SQL> alter session set container=APP_PDB1;
@@ -577,7 +577,7 @@ SQL> select * from app_common.T_METADATA;
           1
 ```
 
-As you can see, From APP\_ROOT, you cannot see data inserted in APP\_PDB1. 
+As you can see, From APP\_ROOT, you cannot see data inserted in APP\_PDB1.
 
 
 
@@ -611,7 +611,7 @@ APP_ROOT                      1          5
 
 
 
-Note that CON_ID  is a virtual column when using the container clause while you have to explicitly  use con$name. When You want to aggregate data across all App PDBs , container clause is very useful. 
+Note that CON_ID  is a virtual column when using the container clause while you have to explicitly  use con$name. When You want to aggregate data across all App PDBs , container clause is very useful.
 
 In some application in a Multitenant environment , It may **not be possible** to change the application to use the CONTAINERS clause . In such scenarios you can use CONTAINER MAPS.   More information about Container MAPS can be got from [Oracle Documentation.](https://docs.oracle.com/en/database/oracle/oracle-database/19/multi/administering-application-containers-with-sql-plus.html#GUID-E2668048-1657-49BC-9B6E-6837D5757463)
 
@@ -629,7 +629,7 @@ You can create a PDB as a proxy PDB by referencing it in a remote CDB.
 
 The benefit of a Proxy PDB is that it’s exactly as if the referenced PDB was in the local CDB, but the data is stored remotely and the operations are executed remotely in the referenced Pluggable Database.
 
-   Example, in the CONTAINERS clause, which allows retrieval of data from all the Pluggable Databases. The query will be executed within the proxy PDB ,but in turn run on the Remote PDB. 
+   Example, in the CONTAINERS clause, which allows retrieval of data from all the Pluggable Databases. The query will be executed within the proxy PDB ,but in turn run on the Remote PDB.
 
 
 
@@ -818,19 +818,19 @@ select  con$name, A.*  FROM  containers(app_common.T_METADATA) A ;
 
 #### Clone APP\_ROOT\_REPLICA in CDB2 based on  APP\_ROOT in CDB1.
 
-##### Create a DB link in CDB2 pointing to CDB1 and Remote clone APP\_ROOT. 
+##### Create a DB link in CDB2 pointing to CDB1 and Remote clone APP\_ROOT.
 
 User the CLAUSE "**AS APPLICATION CONTAINER from <remote_APP\_ROOT>@<DB_LINK>**"
 
 ```
 conn sys/oracle@//localhost:1524/cdb2 as sysdba
 Drop PUBLIC database link CDB1_Link;
-create PUBLIC database link CDB1_Link 
+create PUBLIC database link CDB1_Link
 connect to system identified by oracle
 using 'localhost:1523/cdb1';
 
 create PLUGGABLE DATABASE APP_ROOT_REPLICA /* ARR in CDB2 */
-as APPLICATION CONTAINER 
+as APPLICATION CONTAINER
 from APP_ROOT@CDB1_LINK;
 Alter PLUGGABLE database APP_ROOT_REPLICA open;
 show pdbs
@@ -877,7 +877,7 @@ SQL> show pdbs
 
 #### Create App PDB APP\_PDB3 under APP\_ROOT\_REPICA and install APP01 application.
 
-Now, APP\_ROOT\_REPLICA is a ROOT CONTAINER in Container database CDB2.  This CDB could in real world would be in a different server. This APP\_ROOT\_REPLICA being Application ROOT can now have local App PDBs. 
+Now, APP\_ROOT\_REPLICA is a ROOT CONTAINER in Container database CDB2.  This CDB could in real world would be in a different server. This APP\_ROOT\_REPLICA being Application ROOT can now have local App PDBs.
 
 ** Connect to APP\_ROOT\_REPLICA lala and create App PDB APP\_PDB3 and SYNC the Application APP01 **
 
@@ -938,7 +938,7 @@ APP_ROOT_REPLICA                          1          4
 APP_PDB3                               3333          6
 ```
 
-Here, APP\_ROOT\_REPLICA has has data (ID =1 ) as this  Application container was cloned from APP\_ROOT where we had inserted earlier. Having the same application run on different Replicas of Application Containers  in different CDBs address data sovereignty and latency issues. 
+Here, APP\_ROOT\_REPLICA has has data (ID =1 ) as this  Application container was cloned from APP\_ROOT where we had inserted earlier. Having the same application run on different Replicas of Application Containers  in different CDBs address data sovereignty and latency issues.
 
 Now, by creating a Proxy PDB for APP\_ROOT\_REPLICA (in CDB2) in  APP\_ROOT ( in CDB1), we can query using the containers clause across all APPs. ( APP\_PDB1, APP\_PDB2 and APP\_PDB3).  
 
@@ -961,9 +961,9 @@ select * from  v$proxy_pdb_targets;
 
 
 
-#### Create ProxyPDB ARR_PROXY in APP\_ROOT(in CDB1) for APP\_ROOT\_REPLICA (in CDB2) 
+#### Create ProxyPDB ARR_PROXY in APP\_ROOT(in CDB1) for APP\_ROOT\_REPLICA (in CDB2)
 
- 
+
 
 ```
 conn sys/oracle@//localhost:1523/APP_ROOT as sysdba
@@ -994,9 +994,9 @@ CDB2       APP_PDB3                   3333          6
 CDB2       APP_ROOT_REPLICA              1          4
 ```
 
- 
 
-Observer that we added another hidden  column **CDB$NAME** to show the CDB source for the data in the CONTAINERS clause. 
+
+Observer that we added another hidden  column **CDB$NAME** to show the CDB source for the data in the CONTAINERS clause.
 
 We are able to run the  query across two CDBs and all the Application PDBs. You can use CDB$NAME, CON$NAME and CON_ID in the where condition and group by to  filter the data further. Eg
 
@@ -1015,7 +1015,7 @@ CDB2       APP_PDB3                   3333          6
 
 Now we can apply a patch or upgrade the Master APP\_ROOT,  the data will be distributed to APP\_ROOT\_REPLICA when we sync the proxy PDB. Let us test this.
 
-We will 
+We will
 
 - **Upgrade APP01** from 2.0 to 20.0 In APP\_ROOT
 
@@ -1023,7 +1023,7 @@ We will
 
 - #### Connect to ARR_PROXY &  SYNC and verify that the APP01 changes are push from APP\_ROOT to APP\_ROOT\_REPLICA
 
- 
+
 
 ```
 conn sys/oracle@//localhost:1523/APP_ROOT as sysdba
@@ -1040,7 +1040,7 @@ alter  pluggable database application app01 sync ;
 alter session set container=APP_PDB2;
 alter  pluggable database application app01 sync ;
 
--- TO connect to proxy PDBs, alter session is not supported. 
+-- TO connect to proxy PDBs, alter session is not supported.
  conn sys/oracle@//localhost:1523/ARR_PROXY as sysdba
 -- Executing SYNC in ARR_PROXY will upgrage APP_ROOT_RELICA in CDB2
  alter  pluggable database application app01 sync ;
@@ -1068,7 +1068,7 @@ in_cdb1-app_root
 
 
 
-Table created during the upgrade of APP01 from 2.0 to 20.0 in APP\_ROOT has successfully replicated. This demonstrates that we can have **one Master Application root container and push changes to all the  Root replicas** and inturn help manage application PDBs. 
+Table created during the upgrade of APP01 from 2.0 to 20.0 in APP\_ROOT has successfully replicated. This demonstrates that we can have **one Master Application root container and push changes to all the  Root replicas** and inturn help manage application PDBs.
 
 ## Version Control and Compatibility.
 
@@ -1117,7 +1117,7 @@ col DESCRIPTION format a20
 select * from app_test.mytable;
 ```
 
-   
+
 
 ```
 SQL> conn sys/oracle@//localhost:1524/app_pdb3 as sysdba
@@ -1132,7 +1132,7 @@ select * from app_test.mytable;SQL>
 
 
 
-### Compatibility 
+### Compatibility
 
 When we upgrade application , Oracle creates  a copy of the APP\_ROOT container with Names like F3345058508_3_2 ..  This Helps in Creating a NEW App PDBs and SYNC to any version by USING the **SYNC to "version"** Clause.  instead of  just **SYNC**  which we did  in out lab to the latest version.
 
@@ -1190,8 +1190,7 @@ SQL> show pdbs
 
 
 
-Note that one of the APP ROOT CLONE F3345058508_3_1 is deleted as we set the compatibility to 2.0. So, any App Pdbs created further will inherit all the changes from  1.0 version and 1.1 Patch and 2.0 changes when SYNCed. 
+Note that one of the APP ROOT CLONE F3345058508_3_1 is deleted as we set the compatibility to 2.0. So, any App Pdbs created further will inherit all the changes from  1.0 version and 1.1 Patch and 2.0 changes when SYNCed.
 
 
 For more information see [documentation](http://docs.oracle.com/database/122/ADMIN/administering-application-containers-with-sql-plus.htm) .you will see there is a lot of detail about this functionality.
-
