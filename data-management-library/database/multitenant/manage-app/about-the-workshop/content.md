@@ -14,7 +14,7 @@ This hands-on workshop focuses on
     * Isolation features like Database Firewall
     * Memory, CPU and IO isolation.
 
-## Workshop Requirements 12345
+## Workshop Requirements 
 
 * Access to Oracle Cloud Infrastructure
     * Provided by the instructor for instructor-led workshops
