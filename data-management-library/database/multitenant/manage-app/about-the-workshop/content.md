@@ -14,7 +14,7 @@ This hands-on workshop focuses on
     * Isolation features like Database Firewall
     * Memory, CPU and IO isolation.
 
-## Workshop Requirements 
+## Workshop Requirements
 
 * Access to Oracle Cloud Infrastructure
     * Provided by the instructor for instructor-led workshops
@@ -22,13 +22,15 @@ This hands-on workshop focuses on
     * To access the OCI server through tools like putty and sqldeveloper.
 
 
-## Access the labs
+## Multitenant Data Consonsolidtion for mordern architecture.
 
-- Use **Lab Contents** menu on your right to access the labs.
-    - If the menu is not displayed, click the menu button ![](./images/menu-button.png) on the top right  make it visible.
+###  Value proposition for Multitenant
+It is common to see Software and Hardware platform evole over time to be more efficiancy and performant at lower cost.
+Deployment  environments using Hardware and sofware frameworks like Kubernites and Docker are taking away market share from treditional Virtual Images and Bear-Metal servers.
+In terme of Development paradim, people are moving from Single Monolitic Application to MicroServices and Continous Development and deployment models.
+In terms of Datatype, the adoption of multiple formats like XML, JSON, Relation tabales ,text docs , spacial, Big Data , IOTs and NOSQL are getting popular.
+These modern designs are quickly becoming popular because it is easly to setup and accessible due to Cloud providers who readily provide the platform services.
+A problem arises in these designs if a DBA of a production sytem is not involved in the Design of the newer applications. If a Database to store data is kept close to the thin application layer and have different DB stores for different formats, it usually becomes App tier heavy and will consume more CPU resources and more managements steps to tune,Upgrade and provide High avaibility, Disaster Recovery and scalability. Often, the DBA now has to handle and be proficient in more than one Data Stores.
+![](images/MicroservicesInDocker.png " ")
 
-- From the menu, click on the lab that you like to proceed with. For example, if you like to proceed to **Lab 0**, click **Lab 0: Setup the Lab Environment**.
-
-![](./images/menu.png "")
-
-- You may close the menu by clicking ![](./images/menu-close.png "")
+This is where Oracle Database Multitenant and DB features comes into play. Oracle DB has the ability to store all the Modern Datatypes like JSON, XML, IOTs, nosql, Big data format like parque files, Text docs, Spacial all within the DB. In addition , it has built in features of partitioning,  Multitenant feature can help address the Modern archtecture of thin application frameworks in Dockers access a single PDB 
