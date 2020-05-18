@@ -22,7 +22,7 @@ This hands-on workshop focuses on
     * To access the OCI server through tools like putty and sqldeveloper.
 
 
-## Multitenant Data Consolidation for mordern architecture.
+## Multitenant Data Consolidation for modern architecture.
 
 ###  Value proposition for Multitenant
 
