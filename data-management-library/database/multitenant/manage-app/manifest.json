@@ -5,7 +5,16 @@
             "description":"Workhop Overview",
             "publisheddate": "01/15/2020",
             "filename":"./about-the-workshop/content.md"
-        },{         
+        },
+        {
+            "title": "Lab setup",
+            "description": "Lab Setup",
+            "partnumber": "Ennnnn_01",
+            "publisheddate": "03/10/2020",
+            "contentid": "12nnnn",
+            "filename": "./about-the-workshop/Labsetup_mk.md"
+        },
+        {
             "title": "Multitenant Basics",
             "description": "Clone, Plug and Drop Pluggable Databases",
             "partnumber": "Ennnnn_01",
