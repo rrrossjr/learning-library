@@ -22,7 +22,9 @@ If you already have Cloud Account, then you will already have tenant name, usern
 ## Generate an SSH Key Pair
 
 If you already have an ssh key pair, you may use that to connect to your environment. Based on your laptop config, choose the appropriate step to connect to your instance.
-https://github.com/oracle/learning-library/blob/master/common/labs/generate-ssh-key/generate-ssh-keys.md
+For for information check out the **[link](https://github.com/oracle/learning-library/blob/master/common/labs/generate-ssh-key/generate-ssh-keys.md)**.
+ The link also describes how to connect to Linux server once its provisioned. We will need to revist this once we have provisioned the SSH keys.
+
 
 
 
