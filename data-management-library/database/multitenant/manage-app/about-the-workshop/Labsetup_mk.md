@@ -1,34 +1,19 @@
 #  Multitenant Workshop setup
 
-## OCI cloud account 
+## OCI cloud account
 
 This Lab uses Linux server with Oracle Software from Oracle Marketplace. We can get to this image by logging into Oracle Cloud.  The Lab is self driven and can the done in the following ways.
 
-- Instructor led workshop
 - Using Always Free account
 - Using Your Oracle Cloud account
 
 
+#### Always Free Account
+If you are using the always free account, the free account gives access to Autonomous database and one OCPU VM server. For more information check out the Link on how to get it.
 
-If this Lab is part of a Instructor led Workshop you can use the Lab settings provided below.  
+#### Oracle Cloud Account
+If you already have Cloud Account, then you will already have tenant name, username and password needed to login and provision a workshop server.
 
-If you are using the always free account, ensure you have activated the free account that can give access to Autonomous database and one OCPU VM server. 
-
-If you have a Cloud account, you can use that to test out the lab.
-
-In all the cases, we are going to Oracle Cloud Marketplace and provision a server from the marketplace.
-
-And if not already done, create a one click quick start network configuration and then install the VM from Oracle Marketplace as shown below.
-
-
-
-## Lab Settings
-
-- **Tenancy**:  <Provided by Instructor or part of the always Free account>
-- **Username/Password**: Sent via email
-- **Compartment**: <Provided by Instructor or part of the always Free account>
-- **VCN**:  <Provided by Instructor or Create one after logging in >
-- **Region**:  <Provided by Instructor or part of the always Free account>
 
 ------------------------------------------------------------------------
 
@@ -37,69 +22,7 @@ And if not already done, create a one click quick start network configuration an
 ## Generate an SSH Key Pair
 
 If you already have an ssh key pair, you may use that to connect to your environment. Based on your laptop config, choose the appropriate step to connect to your instance.
-
-```
-IMPORTANT: If the ssh key is not created correctly, you will not be able to connect to your environment and will get errors. Please ensure you create your key properly.
-```
-
-### For MAC Users
-
-Open up a terminal and type the following commands. When prompted for a passphrase click **enter**. *Do not enter a passphrase.
-
-```
-cd ~
-cd .ssh
-ssh-keygen -b 2048 -t rsa -f optionskey
-```
-
-![img](https://oracle.github.io/learning-library/data-management-library/database/options/img/sshkeygen.png)
-
-1. Inspect your .ssh directory. You should see two files. optionskey and optionskey.pub. Copy the contents of the pub file `optionskey.pub` into notepad. Your key file should be one line. You will need this to access your instance later.
-
-   ```
-   ls -l .ssh
-   more optionskey.pub
-   ```
-
-### For Windows: Using GitBash or Windows Subsystem for Linux (WSL)
-
-1. Open the terminal tool of your choice
-
-2. Type the following command at the prompt to generate keys for your instance.
-
-   ```
-    ssh-keygen -f optionskey
-   ```
-
-3. Press enter to accept the default values
-
-4. Do not assign a password for this exercise. (note you should always assign an SSH key password in production)
-
-5. Type the following to retrieve your public key. You will need this to access your instance in Section 5.
-
-   ```
-    cat ~/.ssh/optionskey.pub 
-   ```
-
-### For Windows: Using PuttyGen
-
-1. Open PuttyGen
-
-2. Click the [Generate] button
-
-   ![img](https://oracle.github.io/learning-library/data-management-library/database/options/img/puttygen-generate.jpg)
-
-3. Move your mouse around the screen randomly until the progress bar reaches 100%
-
-4. Click the [Save private key] button. Name the file `optionskey`. This file will not have an extension.
-
-   ![img](https://oracle.github.io/learning-library/data-management-library/database/options/img/puttygen-saveprivatekey.jpg)
-
-5. oeSave the public key (displayed in the text field) by copying it to the clipboard and saving it manually to a new text file. Name the file `optionskey.pub`. You will need this to access your instance in Section 5.
-
-6. Note: Sometimes PuttyGen does not save the public key in the correct format. The text string displayed in the window is correct so copy/paste to be sure.
-
-
+https://github.com/oracle/learning-library/blob/master/common/labs/generate-ssh-key/generate-ssh-keys.md
 
 
 
@@ -131,7 +54,7 @@ Click on <img src="F:\work\PTS\Multitenant_work\03getApp.png" style="zoom:80%;" 
 
 ------
 
-Pick Region and Click **Sign In** 
+Pick Region and Click **Sign In**
 
 <img src="F:\work\PTS\Multitenant_work\04PickRegion.png" style="zoom:80%;" />
 
@@ -147,7 +70,7 @@ Choose **19c Database** and Compartment and Region that was provided by the inst
 
 
 
-Enter Your Instance Name . 
+Enter Your Instance Name .
 
 If you do not see the Oracle Database (single Instance)  in the image, refresh the browser
 
@@ -155,9 +78,9 @@ If you do not see the Oracle Database (single Instance)  in the image, refresh t
 
 
 
-Choose 
+Choose
 
-###### Availability Domain Based on your Last Name 
+###### Availability Domain Based on your Last Name
 
 ###### Virtual Machine for  Instance Type
 
@@ -173,7 +96,7 @@ Choose
 
 ------
 
-If you do not have a VCN you can create one now and give it a name. 
+If you do not have a VCN you can create one now and give it a name.
 
 ie:
 
@@ -270,9 +193,9 @@ NOTE: You cannot connect while on VPN or in the Oracle office on clear-corporate
    /home/opc/setupenv.sh
    nohup /home/opc/setupdb.sh &> setupdb.out&
    ```
-   
-   
-   
+
+
+
 2. To check the status of the script above run the command below. This script takes about 30 minutes to complete. You can also use the unix **jobs** command to see if the script is still running.
 
    ```
@@ -291,7 +214,7 @@ NOTE: You cannot connect while on VPN or in the Oracle office on clear-corporate
       tail -f /home/opc/setupcontainers.out
    ```
 
-   
+
 
 5. Once the script is finished,
    Congratulations! Now you have the environment to run the Multitenant labs. You may proceed to the [Multitenant Lab](https://oracle.github.io/learning-library/data-management-library/database/options/multitenant.html).
@@ -338,8 +261,8 @@ All the scripts for this lab are located in the /u01/app/oracle/labs/multitenant
    sudo su - oracle
    cd /home/oracle/labs/multitenant
    ```
-   
-   
+
+
 
 ## Step 1: Create PDB
 
@@ -358,7 +281,7 @@ The tasks you will accomplish in this lab are:
    connect sys/oracle@localhost:1523/cdb1 as sysdba
    ```
 
-   
+
 
 2. Check to see who you are connected as. At any point in the lab you can run this script to see who or where you are connected.
 
@@ -423,9 +346,9 @@ The tasks you will accomplish in this lab are:
 
    ```
    create table my_tab(my_col number);
-   
+
    insert into my_tab values (1);
-   
+
    commit;
    ```
 
@@ -435,13 +358,13 @@ The tasks you will accomplish in this lab are:
 
    ```
    connect sys/oracle@localhost:1523/cdb1 as sysdba
-   
+
    COLUMN "Con_Name" FORMAT A10
    COLUMN "T'space_Name" FORMAT A12
    COLUMN "File_Name" FORMAT A120
    SET LINESIZE 220
    SET PAGES 9999
-   
+
    with Containers as (
      select PDB_ID Con_ID, PDB_Name Con_Name from DBA_PDBs
      union
@@ -480,7 +403,7 @@ The tasks you will accomplish in this lab are:
    connect sys/oracle@localhost:1523/cdb1 as sysdba
    ```
 
-   
+
 
 2. Change **PDB2** to read only.
 
@@ -550,11 +473,11 @@ The tasks you will accomplish in this lab are:
    ```
    show pdbs
    alter pluggable database PDB3 close immediate;
-   
+
    alter pluggable database PDB3
    unplug into
    '/u01/app/oracle/oradata/CDB1/pdb3.xml';
-   
+
    show pdbs
    ```
 
@@ -564,7 +487,7 @@ The tasks you will accomplish in this lab are:
 
    ```
    drop pluggable database PDB3 keep datafiles;
-   
+
    show pdbs
    ```
 
@@ -578,7 +501,7 @@ The tasks you will accomplish in this lab are:
    COLUMN "File_Name" FORMAT A120
    SET LINESIZE 220
    SET PAGES 9999
-   
+
    with Containers as (
      select PDB_ID Con_ID, PDB_Name Con_Name from DBA_PDBs
      union
@@ -623,7 +546,7 @@ The tasks you will accomplish in this lab are:
    ```
    sqlplus /nolog
    connect sys/oracle@localhost:1524/cdb2 as sysdba
-   
+
    COLUMN "Who am I?" FORMAT A120
    select
      'DB Name: '  ||Sys_Context('Userenv', 'DB_Name')||
@@ -637,7 +560,7 @@ The tasks you will accomplish in this lab are:
      "Who am I?"
    from Dual
    /
-   
+
    show pdbs
    ```
 
@@ -663,7 +586,7 @@ The tasks you will accomplish in this lab are:
    create pluggable database PDB3
    using '/u01/app/oracle/oradata/CDB1/pdb3.xml'
    move;
-   
+
    show pdbs
    alter pluggable database PDB3 open;
    show pdbs
@@ -679,8 +602,8 @@ The tasks you will accomplish in this lab are:
    COLUMN "File_Name" FORMAT A120
    SET LINESIZE 220
    SET PAGES 9999
-   
-   
+
+
    with Containers as (
      select PDB_ID Con_ID, PDB_Name Con_Name from DBA_PDBs
      union
@@ -708,7 +631,7 @@ The tasks you will accomplish in this lab are:
 
    ```
    connect pdb_admin/oracle@localhost:1524/pdb3
-   
+
    select * from my_tab;
    ```
 
@@ -733,11 +656,11 @@ The tasks you will accomplish in this lab are:
 
    ```
    show pdbs
-   
+
    alter pluggable database PDB3 close immediate;
-   
+
    drop pluggable database PDB3 including datafiles;
-   
+
    show pdbs
    ```
 
@@ -790,10 +713,10 @@ The tasks you will accomplish in this lab are:
    ```
    show pdbs
    alter pluggable database GOLDPDB close immediate;
-   
+
    alter pluggable database GOLDPDB
    unplug into '/u01/app/oracle/oradata/CDB1/goldpdb.xml';
-   
+
    show pdbs
    ```
 
@@ -803,7 +726,7 @@ The tasks you will accomplish in this lab are:
 
    ```
    drop pluggable database GOLDPDB keep datafiles;
-   
+
    show pdbs
    ```
 
@@ -855,7 +778,7 @@ The tasks you will accomplish in this lab are:
 
     ```
     alter pluggable database all open;
-    
+
     show pdbs
     ```
 
@@ -906,9 +829,9 @@ The tasks you will accomplish in this lab are:
 
    ```
    connect soe/soe@localhost:1523/oe
-   CREATE TABLE sale_orders 
-   (ORDER_ID      number, 
-   ORDER_DATE    date, 
+   CREATE TABLE sale_orders
+   (ORDER_ID      number,
+   ORDER_DATE    date,
    CUSTOMER_ID   number);
    ```
 
@@ -991,9 +914,9 @@ The tasks you will accomplish in this lab are:
 
    ```
    conn sys/oracle@localhost:1524/oe_refresh as sysdba
-   
+
    alter pluggable database oe_refresh close;
-   
+
    alter session set container=oe_refresh;
    alter pluggable database oe_refresh refresh;
    alter pluggable database oe_refresh open read only;
@@ -1010,7 +933,7 @@ The tasks you will accomplish in this lab are:
 
    ```
    conn sys/oracle@localhost:1524/cdb2 as sysdba
-   
+
    alter pluggable database oe_refresh close;
    drop pluggable database oe_refresh including datafiles;
    ```
@@ -1055,7 +978,7 @@ The tasks you will accomplish in this lab are:
 
    ```
    conn sys/oracle@localhost:1523/cdb2 as sysdba
-   
+
    alter pluggable database oe close;
    drop pluggable database oe including datafiles;
    ```
@@ -1073,4 +996,3 @@ The tasks you will accomplish in this lab are:
 ## Conclusion
 
 Now you've had a chance to try out the Multitenant option. You were able to create, clone, plug and unplug a pluggable database. You were then able to accomplish some advanced tasks that you could leverage when maintaining a large multitenant environment.Hands-on with Multitenant
-
