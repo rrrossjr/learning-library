@@ -56,6 +56,8 @@ That is it. We have successfully create a Multitenant Workshop Instance.
 Check out the IP address of the provisioned server and ssh to it.
 If you need help to configure client from Mac or Putty client to this server, please check the **[link](https://github.com/oracle/learning-library/blob/master/common/labs/generate-ssh-key/generate-ssh-keys.md)** if you need help.
 
+The default user is "opc" and accessed by ssh private key. It does not have a password.
+
 
 <img src="../images/createName.png" style="zoom:80%;" />
 
@@ -177,10 +179,6 @@ NOTE: You cannot connect while on VPN or in the Oracle office on clear-corporate
 
 8. Click Open to begin your session with the instance.
 
-
-
-------
-
 ## Run the Setup Scripts
 
 1. Copy the following commands into your terminal. These scripts take approximately 1.5hrs to run. It is a series of scripts that create several databases in multiple ORACLE HOMES so that you can run both the Multitenant and Advanced Multitenant labs. The last two scripts are run in the background so you should be able to exit out while it’s running. The setupdb.sh script takes approximately 25 minutes to run. The setupcdb.sh takes 60 minutes to run, both run in the background.
@@ -220,21 +218,6 @@ NOTE: You cannot connect while on VPN or in the Oracle office on clear-corporate
 5. Once the script is finished,
    Congratulations! Now you have the environment to run the Multitenant labs. You may proceed to the [Multitenant Lab](https://oracle.github.io/learning-library/data-management-library/database/options/multitenant.html).
 
-
-
-## Introduction
-
-From the point of view of an application, the PDB is the database, in which applications run unchanged. PDBs can be very rapidly provisioned and a pluggable database is a portable database, which makes it very easy to move around, perhaps for load balancing or migration to the Cloud.
-
-Many PDBs can be plugged into a single Multitenant Container Database or CDB. From the point of view of a DBA, the CDB is the database. Common operations are performed at the level of the CDB enabling the DBA to manage many as one for operations such as upgrade, configuration of high availability, taking backups; but we retain granular control when appropriate. This ability to manage many as one enables tremendous gains in operational efficiency.
-
-Enormous gains in technical efficiency are enabled by a shared technical infrastructure. There’s a single set of background processes and a single, global memory area – the SGA – shared by all the PDBs. The result is that with this architecture we can consolidate more applications per server.
-
-[![ ](https://github.com/oracle/learning-library/raw/master/data-management-library/database/options/img/multitenant.png)](https://github.com/oracle/learning-library/blob/master/data-management-library/database/options/img/multitenant.png)
-
-
-
-## Setup
 
 ### Lab Assumptions
 
