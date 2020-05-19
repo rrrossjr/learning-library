@@ -27,16 +27,15 @@ This hands-on workshop focuses on
 ###  Value proposition for Multitenant
 
 <p>
-It is common to see Software and Hardware platform evole over time to be more efficiancy and performant at lower cost.
-Deployment  environments using Hardware and sofware frameworks like Kubernetes and Docker are taking away market share from treditional Virtual Images and Bear-Metal servers.
+It is common to see Software and Hardware platform evolve over time to be more efficiency and performant at lower cost. Deployment environments using Hardware and software frameworks like Kubernetes and Docker are taking away market share from traditional Virtual Images and Bear-Metal servers.
 <p>
-In terms of development paradim, people are moving from single Monolitic Application to MicroServices and Continous Development and deployment models.
+In terms of development paradigm, people are moving from single Monolithic Application to MicroServices and Contiguous Development and deployment models.
 <p>
-In terms of Datatype, the adoption of multiple formats like XML, JSON, Relational tabales,Text docs, Spacial, Big Data , IOTs and NOSQL are getting popular.
+These modern designs are quickly becoming popular because it is easily to setup and accessible due to Cloud providers who readily provide the platform services.
 <p>
 These modern designs are quickly becoming popular because it is easly to setup and accessible due to Cloud providers who readily provide the platform services.
 <p>
-A problem arises in these designs if a DBA of a production system is not involved in the Design of these newer applications. If a Database to store data is kept close to the thin application layer and have different DB stores for different data formats, it usually becomes App tier heavy and will consume more CPU resources and more managements steps to tune, upgrade and provide high avaibility, disaster Recovery and scalability. Often, the DBA now has to be proficient in more than one Data Stores. And even the best of breed Data store which is Freeware/shareware lacks the rich features of Oracle.
+A problem arises in these designs if a DBA of a production system is not involved in the Design of these newer applications. If a Database to store data is kept close to the thin application layer and have different DB stores for different data formats, it usually becomes App tier heavy and will consume more CPU resources and more managements steps to tune, upgrade and provide high availability, disaster Recovery and availability. Often, the DBA now has to be proficient in more than one Data Stores. And even the best of breed Data store which is Freeware/shareware lacks the rich features of Oracle.
 ![](images/MicroservicesInDocker.png " ")
 
 This is where Oracle Database Multitenant and DB features comes into play. Oracle DB has the ability to store all the Modern Datatypes like JSON, XML, IOTs, nosql, Big data format like parquet files, Text docs, Spacial all within the DB. In addition , it has built in features of partitioning,Machine Learning, Tuning,etc.
@@ -45,7 +44,7 @@ Multitenant feature can help address the Modern archtecture of thin application 
 
 ![](images/MicroServiceCDB.png " ")
 
-Oracle Multitenant is best suited to be part of every mordern application archtecture and both in On-prem and in the cloud. It is recommented to put all Data store requirements seperate from the application tier so that there is better resource utilization, management, scalability and availability. Oracle Recommends the most flexible architecture and recommends to put all Data stores outside the Application tier.
+Oracle Multitenant is best suited to be part of every modern application architecture and both in On-prem and in the cloud. It is recommended to put all Data store requirements separate from the application tier so that there is better resource utilization, management, scalability and availability. Oracle Recommends the most flexible architecture and recommends to put all Data stores outside the Application tier.
 
 ![](images/MordernArchtecture.png " ")
 
