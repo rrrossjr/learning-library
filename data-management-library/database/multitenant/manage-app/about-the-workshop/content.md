@@ -49,4 +49,4 @@ Oracle Multitenant is best suited to be part of every modern application archite
 ![](images/MordernArchtecture.png " ")
 
 As of 2020, Oracle has over 24+ dataceters worldwide and integrated Kubernetes into Cloud infrastructure.
-There is a seperate **[workshop](https://oracle.github.io/learning-library/workshops/container-native-development-with-oke/?lab=read-me-first)** on Oracle Container Engine for Kubernetes (sometimes abbreviated to just OKE).
+There is a seperate **[workshop](https://github.com/oracle/learning-library/blob/master/common/labs/generate-ssh-key/generate-ssh-keys.md#connecting-to-an-instance-using-putty)** on Oracle Container Engine for Kubernetes (sometimes abbreviated to just OKE).
