@@ -54,7 +54,7 @@ Add the **ssh** public key  and click **create**
 
 That is it. We have successfully create a Multitenant Workshop Instance.
 Check out the IP address of the provisioned server and ssh to it.
-If you need help to configure client from Mac or Putty client to this server, please
+If you need help to configure client from Mac or Putty client to this server, please check the **[link](https://github.com/oracle/learning-library/blob/master/common/labs/generate-ssh-key/generate-ssh-keys.md)** if you need help.
 
 
 <img src="../images/createName.png" style="zoom:80%;" />
