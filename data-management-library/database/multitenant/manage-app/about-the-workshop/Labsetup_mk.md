@@ -9,7 +9,7 @@ This Lab uses Linux server with Oracle Software from Oracle Marketplace. We can 
 
 
 #### Always Free Account
-If you are using the always free account, the free account gives access to Autonomous database and one OCPU VM server. For more information check out the Link on how to get it.
+If you are using the always free account, the free account gives access to Autonomous database and one OCPU VM server. For more information check out the  **[link](https://docs.cloud.oracle.com/en-us/iaas/Content/FreeTier/resourceref.htm)**. on how to get it.
 
 #### Oracle Cloud Account
 If you already have Cloud Account, then you will already have tenant name, username and password needed to login and provision a workshop server.
@@ -34,31 +34,17 @@ For for information check out the **[link](https://github.com/oracle/learning-li
 
 ## Provision VM with19c Database software from Oracle Marketplace
 
-From a browser go to https://cloudmarketplace.oracle.com/marketplace/oci
+From a browser go to **[ Workshop link]( https://cloudmarketplace.oracle.com/marketplace/listing/74094332)**.
 
-and in the Application search box, enter database and click **Go**.
-
-<img src="F:\work\PTS\Multitenant_work\01Search.png" style="zoom:80%;" />
-
-
-
-------
-
-Then click on the Oracle **Database (Single Instance) **
-
-<img src="F:\work\PTS\Multitenant_work\02SearchResult.png" style="zoom:80%;" />
-
-
-
-
-
-Click on <img src="F:\work\PTS\Multitenant_work\03getApp.png" style="zoom:80%;" />
-
-------
+![](images/GetApp.png " ")
 
 Pick Region and Click **Sign In**
+![](images/signIn.png " ")
 
-<img src="F:\work\PTS\Multitenant_work\04PickRegion.png" style="zoom:80%;" />
+Pick the latest version, and accect the "terms and conditions" and Click  **Launch Instance**
+![](images/LaunchInstance.png " ")
+
+<img src="../images/signIn.png" style="zoom:80%;" />
 
 Now fill the **TENANT NAME, USERNAME and PASSWORD and Click  Sign In**
 
