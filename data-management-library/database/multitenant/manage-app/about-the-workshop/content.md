@@ -22,31 +22,69 @@ This hands-on workshop focuses on
     * To access the OCI server through tools like putty and sqldeveloper.
 
 
-## Multitenant Data Consolidation for modern architecture.
+## Multitenant Data Consolidation and Modernization.
 
-###  Value proposition for Multitenant
+###  Bridging the GAP between Dev and DBAs
+
+#### BACKGROUND
+
 
 <p>
-It is common to see Software and Hardware platform evolve over time to be more efficiency and performant at lower cost. Deployment environments using Hardware and software frameworks like Kubernetes and Docker are taking away market share from traditional Virtual Images and Bear-Metal servers.
+It is common to see software and hardware platforms evolve over time to be more efficient and performant at lower cost. Deployment environments using Hardware and software frameworks like Kubernetes and Docker are taking away market share from traditional Virtual Images and standalone servers.
 <p>
-In terms of development paradigm, people are moving from single Monolithic Application to MicroServices and Contiguous Development and deployment models.
+In terms of development paradigm, Organizations are moving from Monolithic Application architecture to MicroServices and CICD ( Continuous Integration Continuous Deployments ) delivery models.
 <p>
-These modern designs are quickly becoming popular because it is easily to setup and accessible due to Cloud providers who readily provide the platform services.
+In terms of Datatype, the adoption of multiple formats like XML, JSON, Relational tables, Text docs, Spacial, Big Data , IOTs and NOSQL are getting popular.
+
+With the proliferation of multiple players, we see (a) a plethora of data formats such as XML, JSON,(b)Data storage formats such as Spatial.
 <p>
-These modern designs are quickly becoming popular because it is easly to setup and accessible due to Cloud providers who readily provide the platform services.
+These modern approaches  are  mushrooming because it is easy to setup and accessible due to Cloud providers who readily provide the platform services.
+
+However, this phenomenon has led to multiple issues and inefficiencies, which i want to address in this blog.
+
+
+#### PROBLEM STATEMENT
 <p>
-A problem arises in these designs if a DBA of a production system is not involved in the Design of these newer applications. If a Database to store data is kept close to the thin application layer and have different DB stores for different data formats, it usually becomes App tier heavy and will consume more CPU resources and more managements steps to tune, upgrade and provide high availability, disaster Recovery and availability. Often, the DBA now has to be proficient in more than one Data Stores. And even the best of breed Data store which is Freeware/shareware lacks the rich features of Oracle.
+We have witnessed in several customer scenarios, where the DBA is not involved in the design of the modern application. While DevOps attempts to break the silos between development and operations, there is a dire need to bring developers and DBAs together.
+
 ![](images/MicroservicesInDocker.png " ")
 
-This is where Oracle Database Multitenant and DB features comes into play. Oracle DB has the ability to store all the Modern Datatypes like JSON, XML, IOTs, nosql, Big data format like parquet files, Text docs, Spacial all within the DB. In addition , it has built in features of partitioning,Machine Learning, Tuning,etc.
+In a customer environment with  multiple  services dependent on heterogeneous "single trick pony" databases, these are the key problems that surface.
 
-Multitenant feature can help address the Modern archtecture of thin application frameworks in Dockers access a single PDB (data store) if the data store needs to be isolated. However, the rich featues Multitenant can provision over 4000 PDBs in a single DB Container and can address any number of Applications.
+- High Total Cost of Ownership.
+- Challenges in assuring High Availability, Security, Elasticity and Performance.
+- Need for practitioners proficient in multiple  technology for data store.
+- Cumbersome and time consuming mechanism  to move data across data stores.
+- Inability to leverage existing DBA capability in the organization.
+- Unproven technical support for mission critical production systems.
+
+#### RECOMMENDED BLUE PRINT
+<p>
+In line with the evolution of  modern application architectures, Oracle has ensured continuous innovation to be ahead of the curve. Oracle provides a solution architecture that is agnostic of development environment and data representation format.
+
+<P>
+This is where Oracle Database Multitenant and DB features comes into play. Oracle DB has the a native capability to support all the Modern representation formats like JSON, XML, Big data format like parquet files, Text docs, Spatial, etc.
+Consolidating the data store, helps us clearly establish the segregation of responsibilities for developers & DBAs, thereby enabling the DBA to focus on  assuring database Reliability, Scalability, Availability and Security.
 
 ![](images/MicroServiceCDB.png " ")
 
-Oracle Multitenant is best suited to be part of every modern application architecture and both in On-prem and in the cloud. It is recommended to put all Data store requirements separate from the application tier so that there is better resource utilization, management, scalability and availability. Oracle Recommends the most flexible architecture and recommends to put all Data stores outside the Application tier.
+Oracle Pluggable database (PDB) provides an elegant model that
+
+- can establish either "one to one" OR "consolidated" mapping for micro services in containerized environments
+- can facilitate automated provisioning   of instances for developers
+- helps Developers build solutions with confidence & with the assurance of Reliable data store
+- can autoscale upto 4000 instances in a cost efficient manner
+- provides a flexible model where in one can either isolate or aggregate the instances depending on the need.
+
+#### **Solution Use case :**  
+The  use case below clearly illustrates the possibility of achieving  a High availability architecture at all levels of the solution stack.
+
+- Kubernetes in a docker container environment managed by Developers
+- Backend Oracle managed by DBAs
+
 
 ![](images/MordernArchtecture.png " ")
 
+#### NEXT STEPS
 As of 2020, Oracle has over 24+ dataceters worldwide and integrated Kubernetes into Cloud infrastructure.
 There is a seperate **[workshop](https://github.com/oracle/learning-library/blob/master/common/labs/generate-ssh-key/generate-ssh-keys.md#connecting-to-an-instance-using-putty)** on Oracle Container Engine for Kubernetes (sometimes abbreviated to just OKE).
