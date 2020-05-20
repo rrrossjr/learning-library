@@ -839,7 +839,7 @@ SQL> /
 Observer that when there is no load on PDB1, the PDB_2 is able to use all of the CPUs allocated to the CDB.
 Note: The Average CPU Utilization will take about 60 seconds to update the value. You will need to rerun the sql typing the "/" .
 
-Since we have not set CPU\_MIN\_COUNT in PDB1, it will default to CPU\_COUNT which is 4 in my case. So, when we run load on both PDBs, the CPU utilization should be equal to 80% and 20% for PDB_2.
+Since we have not set CPU\_MIN\_COUNT in PDB1, it will default to CPU\_COUNT which is 4 in my case. So, when we run load on both PDBs, the CPU utilization should be equal to 80% for PDB1 and 20% for PDB_2.
 
 ````
 <copy>
