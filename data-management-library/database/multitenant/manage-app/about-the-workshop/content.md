@@ -40,7 +40,7 @@ With the proliferation of multiple players, we see (a) a plethora of data format
 <p>
 These modern approaches  are  mushrooming because it is easy to setup and accessible due to Cloud providers who readily provide the platform services.
 
-However, this phenomenon has led to multiple issues and inefficiencies, which i want to address in this blog.
+However, this phenomenon has led to multiple issues and inefficiencies, Some of the top issue are highlighted below.
 
 
 #### PROBLEM STATEMENT
@@ -73,7 +73,7 @@ Oracle Pluggable database (PDB) provides an elegant model that
 - can establish either "one to one" OR "consolidated" mapping for micro services in containerized environments
 - can facilitate automated provisioning   of instances for developers
 - helps Developers build solutions with confidence & with the assurance of Reliable data store
-- can autoscale upto 4000 instances in a cost efficient manner
+- can scale upto 4000 instances in a cost efficient manner
 - provides a flexible model where in one can either isolate or aggregate the instances depending on the need.
 
 #### **Solution Use case :**  
