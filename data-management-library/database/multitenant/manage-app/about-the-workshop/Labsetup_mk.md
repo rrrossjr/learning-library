@@ -61,51 +61,15 @@ The default user is "opc" and accessed by ssh private key. It does not have a pa
 
 ## Run the Setup Scripts
 
-1. Copy the following commands into your terminal. These scripts take approximately 1.5hrs to run. It is a series of scripts that create several databases in multiple ORACLE HOMES so that you can run both the Multitenant and Advanced Multitenant labs. The last two scripts are run in the background so you should be able to exit out while it’s running. The setupdb.sh script takes approximately 25 minutes to run. The setupcdb.sh takes 60 minutes to run, both run in the background.
-
-   Note: If you are running in windows using putty, ensure your Session Timeout is set to greater than 0
-
+ Copy the following commands into your terminal.
    ```
-   cd /home/opc/
+   <copy>cd /home/opc/
    wget https://objectstorage.us-phoenix-1.oraclecloud.com/n/oraclepartnersas/b/Multitenant/o/multiscripts.zip
    unzip multiscripts.zip; chmod +x *.sh
-   /home/opc/setupenv.sh
-   nohup /home/opc/setupdb.sh &> setupdb.out&
-   ```
-
-
-
-2. To check the status of the script above run the command below. This script takes about 30 minutes to complete. You can also use the unix **jobs** command to see if the script is still running.
-
-   ```
-   tail -f /home/opc/setupdb.out
-   ```
-
-3. Once the database software has been installed, run the script to create the container databases and pluggable databases needed for the next lab.
-
-   ```
-   nohup /home/opc/setupcontainers.sh &> setupcontainers.out&
-   ```
-
-4. To check on the progress of this script, enter the command below. This script takes about 60 minutes to complete. Note: Ignore the [WARNING] [DBT-06208] that occur in the 2nd script.
-
-   ```
-      tail -f /home/opc/setupcontainers.out
-   ```
-
-
-
-5. Once the script is finished,
-   Congratulations! Now you have the environment to run the Multitenant labs. You may proceed to the [Multitenant Lab](https://oracle.github.io/learning-library/data-management-library/database/options/multitenant.html).
-
-
-### Lab Assumptions
-
-- Each participant has been provided a username and password to a tenancy.
-- Each participant has completed the Environment Setup lab.
-- Each participant has created an OCI compute instance using the database template.
-
-There are two container databases running:
+   /home/opc/setupenv.sh </copy>
+   ````
+   Now you have the environment to run the Multitenant labs.
+The Lab includes two container databases running:
 
 - CDB1 running on port 1523
 - CDB2 running on port 1524
