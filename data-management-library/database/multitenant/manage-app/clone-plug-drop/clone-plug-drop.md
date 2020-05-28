@@ -2,7 +2,7 @@
 # Multitenant Basics  
 
 ## Introduction
-In this lab you will perform many multitenant basic tasks.  You will create a pluggable database (PDB), make a copy of this pluggable database, or clone it, explore the concepts of "plugging" and unplugging a PDB and finally drop it.  You will then explore the concepts of cloning unplugged databases and databases that are hot or active. 
+In this lab you will perform many multitenant basic tasks.  You will create a pluggable database (PDB), make a copy of this pluggable database, or clone it, explore the concepts of "plugging" and unplugging a PDB and finally drop it.  You will then explore the concepts of cloning unplugged databases and databases that are hot or active.
 
 [](youtube:kzTQGs75IjA)
 
@@ -156,7 +156,7 @@ The tasks you will accomplish in this lab are:
    ![](./images/alterplug.png " ")
 
    ![](./images/showpdbs.png " ")
-   
+
 3. Create a pluggable database **PDB3** from the read only database **PDB2**.  
 
     ````
@@ -180,7 +180,7 @@ The tasks you will accomplish in this lab are:
     connect pdb_admin/oracle@localhost:1523/pdb2
     select * from my_tab;
     ````
- 
+
    ![](./images/pdb2mytab.png " ")
 
 6. Connect to **PDB3** and show the table **MY_TAB**.  
@@ -435,7 +435,7 @@ The tasks you will accomplish in this lab are:
 4. Change **PDB2** back to read write  
 
     ````
-    <copy> 
+    <copy>
     alter pluggable database PDB2 open read write force;
     show pdbs
     </copy>
@@ -575,13 +575,13 @@ The tasks you will accomplish in this lab are:
     ````
     <copy>
     connect soe/soe@localhost:1523/oe
-    CREATE TABLE sale_orders 
-    (ORDER_ID      number, 
-    ORDER_DATE    date, 
+    CREATE TABLE sale_orders
+    (ORDER_ID      number,
+    ORDER_DATE    date,
     CUSTOMER_ID   number);
     </copy>
     ````
- 
+
  4. Open a new terminal window, sudo to the oracle user and execute write-load.sh. Leave this window open and running throughout the rest of the multitenant labs.  
 
      ````
@@ -753,7 +753,7 @@ The tasks you will accomplish in this lab are:
 
     ````
     <copy>
-    conn sys/oracle@localhost:1523/cdb2 as sysdba
+    conn sys/oracle@localhost:1524/cdb2 as sysdba
 
     alter pluggable database oe close;
     drop pluggable database oe including datafiles;
@@ -780,7 +780,7 @@ The tasks you will accomplish in this lab are:
     ./resetCDB.sh
     ````
 
-Now you've had a chance to try out the Multitenant option. You were able to create, clone, plug and unplug a pluggable database. You were then able to accomplish some advanced tasks that you could leverage when maintaining a large multitenant environment. 
+Now you've had a chance to try out the Multitenant option. You were able to create, clone, plug and unplug a pluggable database. You were then able to accomplish some advanced tasks that you could leverage when maintaining a large multitenant environment.
 
 ## Acknowledgements
 
