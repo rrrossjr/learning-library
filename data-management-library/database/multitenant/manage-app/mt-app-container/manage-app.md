@@ -44,7 +44,6 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    1. Connect to **CDB1**
 
       ```
-      sudo su - oracle
       sqlplus /nolog
       connect sys/oracle@localhost:1523/cdb1 as sysdba
       ```
