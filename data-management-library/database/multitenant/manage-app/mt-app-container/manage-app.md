@@ -745,8 +745,7 @@ A good scenario is hosting a multi tenant Application environment where each ten
 
 
 
-![](../images/MT03_RR.png)
-
+![](./images/MT03_RR.png)
 
 
  Connect to APP\_ROOT and create Additional App_PDB2  and install the Application APP01
