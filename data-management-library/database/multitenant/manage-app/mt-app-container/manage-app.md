@@ -882,8 +882,8 @@ Now, APP\_ROOT\_REPLICA is a ROOT CONTAINER in Container database CDB2.  This CD
 ```
 
 conn sys/oracle@//localhost:1524/APP_ROOT_REPLICA as sysdba
-create pluggable database APP\_PDB3  admin user admin identified by admin;
-alter pluggable database APP\_PDB3 open;
+create pluggable database APP_PDB3  admin user admin identified by admin;
+alter pluggable database APP_PDB3 open;
 show pdbs
 conn sys/oracle@//localhost:1524/APP_PDB3 as sysdba
 alter pluggable database application APP01 SYNC;
