@@ -674,7 +674,7 @@ That is it. By setting the default resouce plan in CDB and CPU count in PDB , we
 To test this, you can run the sample workload.
 
 ````
- SQL> <copy> host /home/oracle/labs/multitenant/cpu_test.sh</copy>
+ SQL> <copy> @/home/oracle/labs/multitenant/cpu_test.sql</copy>
 ````
  open another session and run top command and observe the cpu busy percentage. It will be limited to the percentgate equal to one cpu. In our cace, Total cpus were 2, so 1 cpu would be 50% cpu utilization.
 
