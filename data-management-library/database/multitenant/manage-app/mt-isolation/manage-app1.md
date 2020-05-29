@@ -169,7 +169,7 @@ LISTCDB1 =
 
 ```
 lsnrctl stop listcdb1
-lsnrctl start listener
+lsnrctl start listcdb1
 lsnrctl status listcdb1
 ```
 ```
