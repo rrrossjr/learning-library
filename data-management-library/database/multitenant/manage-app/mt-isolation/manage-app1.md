@@ -686,7 +686,7 @@ Now unset the CPU caging and rerun the workload. In our test, the cpu utilizatio
  alter system set resource_manager_plan='';
  alter session set container=PDB1;
  alter system set cpu_count=0;
- host /home/oracle/labs/multitenant/cpu_test.sh</copy>
+ @/home/oracle/labs/multitenant/cpu_test.sql</copy>
  ````
 The workload without resources runs faster as they make use of all the CPUs.
 
