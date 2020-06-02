@@ -95,18 +95,17 @@ ssh -i lapkey.ppk orace@192.237.248.66
 
 ````
 ## Run the Setup Scripts as oracle
-if you logging in as opc, sudo to Oracle
+if you connected with username  opc, then sudo to oracle user.
 ````
 sudo su - oracle
 ````
 
-````
-<copy>
+````<copy>
 cd /home/oracle
 wget https://objectstorage.us-phoenix-1.oraclecloud.com/n/oraclepartnersas/b/Multitenant/o/labs.zip
 chown oracle:oinstall /home/oracle/labs.zip
 unzip -o labs.zip
 chmod -R +x /home/oracle/labs
-/home/oracle/lab/multitenant/resetCDB.sh
+/home/oracle/labs/multitenant/resetCDB.sh
 </copy>
 ````
