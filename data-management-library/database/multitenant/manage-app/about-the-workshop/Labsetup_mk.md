@@ -58,6 +58,7 @@ If you need help to configure client from Mac or Putty client to this server, pl
 
 The default user is "opc" and accessed by ssh private key. It does not have a password.
 
+## Connecting to workshop instance using Putty
 
 ## Run the Setup Scripts
 
