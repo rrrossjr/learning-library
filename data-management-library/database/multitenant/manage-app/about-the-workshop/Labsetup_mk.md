@@ -59,6 +59,27 @@ If you need help to configure client from Mac or Putty client to this server, pl
 The default user is "opc" and accessed by ssh private key. It does not have a password.
 
 ## Connecting to workshop instance using Putty
+1.  Open the PuTTY utility from the Windows start menu.   In the dialog box, enter the IP Address of your OCI Compute Instance.  This can be obtained from the **OCI Console > Instance Details** screen.
+
+    ![](images/keylab-023.png " ")
+
+2.  Under **Category** select **Connection** and then choose the **Data** field.  Enter the assigned username.  OCI instances will default to the username ```opc```.  Enter ```opc```.
+
+    ![](images/keylab-024.png " ")
+
+3.  Under **Category**, navigate to **Connection** - **SSH** and choose the **Auth** category.   Click on the **Browse** button and locate the ```Private Key file``` you created in the earlier step.   Click the Open button to initiate the SSH connection to your cloud instance.
+
+    ![](images/keylab-025.png " ")
+
+4.  Click **Yes** to bypass the Security Alert about the uncached key.
+
+    ![](images/keylab-026.png " ")
+
+5.  Connection successful.   You are now securely connected to an OCI Cloud instance.
+
+    ![](images/keylab-027.png " ")
+
+    You are now able to connect securely using the Putty terminal utility.   You can save the connection information for future use and configure PuTTY with your own custom settings.
 
 ## Run the Setup Scripts
 
