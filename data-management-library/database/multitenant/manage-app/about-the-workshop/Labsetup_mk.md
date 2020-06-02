@@ -83,33 +83,30 @@ The default user is "opc" and accessed by ssh private key. It does not have a pa
 
     You are now able to connect securely using the Putty terminal utility.   You can save the connection information for future use and configure PuTTY with your own custom settings.
 
-## Run the Setup Scripts
+## Connect from Mac
+1. Run the following command to change the file permissions to 600 to secure the key. You can also set them to 400.
 
- Copy the following commands into your terminal.
-   ```
-   <copy>cd /home/opc/
-   wget https://objectstorage.us-phoenix-1.oraclecloud.com/n/oraclepartnersas/b/Multitenant/o/multiscripts.zip
-   unzip multiscripts.zip; chmod +x *.sh
-   /home/opc/setupenv.sh </copy>
-   ````
-   Now you have the environment to run the Multitenant labs.
-The Lab includes two container databases running:
+````
+ chmod 600 labkey.ppk
+ ````
+2. Use the key to log in to the SSH client as shown in the following example, which loads the key in file labkey.ppk, and logs in as user to IP Address.
+````
+ssh -i lapkey.ppk orace@192.237.248.66
 
-- CDB1 running on port 1523
-- CDB2 running on port 1524
+````
+## Run the Setup Scripts as oracle
+if you logging in as opc, sudo to Oracle
+````
+sudo su - oracle
+````
 
-### Lab Setup
-
-All the scripts for this lab are located in the /u01/app/oracle/labs/multitenant folder.
-
-1. To access the scripts, secure shell into the OCI compute instance.
-
-2. Change to the ssh directory and ssh into your instance. The public IP address can be found by going to Compute -> Instance.
-
-   ```
-   cd .ssh
-   ssh -i optionskey opc@<your public ip address>
-   ls
-   sudo su - oracle
-   cd /home/oracle/labs/multitenant
-   ```
+````
+<copy>
+cd /home/oracle
+wget https://objectstorage.us-phoenix-1.oraclecloud.com/n/oraclepartnersas/b/Multitenant/o/labs.zip
+chown oracle:oinstall /home/oracle/labs.zip
+unzip -o labs.zip
+chmod -R +x /home/oracle/labs
+/home/oracle/lab/multitenant/resetCDB.sh
+</copy>
+````
