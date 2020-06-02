@@ -363,7 +363,7 @@ The tasks you will accomplish in this lab are:
 
     ![](./images/mtdbfcdb2.png " ")
 
-5. Connect as **PDB_ADMIN** to **PDB3** and look at **MY_TAB**;  
+5. Connect as **PDB\_ADMIN** to **PDB3** and look at **MY\_TAB**;  
 
     ````
     connect pdb_admin/oracle@localhost:1524/pdb3
@@ -593,7 +593,7 @@ The tasks you will accomplish in this lab are:
     ````
     Leave this window open and running for the next few labs.
 
-5. Go back to your original terminal window.  Connect to **CDB2** and create the pluggable **OE_DEV** from the database link **oe@cdb1_link**  
+5. Go back to your original terminal window.  Connect to **CDB2** and create the pluggable **OE\_DEV** from the database link **oe@cdb1\_link**  
 
     ````
     <copy>
@@ -603,7 +603,7 @@ The tasks you will accomplish in this lab are:
     </copy>
     ````
 
-6. Connect as **SOE** to **OE_DEV** and check the number of records in the **sale_orders** table  
+6. Connect as **SOE** to **OE\_DEV** and check the number of records in the **sale\_orders** table  
 
     ````
     <copy>
@@ -654,7 +654,7 @@ The tasks you will accomplish in this lab are:
     </copy>
     ````
 
-2. Create a pluggable database **OE_REFRESH**` with manual refresh mode from the database link **oe@cdb1_link**  
+2. Create a pluggable database **OE\_REFRESH** with manual refresh mode from the database link **oe@cdb1\_link**  
 
     ````
     <copy>
@@ -663,7 +663,7 @@ The tasks you will accomplish in this lab are:
     </copy>
     ````
 
-3. Connect as **SOE** to the pluggable database **OE_REFRESH**` and count the number of records in the sale_orders table  
+3. Connect as **SOE** to the pluggable database **OE\_REFRESH** and count the number of records in the sale\_orders table  
 
     ````
     <copy>
@@ -686,7 +686,7 @@ The tasks you will accomplish in this lab are:
     </copy>
     ````
 
-5. Connect as **SOE** to the pluggable dataabse **OE_REFRESH**` and count the number of records in the **sale_orders** table. You should see the number of records change.  
+5. Connect as **SOE** to the pluggable databse **OE\_REFRESH** and count the number of records in the **sale\_orders** table. You should see the number of records change.  
 
     ````
     <copy>
@@ -753,7 +753,7 @@ The tasks you will accomplish in this lab are:
 
     ````
     <copy>
-    conn sys/oracle@localhost:1524/cdb2 as sysdba
+    conn sys/oracle@localhost:1523/cdb2 as sysdba
 
     alter pluggable database oe close;
     drop pluggable database oe including datafiles;

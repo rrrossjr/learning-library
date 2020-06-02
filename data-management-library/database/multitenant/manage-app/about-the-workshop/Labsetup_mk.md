@@ -71,11 +71,13 @@ The default user is "opc" and accessed by ssh private key. It does not have a pa
 
     ![](images/keylab-025.png " ")
 
-4.  Click **Yes** to bypass the Security Alert about the uncached key.
+4. Click Session in the left navigation pane, then click Save in the Load, save or delete a stored session Step.
+
+5.  Click **Yes** to bypass the Security Alert about the uncached key.
 
     ![](images/keylab-026.png " ")
 
-5.  Connection successful.   You are now securely connected to an OCI Cloud instance.
+6.  Connection successful.   You are now securely connected to an OCI Cloud instance.
 
     ![](images/keylab-027.png " ")
 
