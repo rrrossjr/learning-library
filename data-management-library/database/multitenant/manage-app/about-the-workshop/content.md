@@ -8,11 +8,11 @@ This hands-on workshop focuses on
 * Multitenant Basics : This is a 4 hour workshop that helps DBAs to perform operations as below.
     * Create, Drop, Unplug and Plug PDBs.
     * Includes Hot clone, PDB refresh and PDB relocate.
-* Multitenant Application Containers : This is a 3 hour workshop. Once the Basic is mastered, DBAs can architect the application to take advantage of Multitenant specific features.
-    * Application Architecture, Upgrde, Porxy PDBs , Syncronizing Application and Version control.
-* Multitenant Tenant Isolation : Helps DBA mange resource allocation, isolation of pluggable database.
-    * Isolation features like Database Firewall
+* Multitenant Tenant Isolation : This is a 2 hour workshop. It helps DBAs mange resource allocation, isolation of pluggable database.
+    * Isolation features like Database Firewall and LOCKDOWN.
     * Memory, CPU and IO isolation.
+* Multitenant Application Containers : This is a 3 hour workshop. Once the Basic is mastered, DBAs can architect the application to take advantage of Multitenant specific features.
+        * Application Architecture, Upgrde, Porxy PDBs , Syncronizing Application and Version control.
 
 ## Workshop Requirements
 
@@ -63,7 +63,7 @@ In a customer environment with  multiple  services dependent on heterogeneous "s
 In line with the evolution of  modern application architectures, Oracle has ensured continuous innovation to be ahead of the curve. Oracle provides a solution architecture that is agnostic of development environment and data representation format.
 
 <P>
-This is where Oracle Database Multitenant and DB features comes into play. Oracle DB has the a native capability to support all the Modern representation formats like JSON, XML, Big data format like parquet files, Text docs, Spatial, etc.
+This is where Oracle Database Multitenant and DB features comes into play. Oracle DB has the native capability to support all the Modern representation formats like JSON, XML, Big data format like parquet files, Text docs, Spatial, etc.
 Consolidating the data store, helps us clearly establish the segregation of responsibilities for developers & DBAs, thereby enabling the DBA to focus on  assuring database Reliability, Scalability, Availability and Security.
 
 ![](images/MicroServiceCDB.png " ")
@@ -72,7 +72,7 @@ Oracle Pluggable database (PDB) provides an elegant model that
 
 - can establish either "one to one" OR "consolidated" mapping for micro services in containerized environments
 - can facilitate automated provisioning   of instances for developers
-- helps Developers build solutions with confidence & with the assurance of Reliable data store
+- helps Developers build solutions with confidence & with the assurance of reliable data store
 - can scale upto 4000 instances in a cost efficient manner
 - provides a flexible model where in one can either isolate or aggregate the instances depending on the need.
 
