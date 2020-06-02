@@ -301,6 +301,11 @@ The tasks you will accomplish in this lab are:
     ````
     ![](./images/whoamicdb2.png " ")
 
+    to use the above query for debugging, you can save the query as a file.
+    ````
+    save whoami.sql
+    ````
+
 2. Check the compatibility of **PDB3** with **CDB2**  
 
     ````
