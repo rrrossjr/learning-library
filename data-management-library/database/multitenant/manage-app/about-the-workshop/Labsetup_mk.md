@@ -89,9 +89,9 @@ The default user is "opc" and accessed by ssh private key. It does not have a pa
 ````
  chmod 600 labkey.ppk
  ````
-2. Use the key to log in to the SSH client as shown in the following example, which loads the key in file labkey.ppk, and logs in as user to IP Address.
+2. Use the key to log in to the SSH client as shown in the following example, which loads the key in file labkey.ppk, and logs in as user to IP Address. Eg.
 ````
-ssh -i lapkey.ppk orace@192.237.248.66
+ssh -i lapkey.ppk oracle@192.237.248.66
 
 ````
 ## Run the Setup Scripts as oracle
@@ -103,6 +103,7 @@ sudo su - oracle
 ````
 <copy>
 cd /home/oracle
+rm
 wget https://objectstorage.us-phoenix-1.oraclecloud.com/n/oraclepartnersas/b/Multitenant/o/labs.zip
 chown oracle:oinstall /home/oracle/labs.zip
 unzip -o labs.zip

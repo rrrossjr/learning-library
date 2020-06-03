@@ -307,6 +307,7 @@ The V$IP_ACL view lists the active ACLs.
 
 ````
 - Display the saved ACLs.
+<copy>
 COLUMN service_name FORMAT A30
 COLUMN host FORMAT A30
 
@@ -316,7 +317,7 @@ SELECT service_name,
        con_id
 FROM   v$ip_acl
 ORDER BY 1, 2;
-
+</copy>
 
 SERVICE_NAME                   HOST                               CON_ID
 ------------------------------ ------------------------------ ----------
@@ -351,18 +352,17 @@ Taking AWR snapshots,
 Using JAVA partially or as a whole,
 Using certain database options such as Advanced Queueing and Partitioning.
 
-We can fulfill these requirements by creating a lockdown profile in our CDB Root and adding these restrictions to it. Before we move onto the “How?” part of this discussion, it’s worth mentioning a couple of important details about lockdown profiles:
-We can fulfill these requirements by creating a lockdown profile in our CDB Root and adding these restrictions to it. Before we move onto the “How?” part of this discussion, it’s worth mentioning a couple of important details about lockdown profiles:
+We can fulfill these requirements by creating a lockdown profile in our CDB Root and adding these restrictions to it. Before we move onto the “How?” part of this discussion, it’s worth mentioning a couple of important details about lockdown profiles.
 
-In order to be able to create a lockdown profile, you have to be a common user with CREATE LOCKDOWN PROFILE privilege and in order to enable a lockdown profile (either at the CDB or PDB level), you have to be common user with common ALTER SYSTEM or common SYSDBA privilege.
+- In order to be able to create a lockdown profile, you have to be a common user with CREATE LOCKDOWN PROFILE privilege and in order to enable a lockdown profile (either at the CDB or PDB level), you have to be common user with common ALTER SYSTEM or common SYSDBA privilege.
 
-A single lockdown profile can have several rules defined in it. In other words, you don’t have to create a lockdown profile for every restriction you want to implement.
+- A single lockdown profile can have several rules defined in it. In other words, you don’t have to create a lockdown profile for every restriction you want to implement.
 
-A PDB can have only one lockdown profile active at a time.
+- A PDB can have only one lockdown profile active at a time.
 
-The restrictions enforced by a lockdown profile are PDB-wide, they affect every single user including the SYS and SYSTEM.
+- The restrictions enforced by a lockdown profile are PDB-wide, they affect every single user including the SYS and SYSTEM.
 
-If you enable a lockdown profile in CDB Root, it affects all PDBs in the CDB. If you enable it in an Application Root (App Root), it affects all Application PDBs (App PDBs) under that App Root. If you enable it within a PDB, it only affects that PDB.
+- If you enable a lockdown profile in CDB Root, it affects all PDBs in the CDB. If you enable it in an Application Root (App Root), it affects all Application PDBs (App PDBs) under that App Root. If you enable it within a PDB, it only affects that PDB.
 
 
 
@@ -388,7 +388,7 @@ create lockdown profile TENANT_LOCK;
 You can lockdown Oracle options such as partitions option or lockdown statements like alter system.
 Eg alter lockdown profile sec_profile disable option=('Partitioning');
 
-You can restrict all statements by using the "ALL" clause.
+You can restrict individual SQL statements or can restrict all statements by using the "ALL" clause.
 eg.  alter lockdown profile sec_profile disable statement=('alter system') clause=('set') option all;.
 
  The scope of the restriction can be reduced using the  CLAUSE, OPTION, MINVALUE, MAXVALUE options and values.
@@ -444,7 +444,7 @@ TENANT_LOCK          OPTION     PARTITIONING                        DISABLE ALL
 TENANT_LOCK          STATEMENT  ALTER SYSTEM  SET   CURSOR_SHARING  DISABLE ALL
 ````
 
-Once the restrictions are added to the lockdown profile, we need to set it. Let us verify you can change CURSOR_SHARING and create a partitioned table before the lockdown profile TENANT_LOCK is set.
+Once the restrictions are added to the lockdown profile, we need to set it. Let us verify you can change CURSOR\_SHARING and create a partitioned table before the lockdown profile TENANT\_LOCK is set.
 Connect to container PDB1 and display the value of CURSOR_SHARING
 ````
 <copy>alter session set container=PDB1;
