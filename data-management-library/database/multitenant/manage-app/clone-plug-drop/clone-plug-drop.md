@@ -744,11 +744,10 @@ The tasks you will accomplish in this lab are:
 
     ````
     <copy>
-    conn sys/oracle@localhost:1523/cdb2 as sysdba;
+    conn sys/oracle@localhost:1524/cdb2 as sysdba;
     create pluggable database oe from oe@cdb1_link relocate;
     alter pluggable database oe open;
-    show pdbs
-    </copy>
+    show pdbs</copy>
     ````
 
 3. Connect to **CDB1** and see what pluggable databases exist there  

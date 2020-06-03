@@ -100,7 +100,8 @@ if you connected with username  opc, then sudo to oracle user.
 sudo su - oracle
 ````
 
-````<copy>
+````
+<copy>
 cd /home/oracle
 wget https://objectstorage.us-phoenix-1.oraclecloud.com/n/oraclepartnersas/b/Multitenant/o/labs.zip
 chown oracle:oinstall /home/oracle/labs.zip
