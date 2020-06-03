@@ -42,6 +42,15 @@ The tasks you will accomplish in this lab are:
 
     ![](./images/whoisconnected.png " ")
 
+   To save the above query as a script , save from the sql prompt.
+    ````
+    save whoami.sql
+    ````
+    Re run the query through the script.
+    ````
+    @whoami.sql
+    ````
+
 3. Create a pluggable database **PDB2**.  
 
     ````
@@ -302,9 +311,7 @@ The tasks you will accomplish in this lab are:
     ![](./images/whoamicdb2.png " ")
 
     to use the above query for debugging, you can save the query as a file.
-    ````
-    save whoami.sql
-    ````
+
 
 2. Check the compatibility of **PDB3** with **CDB2**  
 
