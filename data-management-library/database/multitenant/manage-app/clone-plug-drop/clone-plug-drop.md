@@ -24,20 +24,17 @@ The tasks you will accomplish in this lab are:
 2. Check to see who you are connected as. At any point in the lab you can run this script to see who or where you are connected.  
 
     ````
-    <copy>
-    select
-      'DB Name: '  ||Sys_Context('Userenv', 'DB_Name')||
-      ' / CDB?: '     ||case
-        when Sys_Context('Userenv', 'CDB_Name') is not null then 'YES'
-          else  'NO'
-          end||
-      ' / Auth-ID: '   ||Sys_Context('Userenv', 'Authenticated_Identity')||
-      ' / Sessn-User: '||Sys_Context('Userenv', 'Session_User')||
-      ' / Container: ' ||Nvl(Sys_Context('Userenv', 'Con_Name'), 'n/a')
-      "Who am I?"
-      from Dual
-      /
-      </copy>
+
+    <copy>select
+  'DB Name: '  ||Sys_Context('Userenv', 'DB_Name')||
+  ' / CDB Name: '   ||Sys_Context('Userenv', 'CDB_NAME')||
+  ' / Auth-ID: '   ||Sys_Context('Userenv', 'Authenticated_Identity')||
+  ' / Sessn-User: '||Sys_Context('Userenv', 'Session_User')||
+  ' / Container: ' ||Nvl(Sys_Context('Userenv', 'Con_Name'), 'n/a')
+  "Who am I?"
+  from Dual
+/ </copy>
+
     ````
 
     ![](./images/whoisconnected.png " ")
@@ -329,6 +326,7 @@ The tasks you will accomplish in this lab are:
     /   
     </copy>
     ````
+   If script executes without feedback or exception then it IS COMPATIBLE.
 
 
 3. Plug **PDB3** into **CDB2**  
@@ -710,7 +708,7 @@ The tasks you will accomplish in this lab are:
     </copy>
     ````
 
-6. Close and remove the **OE_DEV** pluggable database  
+6. Close and remove the **OE_REFRESH** pluggable database  
 
     ````
     <copy>

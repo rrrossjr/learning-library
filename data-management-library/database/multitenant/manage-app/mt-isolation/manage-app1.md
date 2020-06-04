@@ -245,10 +245,14 @@ Service "a206980f93d62602e0530200000ab752" has 1 instance(s).
 Service "pdb1" has 1 instance(s).
   Instance "CDB1", status READY, has 1 handler(s) for this service...
 The command completed successfully
+````
+It can take up to 5 minutes before all services have been registered again. If you want to speed this up, login to the CDB1 using SQL*Plus and execute the command 'alter system register;'.
+Once all services are available, specifically the PDB1 services, we can continue with the lab.
 
 ````
-It can take up to 5 minutes before all services have been registered again. If you want to speed this up, login to the CDB1 using SQL*Plus and execute the command 'alter system register'.
-Once all services are available, specifically the PDB1 services, we can continue with the lab.
+<copy>connect sys/oracle@//localhost:1523/cdb1 as sysdba
+alter system register;</copy>
+````
 
 
 #### **Step 3: Add IP address to PDB whitelist.**
@@ -676,9 +680,9 @@ To test this, you can run the sample workload.
 ````
  SQL> <copy> @/home/oracle/labs/multitenant/cpu_test.sql</copy>
 ````
- open another session and run top command and observe the cpu busy percentage. It will be limited to the percentgate equal to one cpu. In our cace, Total cpus were 2, so 1 cpu would be 50% cpu utilization.
+ open another session and run top command and observe the cpu busy percentage. It will be limited to the percentage equal to one cpu. In our case, Total cpus were 2, so 1 cpu would be 50% cpu utilization.
 
-In a production system with many CPUs and PDB consolidation, it is possible to over provision. i.e The total of CPU_COUNT at PDB level is more than allocated at CDB level. This is a recommended configuration if we want better CPU utilization of the system.
+In a production system with many CPUs and PDB consolidation, it is possible to over provision. i.e. The total of CPU_COUNT at PDB level is more than allocated at CDB level. This is a recommended configuration if we want better CPU utilization of the system.
 
 Now unset the CPU caging and rerun the workload. In our test, the cpu utilization peaks to 100% consuming the 2 CPUs available.
 ````
