@@ -103,7 +103,6 @@ sudo su - oracle
 ````
 <copy>
 cd /home/oracle
-rm
 wget https://objectstorage.us-phoenix-1.oraclecloud.com/n/oraclepartnersas/b/Multitenant/o/labs.zip
 chown oracle:oinstall /home/oracle/labs.zip
 unzip -o labs.zip

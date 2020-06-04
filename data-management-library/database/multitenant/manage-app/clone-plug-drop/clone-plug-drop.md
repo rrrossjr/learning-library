@@ -44,11 +44,11 @@ The tasks you will accomplish in this lab are:
 
    To save the above query as a script , save from the sql prompt.
     ````
-    save whoami.sql
+    <copy>save whoami.sql</copy>
     ````
     Re run the query through the script.
     ````
-    @whoami.sql
+    <copy>@whoami.sql</copy>
     ````
 
 3. Create a pluggable database **PDB2**.  
@@ -70,7 +70,7 @@ The tasks you will accomplish in this lab are:
 4. Change the session to point to **PDB2**.  
 
     ````
-    alter session set container = PDB2;
+    <copy>alter session set container = PDB2;</copy>
     ````
    ![](./images/altersession.png " ")
 
@@ -90,17 +90,15 @@ The tasks you will accomplish in this lab are:
 6. Connect as **PDB_ADMIN** to **PDB2**.  
 
     ````
-    connect pdb_admin/oracle@localhost:1523/pdb2
+    <copy>connect pdb_admin/oracle@localhost:1523/pdb2</copy>
     ````
 
 7. Create a table **MY_TAB** in **PDB2**.  
 
     ````
-    <copy>
-    create table my_tab(my_col number);
+    <copy>create table my_tab(my_col number);
     insert into my_tab values (1);
-    commit;
-    </copy>
+    commit;</copy>
     ````
 
    ![](./images/createtable.png " ")
@@ -151,15 +149,15 @@ The tasks you will accomplish in this lab are:
 1. Connect to **CDB1**.  
 
     ````
-    sqlplus /nolog
-    connect sys/oracle@localhost:1523/cdb1 as sysdba
+    <copy>sqlplus /nolog
+    connect sys/oracle@localhost:1523/cdb1 as sysdba</copy>
     ````
 
 2. Change **PDB2** to read only.  
 
     ````
-    alter pluggable database PDB2 open read only force;
-    show pdbs
+    <copy>alter pluggable database PDB2 open read only force;
+    show pdbs</copy>
     ````
 
    ![](./images/alterplug.png " ")
@@ -169,25 +167,25 @@ The tasks you will accomplish in this lab are:
 3. Create a pluggable database **PDB3** from the read only database **PDB2**.  
 
     ````
-    create pluggable database PDB3 from PDB2;
+    <copy>create pluggable database PDB3 from PDB2;
     alter pluggable database PDB3 open force;
-    show pdbs
+    show pdbs</copy>
     ````
    ![](./images/createpdb3.png " ")
 
 4. Change **PDB2** back to read write.  
 
     ````
-    alter pluggable database PDB2 open read write force;
-    show pdbs
+    <copy>alter pluggable database PDB2 open read write force;
+    show pdbs</copy>
     ````
    ![](./images/pdb2write.png " ")
 
 5. Connect to **PDB2** and show the table **MY_TAB**.  
 
     ````
-    connect pdb_admin/oracle@localhost:1523/pdb2
-    select * from my_tab;
+    <copy>connect pdb_admin/oracle@localhost:1523/pdb2
+    select * from my_tab;</copy>
     ````
 
    ![](./images/pdb2mytab.png " ")
@@ -195,8 +193,8 @@ The tasks you will accomplish in this lab are:
 6. Connect to **PDB3** and show the table **MY_TAB**.  
 
     ````
-    connect pdb_admin/oracle@localhost:1523/pdb3
-    select * from my_tab;
+    <copy>connect pdb_admin/oracle@localhost:1523/pdb3
+    select * from my_tab;</copy>
     ````
    ![](./images/pdb3mytab.png " ")
 
@@ -216,14 +214,14 @@ The tasks you will accomplish in this lab are:
 2. Unplug **PDB3** from **CDB1**.  
 
     ````
-    show pdbs
+    <copy>show pdbs
     alter pluggable database PDB3 close immediate;
 
     alter pluggable database PDB3
     unplug into
     '/u01/app/oracle/oradata/CDB1/pdb3.xml';
 
-    show pdbs
+    show pdbs </copy>
     ````
 
    ![](./images/unplugpdb3.png " ")
