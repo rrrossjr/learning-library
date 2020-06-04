@@ -229,9 +229,9 @@ The tasks you will accomplish in this lab are:
 3. Remove **PDB3** from **CDB1**.  
 
     ````
-    drop pluggable database PDB3 keep datafiles;
+    <copy>drop pluggable database PDB3 keep datafiles;
 
-    show pdbs
+    show pdbs</copy>
     ````
 
    ![](./images/droppdb3.png " ")
@@ -273,7 +273,7 @@ The tasks you will accomplish in this lab are:
 5. Look at the XML file for the pluggable database **PDB3**.  
 
     ````
-    host cat /u01/app/oracle/oradata/CDB1/pdb3.xml
+    <copy>host cat /u01/app/oracle/oradata/CDB1/pdb3.xml</copy>
     ````
     ![](./images/xmlfile.png " ")
 
@@ -308,12 +308,16 @@ The tasks you will accomplish in this lab are:
     ````
     ![](./images/whoamicdb2.png " ")
 
-    to use the above query for debugging, you can save the query as a file.
+     If you have saved the query as whoami.sql earlier, you can run the query as below.
+     ````
+     <copy>@whoami.sql</copy>
+     ````
 
 
 2. Check the compatibility of **PDB3** with **CDB2**  
 
     ````
+    <copy>
     begin
       if not
         Sys.DBMS_PDB.Check_Plug_Compatibility
@@ -322,20 +326,21 @@ The tasks you will accomplish in this lab are:
         Raise_Application_Error(-20000, 'Incompatible');
       end if;
     end;
-    /
+    /   
+    </copy>
     ````
 
 
 3. Plug **PDB3** into **CDB2**  
 
     ````
-    create pluggable database PDB3
+      <copy>create pluggable database PDB3
     using '/u01/app/oracle/oradata/CDB1/pdb3.xml'
     move;
 
     show pdbs
     alter pluggable database PDB3 open;
-    show pdbs
+    show pdbs   </copy>
     ````
 
     ![](./images/createwithxml.png " ")
@@ -343,6 +348,7 @@ The tasks you will accomplish in this lab are:
 4. Review the datafiles in **CDB2**  
 
     ````
+      <copy>
     COLUMN "Con_Name" FORMAT A10
     COLUMN "T'space_Name" FORMAT A12
     COLUMN "File_Name" FORMAT A120
@@ -368,7 +374,7 @@ The tasks you will accomplish in this lab are:
       File_Name "File_Name"
     from CDB_Temp_Files inner join Containers using (Con_ID)
     order by 1, 3
-    /
+    /   </copy>
     ````
 
     ![](./images/mtdbfcdb2.png " ")
@@ -376,9 +382,9 @@ The tasks you will accomplish in this lab are:
 5. Connect as **PDB\_ADMIN** to **PDB3** and look at **MY\_TAB**;  
 
     ````
-    connect pdb_admin/oracle@localhost:1524/pdb3
+    <copy>connect pdb_admin/oracle@localhost:1524/pdb3
 
-    select * from my_tab;
+    select * from my_tab</copy>
     ````
 
     ![](./images/pdb3mytab2.png " ")
@@ -399,13 +405,13 @@ The tasks you will accomplish in this lab are:
 2. Drop **PDB3** from **CDB2**  
 
     ````
-    show pdbs
+  <copy>  show pdbs
 
     alter pluggable database PDB3 close immediate;
 
     drop pluggable database PDB3 including datafiles;
 
-    show pdbs
+    show pdbs</copy>
     ````
 
     ![](./images/droppdb.png " ")
@@ -428,16 +434,16 @@ The tasks you will accomplish in this lab are:
 2. Change **PDB2** to read only  
 
     ````
-    alter pluggable database PDB2 open read only force;
-    show pdbs
+    <copy>alter pluggable database PDB2 open read only force;
+    show pdbs</copy>
     ````
 
 3. Create a pluggable database **GOLDPDB** from the read only database **PDB2**  
 
     ````
-    create pluggable database GOLDPDB from PDB2;
+    <copy>create pluggable database GOLDPDB from PDB2;
     alter pluggable database GOLDPDB open force;
-    show pdbs
+    show pdbs</copy>
     ````
 
     ![](./images/goldpdb.png " ")
@@ -445,8 +451,7 @@ The tasks you will accomplish in this lab are:
 4. Change **PDB2** back to read write  
 
     ````
-    <copy>
-    alter pluggable database PDB2 open read write force;
+    <copy>alter pluggable database PDB2 open read write force;
     show pdbs
     </copy>
     ````
@@ -472,15 +477,15 @@ The tasks you will accomplish in this lab are:
 6. Remove **GOLDPDB** from **CDB1**  
 
     ````
-    drop pluggable database GOLDPDB keep datafiles;
+    <copy>drop pluggable database GOLDPDB keep datafiles;
 
-    show pdbs
+    show pdbs</copy>
     ````
 
 7. Connect to **CDB2**  
 
     ````
-    connect sys/oracle@localhost:1524/cdb2 as sysdba
+    <copy>connect sys/oracle@localhost:1524/cdb2 as sysdba</copy>
     ````
 
 8. Validate **GOLDPDB** is compatibile with **CDB2**  
@@ -530,9 +535,9 @@ The tasks you will accomplish in this lab are:
 11. Open all of the pluggable databases  
 
     ````
-    alter pluggable database all open;
+    <copy>alter pluggable database all open;
 
-    show pdbs
+    show pdbs</copy>
     ````
     ![](./images/allopen.png " ")
 
@@ -592,7 +597,7 @@ The tasks you will accomplish in this lab are:
     </copy>
     ````
 
- 4. Open a new terminal window, sudo to the oracle user and execute write-load.sh. Leave this window open and running throughout the rest of the multitenant labs.  
+ 4. Open a **new terminal window**, sudo to the oracle user and execute write-load.sh. Leave this window open and running throughout the rest of the multitenant labs.  
 
      ````
     <copy>

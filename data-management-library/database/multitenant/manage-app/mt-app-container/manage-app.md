@@ -334,6 +334,7 @@ When you upgrade applications, any **intermediate patches applied will also be a
 
 
 #### Initiate upgrade for the application APP01
+An app upgrade is bounded by a ‘ALTER PLUGGABLE DATABASE APPLICATION .... BEGIN UPGRADE... ’ and "ALTER PLUGGABLE DATABASE ...  END UPGRADE" as demonstrated in the next few steps.
 
 ```
 ALTER SESSION SET container=APP_ROOT;
