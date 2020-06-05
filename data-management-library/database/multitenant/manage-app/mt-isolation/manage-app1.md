@@ -680,11 +680,13 @@ To test this, you can run the sample workload.
 ````
  SQL> <copy> @/home/oracle/labs/multitenant/cpu_test.sql</copy>
 ````
- open another session and run top command and observe the cpu busy percentage. It will be limited to the percentage equal to one cpu. In our case, Total cpus were 2, so 1 cpu would be 50% cpu utilization.
+You can open a separate terminal and run "top -c " and look at "%Cpu(s):" in your environment.
+It will be limited to the percentage equal to one cpu. In our case, Total cpus were 2, so 1 cpu would be 50% cpu utilization.
 
 In a production system with many CPUs and PDB consolidation, it is possible to over provision. i.e. The total of CPU_COUNT at PDB level is more than allocated at CDB level. This is a recommended configuration if we want better CPU utilization of the system.
 
 Now unset the CPU caging and rerun the workload. In our test, the cpu utilization peaks to 100% consuming the 2 CPUs available.
+
 ````
  <copy>conn / as SYSDBA
  alter system set resource_manager_plan='';
