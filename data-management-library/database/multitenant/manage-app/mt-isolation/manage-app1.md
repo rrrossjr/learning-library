@@ -250,7 +250,7 @@ It can take up to 5 minutes before all services have been registered again. If y
 Once all services are available, specifically the PDB1 services, we can continue with the lab.
 
 ````
-<copy>connect sys/oracle@//localhost:1523/cdb1 as sysdba
+<copy>connect / as sysdba
 alter system register;</copy>
 ````
 

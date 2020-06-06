@@ -571,14 +571,14 @@ The tasks you will accomplish in this lab are:
 
 2. Create a pluggable database **OE** with an admin user of **SOE**  
 
-    ````
-    <copy>
+
+  ````
+  <copy>
     create pluggable database oe admin user soe identified by soe roles=(dba);
     alter pluggable database oe open;
     alter session set container = oe;
     grant create session, create table to soe;
-    alter user soe quota unlimited on system;
-     </copy>
+    alter user soe quota unlimited on system; </copy>
    ````
 
     ![](./images/oe.png " ")
@@ -724,7 +724,7 @@ The tasks you will accomplish in this lab are:
 
 ## Step 9: PDB Relocation
 
-This section looks at how to relocate a pluggable database from one container database to another. One important note, either both container databases need to be using the same listener in order for sessions to keep connecting or local and remote listeners need to be setup correctly. For this lab we will change **CDB2** to use the same listener as **CDB1**.
+<!-- This section looks at how to relocate a pluggable database from one container database to another. One important note, either both container databases need to be using the same listener in order for sessions to keep connecting or local and remote listeners need to be setup correctly. For this lab we will change **CDB2** to use the same listener as **CDB1**.
 
 The tasks you will accomplish in this lab are:
 - Change **CDB2** to use the same listener as **CDB1**
@@ -740,13 +740,37 @@ The tasks you will accomplish in this lab are:
     alter system set local_listener='LISTCDB1' scope=both;
     </copy>
     ````
+ -->
+This section looks at how to relocate a pluggable database from one container database to another.
+When moving a PDB between server or data centers, or from an on-premises environment to a cloud environment, all the data must physically move. For large PDBs, this process may take considerable time, possibly violating availability components of an SLA. PDB relocation eliminates the outage completely. You can relocate the PDB without taking the application offline, changing the application, or changing network connection strings.
 
-2. Connect to **CDB2** and relocate **OE** using the database link **oe@cdb1_link**  
+During relocation, the source PDB can be open in read/write mode and fully functional.
+PDB relocation executes an online block level copy of the source PDB data files, redo, and undo while the source PDB is open with active sessions. When the target PDB comes online because of an ALTER PLUGGABLE DATABASE OPEN statement, Oracle Database terminates the active sessions and closes the source PDB.
+
+This technique is the fastest way to move a PDB with minimal or no down time. Otherwise, unplugging the source PDB requires a PDB outage until the PDB is plugged in to the target CDB.
+
+
+
+One important note, either both container databases need to be using the same listener in order for sessions to keep connecting or we need to use the AVAILABILITY MAX clause.
+
+The AVAILABILITY MAX clause in CREATE PLUGGABLE DATABASE ... RELOCATE implicitly instructs the SQL*Net layer to reconfigure the original listener. The LISTENER_NETWORKS initialization parameter is implicitly updated in the source PDB with the forwarding address, and the listener PDB services for the source CDB are updated with the forwarding address.
+For more information, check out the **[documentation.](https://docs.oracle.com/en/database/oracle/oracle-database/19/multi/relocating-a-pdb.html#GUID-355DBFEE-4330-4B57-8B81-0DD094EBCDE4)**
+
+
+1. Connect to **CDB1**  and verify PDB **OE** is up.
+
+````
+<copy>connect sys/oracle@//localhost:1523/cdb1 as sysdba
+show pdbs</copy>
+````
+
+2. Connect to **CDB2** and relocate **OE** using the database link **oe@cdb1_link**.
+   While this relocation takes place, you should be able to see transactions continue. When you open the pdb in cdb2, you will observe a brief pause.
 
     ````
     <copy>
-    conn sys/oracle@localhost:1523/cdb2 as sysdba;
-    create pluggable database oe from oe@cdb1_link relocate;
+    conn sys/oracle@localhost:1524/cdb2 as sysdba;
+    create pluggable database oe from oe@cdb1_link RELOCATE AVAILABILITY MAX;
     alter pluggable database oe open;
     show pdbs</copy>
     ````
@@ -754,35 +778,34 @@ The tasks you will accomplish in this lab are:
 3. Connect to **CDB1** and see what pluggable databases exist there  
 
     ````
-    <copy>
-    conn sys/oracle@localhost:1523/cdb1 as sysdba
-    show pdbs
-    </copy>
-
+    <copy>conn sys/oracle@localhost:1523/cdb1 as sysdba
+    show pdbs</copy>
     ````
+   You will see OE PDB in mount state. The network service is configured to forward to target until this pluggable database exists.
 
-4. Close and remove the **OE** pluggable database  
+4. Test the connection forwarding by connecting to **OE** from **CDB1** and **CDB2.**  
 
     ````
     <copy>
-    conn sys/oracle@localhost:1523/cdb2 as sysdba
-
-    alter pluggable database oe close;
-    drop pluggable database oe including datafiles;
-    </copy>
+    connect soe/soe@localhost:1523/oe
+    select count(*) from sales_orders;
+    connect soe/soe@localhost:1524/oe
+    select count(*) from sales_orders; </copy>
     ````
+ You are able to access OE pdb from source and target. You might see the values different if the load is still running.
 
 5. The load program isn't needed anymore and that window can be closed.
 
-6. If you are going to continue to use this environment you will need to change **CDB2** back to use **LISTCDB2**
-
-    ````
-    <copy>
-    sqlplus /nolog
-    conn sys/oracle@localhost:1523/cdb2 as sysdba;
-    alter system set local_listener='LISTCDB2' scope=both;
-    </copy>
-    ````
+6. Bonus step.
+If you want to relocate **OE** back to **CDB1**
+````
+<copy>connect sys/oracle@//localhost:1523/cdb1 as sysdba
+show pdbs
+drop pluggable database oe including datafiles;
+create pluggable database oe from oe@cdb2_link RELOCATE AVAILABILITY MAX;
+alter pluggable database oe open;
+show pdbs </copy>
+````
 
 ## Lab Cleanup
 
@@ -796,8 +819,7 @@ Now you've had a chance to try out the Multitenant option. You were able to crea
 
 ## Acknowledgements
 
-- **Author** - Patrick Wheeler, VP, Multitenant Product Management
-- **Adapted to Cloud by** -  David Start, OSPA
+- **Author** - Vijay Balebail & Patrick Wheeler. Database Product Management.
 - **Last Updated By/Date** - Kay Malcolm, Director, DB Product Management, March 2020
 
 See an issue?  Please open up a request [here](https://github.com/oracle/learning-library/issues).
