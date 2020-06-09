@@ -571,19 +571,18 @@ The tasks you will accomplish in this lab are:
 
 2. Create a pluggable database **OE** with an admin user of **SOE**  
 
-
-  ````
-  <copy>
+    ````
+    <copy>
     create pluggable database oe admin user soe identified by soe roles=(dba);
     alter pluggable database oe open;
     alter session set container = oe;
     grant create session, create table to soe;
     alter user soe quota unlimited on system; </copy>
-   ````
-
+    ````
     ![](./images/oe.png " ")
 
 3. Connect as **SOE** and create the **sale_orders** table  
+
 
     ````
     <copy>
