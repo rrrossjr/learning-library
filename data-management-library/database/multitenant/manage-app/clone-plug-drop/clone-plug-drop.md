@@ -708,32 +708,34 @@ The tasks you will accomplish in this lab are:
     ````
 Observe that the count of sale_orders has increased after the refresh.
 
-## Step 9. Snapshot Copy
+## Step 9: Snapshot Copy
 
 You can create a snapshot copy PDB by executing a CREATE PLUGGABLE DATABASE ... FROM ... SNAPSHOT COPY statement. The source PDB is specified in the FROM clause.
 
-A snapshot copy reduces the time required to create the clone because it does not include a complete copy of the source data files. Furthermore, the snapshot copy PDB occupies a fraction of the space of the source PDB.
+A snapshot copy reduces the time required to create the clone because it does not include a complete copy of the source data files. Furthermore, the snapshot copy PDB occupies a fraction of the space of the source PDB. The snapshot copy can be created in any filesystem like utf3, utf4, ntfs for local disks. It also supports NFS, ZSF, ACFS,etc.
 
 The two main requirements for snapshot copy to work are
 - CLONEDB initialization parameter should be set to TRUE.
 - The source PDB is in Read Only mode.
 
-You can create any number of snapshot copies from the refreshable pdb and use it for test and dev.
-The refreshable PDB OE_REFRESH in this case is the source PDB for snapshots and is in read only mode already.
+Creating a snapshot copy of  refreshable PDB is a good use case for snapshot copy PDBs. Refreshable PDBs need to in read only mode in order to refresh. However, you can quickly create snapshots from there and use it for reporting, test and dev environments.
+The refreshable PDB OE_REFRESH is the source PDB for snapshots and is always in read only mode.
 
-1. set CLONDDB and restart CDB2.
+1. Verify that the initialization parameter CLONEDB is set.
     ````
-    connect sys/oracle@//localhost:1524/cdb2 as sysdba
-    show pdbs
+    <copy>connect sys/oracle@//localhost:1524/cdb2 as sysdba
+    show parameter CLONEDB</copy>
+
     show parameter CLONEDB
-    alter system set clonedb=true scope=spfile;
-    ````
-run the script from restart cdb2.
+    SQL>
+
+    NAME                                 TYPE        VALUE
+    ------------------------------------ ----------- ------------------------------
+    clonedb                              boolean     TRUE
+    clonedb_dir                          string
 
     ````
-    sql> <copy>host
-    /home/oracle/labs/multitenant/addClonedb.sh</copy>
-    ````
+
 2. Create SNAPSHOT COPY
 
     ````
@@ -845,10 +847,10 @@ For more information, check out the **[documentation.](https://docs.oracle.com/e
 
 1. Connect to **CDB1**  and verify PDB **OE** is up.
 
-````
-<copy>connect sys/oracle@//localhost:1523/cdb1 as sysdba
-show pdbs</copy>
-````
+    ````
+    <copy>connect sys/oracle@//localhost:1523/cdb1 as sysdba
+    show pdbs</copy>
+    ````
 
 2. Connect to **CDB2** and relocate **OE** using the database link **oe@cdb1_link**.
    While this relocation takes place, you should be able to see transactions continue. When you open the pdb in cdb2, you will observe a brief pause.
@@ -884,14 +886,14 @@ show pdbs</copy>
 
 6. Bonus step.
 If you want to relocate **OE** back to **CDB1**
-````
-<copy>connect sys/oracle@//localhost:1523/cdb1 as sysdba
-show pdbs
-drop pluggable database oe including datafiles;
-create pluggable database oe from oe@cdb2_link RELOCATE AVAILABILITY MAX;
-alter pluggable database oe open;
-show pdbs </copy>
-````
+    ````
+    <copy>connect sys/oracle@//localhost:1523/cdb1 as sysdba
+    show pdbs
+    drop pluggable database oe including datafiles;
+    create pluggable database oe from oe@cdb2_link RELOCATE AVAILABILITY MAX;
+    alter pluggable database oe open;
+    show pdbs </copy>
+    ````
 
 ## Lab Cleanup
 
