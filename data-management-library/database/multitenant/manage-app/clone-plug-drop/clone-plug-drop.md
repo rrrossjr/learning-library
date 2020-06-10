@@ -706,14 +706,101 @@ The tasks you will accomplish in this lab are:
     select count(*) from sale_orders;
     </copy>
     ````
+Observe that the count of sale_orders has increased after the refresh.
 
-6. Close and remove the **OE_REFRESH** pluggable database  
+## Step 9. Snapshot Copy
+
+You can create a snapshot copy PDB by executing a CREATE PLUGGABLE DATABASE ... FROM ... SNAPSHOT COPY statement. The source PDB is specified in the FROM clause.
+
+A snapshot copy reduces the time required to create the clone because it does not include a complete copy of the source data files. Furthermore, the snapshot copy PDB occupies a fraction of the space of the source PDB.
+
+The two main requirements for snapshot copy to work are
+- CLONEDB initialization parameter should be set to TRUE.
+- The source PDB is in Read Only mode.
+
+You can create any number of snapshot copies from the refreshable pdb and use it for test and dev.
+The refreshable PDB OE_REFRESH in this case is the source PDB for snapshots and is in read only mode already.
+
+1. set CLONDDB and restart CDB2.
+    ````
+    connect sys/oracle@//localhost:1524/cdb2 as sysdba
+    show pdbs
+    show parameter CLONEDB
+    alter system set clonedb=true scope=spfile;
+    ````
+run the script from restart cdb2.
+
+    ````
+    sql> <copy>host
+    /home/oracle/labs/multitenant/addClonedb.sh</copy>
+    ````
+2. Create SNAPSHOT COPY
+
+    ````
+    <copy>connect sys/oracle@//localhost:1524/cdb2 as sysdba
+    create pluggable database OSSNAP from oe_refresh SNAPSHOT COPY ;
+    alter pluggable database OSSNAP open;
+    show pdbs
+    ````
+
+3. Connect to OSSNAP and insert rows.
+
+    ````
+    <copy>connect soe/soe@localhost:1524/ossnap
+    select count(*) from sale_orders;
+    insert into sale_orders values (1,sysdate,30);
+    commit; </copy>
+    ````
+4. Verify that the snapshot copy uses a fraction of the disk space use du command.
+   "du" stand dor disk usage. run the following sql and generate a outup which you can run on a
+    ````
+    <copy>connect sys/oracle@//localhost:1524/cdb2 as sysdba
+    show pdbs
+    select distinct 'du -h '||SUBSTR(NAME,1,INSTR(NAME,'datafile')+8 )  du_output from v$datafile -
+    where con_id in (select con_id from v$pdbs where name in ('OE_REFRESH','OSSNAP') );</copy>
+    ````
+    ````
+    SQL>  connect sys/oracle@//localhost:1524/cdb2 as sysdba
+    Connected.
+    SQL> show pdbs
+
+       CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+    ---------- ------------------------------ ---------- ----------
+         2 PDB$SEED                       READ ONLY  NO
+         3 PDB2                           READ WRITE NO
+         4 OE_REFRESH                     READ ONLY  NO
+         6 OSSNAP                         READ WRITE NO
+      SQL>  select distinct 'du -h '||SUBSTR(NAME,1,INSTR(NAME,'datafile')+8 )  du_output from v$datafile -
+      > where con_id in (select con_id from v$pdbs where name in ('OE_REFRESH','OSSNAP') );
+
+      DU_OUTPUT
+      --------------------------------------------------------------------------------
+      du -h /u01/app/oracle/oradata/CDB2/A7ABA07A39D36559E0530300000AE318/datafile/
+      du -h /u01/app/oracle/oradata/CDB2/A7AF576522D768ABE0530300000A47CF/datafile/
+      ````
+5. Type host in sql prompt. Copy the two lines from query output and past it to OS prompt.
+    you will see that OSSNAP takes a fraction of space compared to OE_REFRESH.
+    you can type exit to come back to sql prompt.
+    ````
+    SQL> host
+    [oracle@MTWorkshop]$ du -h /u01/app/oracle/oradata/CDB2/A7ABA07A39D36559E0530300000AE318/datafile/
+    861M    /u01/app/oracle/oradata/CDB2/A7ABA07A39D36559E0530300000AE318/datafile/
+    [oracle@MTWorkshop]$ du -h /u01/app/oracle/oradata/CDB2/A7AF576522D768ABE0530300000A47CF/datafile/
+    2.2M    /u01/app/oracle/oradata/CDB2/A7AF576522D768ABE0530300000A47CF/datafile/
+
+    [oracle@MTWorkshop]$ exit
+    exit
+    SQL>
+    ````
+
+6. Close and remove the **OE_REFRESH**  and **OSSNAP** pluggable databases.  
 
     ````
     <copy>
     conn sys/oracle@localhost:1524/cdb2 as sysdba
-
+    alter pluggable database sostat close;
     alter pluggable database oe_refresh close;
+    drop pluggable database osstat including datafiles;
     drop pluggable database oe_refresh including datafiles;
     </copy>
     ````
@@ -721,7 +808,7 @@ The tasks you will accomplish in this lab are:
 7. Leave the **OE** pluggable database open with the load running against it for the rest of the labs.
 
 
-## Step 9: PDB Relocation
+## Step 10: PDB Relocation
 
 <!-- This section looks at how to relocate a pluggable database from one container database to another. One important note, either both container databases need to be using the same listener in order for sessions to keep connecting or local and remote listeners need to be setup correctly. For this lab we will change **CDB2** to use the same listener as **CDB1**.
 
@@ -787,9 +874,9 @@ show pdbs</copy>
     ````
     <copy>
     connect soe/soe@localhost:1523/oe
-    select count(*) from sales_orders;
+    select count(*) from sale_orders;
     connect soe/soe@localhost:1524/oe
-    select count(*) from sales_orders; </copy>
+    select count(*) from sale_orders; </copy>
     ````
  You are able to access OE pdb from source and target. You might see the values different if the load is still running.
 
