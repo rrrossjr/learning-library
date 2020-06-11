@@ -712,7 +712,7 @@ Observe that the count of sale_orders has increased after the refresh.
 
 You can create a snapshot copy PDB by executing a CREATE PLUGGABLE DATABASE ... FROM ... SNAPSHOT COPY statement. The source PDB is specified in the FROM clause.
 
-A snapshot copy reduces the time required to create the clone because it does not include a complete copy of the source data files. Furthermore, the snapshot copy PDB occupies a fraction of the space of the source PDB. The snapshot copy can be created in any filesystem like utf3, utf4, ntfs for local disks. It also supports NFS, ZSF, ACFS,etc.
+A snapshot copy reduces the time required to create the clone because it does not include a complete copy of the source data files. Furthermore, the snapshot copy PDB occupies a fraction of the space of the source PDB. The snapshot copy can be created in any filesystem like ext3, ext4, ntfs for local disks. It also supports NFS, ZSF, ACFS,etc.
 
 The two main requirements for snapshot copy to work are
 - CLONEDB initialization parameter should be set to TRUE.
