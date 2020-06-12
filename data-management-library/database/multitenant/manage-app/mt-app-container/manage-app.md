@@ -8,9 +8,8 @@ Finally see how it all fits together in Root Replicas
 
 ### Lab Assumptions
 
-- Each participant has been provided a username and password to the tenancy c4u03.
-- Each participant has completed the Environment Setup lab.
-- Each participant has created an OCI compute instance using the database template.
+- Each participant has been provided a username and password to the tenancy.
+- Each participant has completed the Environment lab Setup.
 
 There are two container databases running:
 
