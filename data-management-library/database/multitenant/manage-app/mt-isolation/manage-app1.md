@@ -1,22 +1,13 @@
 #  Multitenant Tenant Isolation
 
-## Lab Introduction
+## Introduction
 
 This is a series of hands-on labs designed to familiarize you with the  Oracle Multitenant and Network isolation feature. In these labs, We will dive into the concepts of Database Firewalls , Resource managements and Lockdown features.
 
 
-#### Lab Assumptions
-
-- Each participant has been provided a username and password to the tenancy .
-- Each participant has completed the Environment Setup lab. It is possible to run this lab as a stand alone and does not depend on previous works.
-- Each participant has created an OCI compute instance using the database template.
-
-There are two container databases running:
-
-- CDB1 running on port 1523
-- CDB2 running on port 1524
 
 #### Lab Setup
+
 
 All the scripts for this lab are located in the /home/oracle/labs/multitenant/scripts folder.
 
