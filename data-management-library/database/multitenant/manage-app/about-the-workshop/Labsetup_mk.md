@@ -17,7 +17,15 @@ If you already have Cloud Account, then you will already have tenant name, usern
 
 ------------------------------------------------------------------------
 
+To provision a OCI container with Multitenant Workshop template, you need to first create a OCI image from market place. For that you need to have a ssh public and private keys. If you don't have one, then follow the instructions below to generate a ssh key pair.
+Once you have ssh key, you can provision the OCI container from  Marketplace.   
+After provisioning the environment, you can connect to it using your private key.
+run the setup script. This will download the latest setup scripts required for the Lab.
 
+The Multitenant lab includes two container databases running:
+
+- CDB1 running on port 1523
+- CDB2 running on port 1524
 
 ## Generate an SSH Key Pair
 
