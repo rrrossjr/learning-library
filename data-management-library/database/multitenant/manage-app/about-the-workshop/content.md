@@ -12,10 +12,10 @@ This hands-on workshop focuses on
     * Isolation features like Database Firewall and LOCKDOWN.
     * Memory, CPU and IO isolation.
 * Multitenant Application Containers : This is a 3 hour workshop. Once the Basic is mastered, DBAs can architect the application to take advantage of Multitenant specific features.
-    * Application Architecture.
-    * Application Upgrade and patching.
+    * Application architecture.
+    * Application upgrade and patching.
     * Proxy PDBs.
-    * Syncronizing Application and Version control.
+    * Synchronizing application and Version control.
 
 ## Workshop Requirements
 
