@@ -2,8 +2,8 @@
 
 ## Introduction
 
-This is a series self pased labs. Once you are familir of multitenant basic concepts like plug-in,un-plug, clone, hot clone and refreshable clones, you can familiaize with Application Container functionality of Oracle Multitenant. In these labs, We will dive into the concepts of Application container and Proxy PDBs.
-Finally see how it all fits together in Root Replicas
+This is a series self paced labs. Once you are familiar of multitenant basic concepts like plug-in,un-plug, clone, hot clone and refreshable clones, you can learn about Application Container functionality of Oracle Multitenant. In these labs, we will dive into the concepts of Application container, container clause, upgrading and patching and Proxy PDBs. 
+Finally see how it all fits together in Root Replicas.
 
 
 #### Lab Setup
