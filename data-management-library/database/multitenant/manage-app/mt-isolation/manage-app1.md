@@ -23,6 +23,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
    ./resetCDB.sh </copy>
    ```
 
+   
 ##  Database Service Firewall
 
 Database Service Firewall is a feature of Oracle Access Control List (ACL) since 12.2.
