@@ -1,38 +1,27 @@
 # Multitenant Application Container
 
-## Lab Introduction
+## Introduction
 
 This is a series self pased labs. Once you are familir of multitenant basic concepts like plug-in,un-plug, clone, hot clone and refreshable clones, you can familiaize with Application Container functionality of Oracle Multitenant. In these labs, We will dive into the concepts of Application container and Proxy PDBs.
 Finally see how it all fits together in Root Replicas
 
 
-### Lab Assumptions
+#### Lab Setup
 
-- Each participant has been provided a username and password to the tenancy.
-- Each participant has completed the Environment lab Setup.
+At this point, it is assumbed you have already hava a Multitenat workshop environment and you have run the one time  **[setup script.](https://vijaybalebail.github.io/learning-library/data-management-library/database/multitenant/manage-app/index.html?lab=lab-setup#RuntheSetupScriptsasoracle)**
 
-There are two container databases running:
-
-- CDB1 running on port 1523
-- CDB2 running on port 1524
-
-### Lab Setup
+If you have not reset after the previous lab, you can run resetCDB.sh to start with a clean environment. If any errors about dropping databases appear they can be ignored.
 
 All the scripts for this lab are located in the /home/oracle/labs/multitenant/scripts folder.
 
-1. To access the scripts, secure shell into the OCI compute instance.
-
-2. Change to the ssh directory and ssh into your instance. The public IP address can be found by going to Compute -> Instance.
-
-   ```
-   cd /home/oracle/labs/multitenant
-   ```
-
-3. Reset the container databases back to their original ports if they were changed in a previous lab. If any errors about dropping databases appear they can be ignored.
+- To access the scripts, secure shell into the OCI compute instance.
+- Change to the ssh directory and ssh into your instance. The public IP address can be found by going to Compute -> Instance.
 
    ```
-   ./resetCDB.sh
+  <copy> cd /home/oracle/labs/multitenant
+   ./resetCDB.sh </copy>
    ```
+
 
 ## Application Container
 
