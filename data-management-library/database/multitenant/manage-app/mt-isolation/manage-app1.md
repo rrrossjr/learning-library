@@ -6,23 +6,21 @@ This is a series of hands-on labs designed to familiarize you with the  Oracle M
 
 
 
+
 #### Lab Setup
 
+At this point, it is assumbed you have already hava a Multitenat workshop environment and you have run the one time  **[setup script.](https://vijaybalebail.github.io/learning-library/data-management-library/database/multitenant/manage-app/index.html?lab=lab-setup#RuntheSetupScriptsasoracle)**
+
+If you have not reset after the previous lab, you can run resetCDB.sh to start with a clean environment. If any errors about dropping databases appear they can be ignored.
 
 All the scripts for this lab are located in the /home/oracle/labs/multitenant/scripts folder.
 
 - To access the scripts, secure shell into the OCI compute instance.
-
 - Change to the ssh directory and ssh into your instance. The public IP address can be found by going to Compute -> Instance.
 
    ```
-   cd /home/oracle/labs/multitenant
-   ```
-
-- Reset the container databases back to their original ports if they were changed in a previous lab. If any errors about dropping databases appear they can be ignored.
-
-   ```
-   ./resetCDB.sh
+  <copy> cd /home/oracle/labs/multitenant
+   ./resetCDB.sh </copy>
    ```
 
 ##  Database Service Firewall
