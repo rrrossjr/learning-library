@@ -1,8 +1,8 @@
 {
     "tutorials": [
         {
-            "title": "Workshop Overview",
-            "description":"Workhop Overview",
+            "title": "Introduction and Overview",
+            "description":"multitenant Overview",
             "publisheddate": "01/15/2020",
             "filename":"./about-the-workshop/content.md"
         },
