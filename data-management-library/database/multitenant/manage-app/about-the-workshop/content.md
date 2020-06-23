@@ -39,7 +39,7 @@ In terms of development paradigm, Organizations are moving from Monolithic Appli
 <p>
 In terms of Datatype, the adoption of multiple formats like XML, JSON, Relational tables, Text docs, Spacial, Big Data , IOTs and NOSQL are getting popular.
 
-With the proliferation of multiple players, we see (a) a plethora of data formats such as XML, JSON,(b)Data storage formats such as Spatial.
+With the proliferation of multiple players, we see a plethora of data formats such as XML, JSON,(b)Data storage formats such as Spatial.
 <p>
 These modern approaches  are  mushrooming because it is easy to setup and accessible due to Cloud providers who readily provide the platform services.
 
