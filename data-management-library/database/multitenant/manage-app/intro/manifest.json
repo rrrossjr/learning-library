@@ -12,7 +12,7 @@
             "partnumber": "Ennnnn_01",
             "publisheddate": "03/10/2020",
             "contentid": "12nnnn",
-            "filename": "https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/cloud-login/cloud-login-ssworkshop.md"
+            "filename": "https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/cloud-login/cloud-login.md"
         },
         {
             "title": "Lab 2: Generate SSH Key",
@@ -28,8 +28,8 @@
             "partnumber": "Ennnnn_01",
             "publisheddate": "03/10/2020",
             "contentid": "12nnnn",
-            "filename": "./../setup/ssworkshop-setup.md"
-        },        
+            "filename": "./../setup/freetier-setup.md"
+        }, 
         {
             "title": "Lab setup",
             "description": "Lab Setup",
