@@ -7,6 +7,30 @@
             "filename":"./intro.md"
         },
         {
+            "title": "Lab 1: Login to Oracle Cloud",
+            "description": "Login to Oracle Cloud",
+            "partnumber": "Ennnnn_01",
+            "publisheddate": "03/10/2020",
+            "contentid": "12nnnn",
+            "filename": "https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/cloud-login/cloud-login-ssworkshop.md"
+        },
+        {
+            "title": "Lab 2: Generate SSH Key",
+            "description": "Generate SSH Key",
+            "partnumber": "Ennnnn_01",
+            "publisheddate": "03/10/2020",
+            "contentid": "12nnnn",
+            "filename": "https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/generate-ssh-key/generate-ssh-keys.md"
+        },
+        {
+            "title": "Lab 3: Workshop Setup",
+            "description": "Setup Multitenant Workshop in Self Service Workshop",
+            "partnumber": "Ennnnn_01",
+            "publisheddate": "03/10/2020",
+            "contentid": "12nnnn",
+            "filename": "./../setup/ssworkshop-setup.md"
+        },        
+        {
             "title": "Lab setup",
             "description": "Lab Setup",
             "partnumber": "Ennnnn_01",
